@@ -757,7 +757,6 @@ function drawNote(x, step, noteName, finInfo, hand, key, mode) {
   return svg;
 }
 
-let curDir = 'asc';
 
 const DATA = {
   C: {
@@ -1099,7 +1098,8 @@ const RULES = {
   ]
 };
 
-let curKey = 'C', curMode = 'major', curDir = 'asc';
+let curKey = 'C', curMode = 'major';
+let curDir = 'asc';
 
 function buildFingers(str) {
   const groups = str.split(' | ');
