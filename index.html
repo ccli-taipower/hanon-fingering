@@ -211,7 +211,7 @@ select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
 .fingers {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: flex-start;
   gap: 4px;
   margin-bottom: 6px;
 }
@@ -222,10 +222,13 @@ select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
   gap: 2px;
 }
 .fn-note {
-  font-size: 10px;
+  font-size: 11px;
   font-family: var(--mono);
   color: var(--ink-muted);
   line-height: 1;
+  min-width: 16px;
+  text-align: center;
+  display: block;
 }
 .fn-wrap .fn.thumb + .fn-note { color: var(--thumb-fg); }
 .fn-wrap .fn.pivot + .fn-note { color: var(--pivot-ring); }
