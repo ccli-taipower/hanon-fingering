@@ -491,6 +491,151 @@ select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
 .tip-icon svg { width: 100%; height: 100%; }
 .tip-card.green .tip-icon { color: var(--pivot-ring); }
 .tip-card.rust  .tip-icon { color: var(--accent-2); }
+
+/* ── Plan ── */
+.plan-intro {
+  font-family: var(--serif);
+  font-size: 15px;
+  color: var(--ink-soft);
+  line-height: 1.8;
+  margin-bottom: 36px;
+  max-width: 640px;
+}
+.plan-stage {
+  margin-bottom: 36px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+.plan-stage-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background: var(--paper-warm);
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+  user-select: none;
+}
+.plan-stage-header:hover { background: var(--paper-deep); }
+.plan-stage-badge {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.plan-stage-badge.s2 { background: #2a7a5a; }
+.plan-stage-badge.s3 { background: var(--accent-2); }
+.plan-stage-badge.s4 { background: #6a3a9a; }
+.plan-stage-badge.s5 { background: #1a6a6a; }
+.plan-stage-info { flex: 1; }
+.plan-stage-title {
+  font-family: var(--serif);
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+.plan-stage-sub {
+  font-size: 12px;
+  color: var(--ink-muted);
+  font-family: var(--mono);
+  letter-spacing: .04em;
+}
+.plan-stage-chevron {
+  width: 20px; height: 20px;
+  color: var(--ink-muted);
+  transition: transform .2s;
+  flex-shrink: 0;
+}
+.plan-stage.open .plan-stage-chevron { transform: rotate(180deg); }
+.plan-stage-body {
+  display: none;
+  padding: 20px;
+}
+.plan-stage.open .plan-stage-body { display: block; }
+.plan-sessions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.plan-session {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 12px;
+  align-items: start;
+}
+.plan-session-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--paper-deep);
+  border: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-muted);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.plan-session-content {}
+.plan-session-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 3px;
+}
+.plan-session-blocks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+.plan-block {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px 3px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-family: var(--mono);
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+.plan-block-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.plan-block.warm  { background: #fff8e8; border-color: #e8d080; }
+.plan-block.warm  .plan-block-dot { background: #c8a020; }
+.plan-block.scale { background: #e8f0f8; border-color: #a0b8d8; }
+.plan-block.scale .plan-block-dot { background: #2c5a8a; }
+.plan-block.tech  { background: #eaf5ee; border-color: #90c8a0; }
+.plan-block.tech  .plan-block-dot { background: #2a7a5a; }
+.plan-block.free  { background: #f5eaf5; border-color: #c0a0c8; }
+.plan-block.free  .plan-block-dot { background: #6a3a9a; }
+.plan-advance {
+  margin-top: 16px;
+  padding: 12px 14px;
+  background: var(--paper-warm);
+  border-radius: var(--r-md);
+  border-left: 3px solid var(--accent);
+  font-size: 12px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+.plan-advance strong { color: var(--ink); font-weight: 500; }
+.plan-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 24px;
+}
 </style>
 </head>
 <body>
@@ -506,6 +651,7 @@ select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
   <nav class="tab-nav" role="tablist">
     <button class="tab-btn active" data-tab="fingering" role="tab">指法查詢</button>
     <button class="tab-btn" data-tab="guide" role="tab">練習指南</button>
+    <button class="tab-btn" data-tab="plan" role="tab">練習計劃</button>
   </nav>
 
   <div class="tab-panel active" id="tab-fingering">
@@ -588,6 +734,10 @@ select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
   </div>
 
   </div><!-- /tab-guide -->
+
+  <div class="tab-panel" id="tab-plan">
+    <div id="plan-content"></div>
+  </div><!-- /tab-plan -->
 
   <footer class="footer">
     <span>哈農音階指法查詢 · Hanon Scale Fingering Dashboard</span>
@@ -1292,6 +1442,306 @@ function initTabs() {
   });
 }
 
+
+const PLAN_STAGES = [
+  {
+    id: 's1',
+    badge: 'S1',
+    badgeClass: '',
+    title: '奠基期：白鍵音階',
+    sub: '目標速度 ♩=60–84　建議從這裡開始',
+    sessions: [
+      {
+        num: 'A',
+        title: 'C 大調熟悉指法',
+        blocks: [
+          {type:'warm',  time:'5分', label:'雙手慢速 ♩=60，C 大調上行×2'},
+          {type:'scale', time:'10分', label:'右手單手 C 大調上下行，注意 C、F 換指'},
+          {type:'scale', time:'10分', label:'左手單手 C 大調上下行，注意 E、B 穿越'},
+          {type:'free',  time:'5分', label:'雙手合奏，不強求速度'},
+        ]
+      },
+      {
+        num: 'B',
+        title: '加入 F、G 大調',
+        blocks: [
+          {type:'warm',  time:'5分', label:'C 大調暖身複習'},
+          {type:'scale', time:'12分', label:'F 大調（注意 4+3 分組）、G 大調各練一遍'},
+          {type:'scale', time:'8分', label:'三個調輪流，上行→下行不間斷'},
+          {type:'free',  time:'5分', label:'挑一個最順的調加速到 ♩=84'},
+        ]
+      },
+      {
+        num: 'C',
+        title: '降號調完整（F→Cb）',
+        blocks: [
+          {type:'warm',  time:'5分', label:'C、F、Bb 暖身'},
+          {type:'scale', time:'15分', label:'依序練 Eb、Ab、Db、Gb、Cb，每個各1–2遍'},
+          {type:'scale', time:'5分', label:'特別留意 Eb（3指起）、Bb（4指起）'},
+          {type:'free',  time:'5分', label:'選一個降號調雙手合奏'},
+        ]
+      },
+      {
+        num: 'D',
+        title: '升號調完整（G→C#）',
+        blocks: [
+          {type:'warm',  time:'5分', label:'C、G、D 暖身'},
+          {type:'scale', time:'15分', label:'依序練 A、E、B、F#、C#，注意黑鍵起始指'},
+          {type:'scale', time:'5分', label:'F#、C# 特別注意 2指起，拇指避黑鍵'},
+          {type:'free',  time:'5分', label:'選一個升號調雙手合奏'},
+        ]
+      },
+    ],
+    advance: '進階條件：所有 15 個大調，雙手合奏 ♩=84 不停頓、不錯音，可進入 S2。'
+  },
+  {
+    id: 's2',
+    badge: 'S2',
+    badgeClass: 's2',
+    title: '擴展期：小調與速度',
+    sub: '目標速度 ♩=84–100',
+    sessions: [
+      {
+        num: 'A',
+        title: '和聲小調入門',
+        blocks: [
+          {type:'warm',  time:'5分', label:'C 大調暖身'},
+          {type:'scale', time:'12分', label:'a 和聲小調（升 G#），右手、左手各練'},
+          {type:'scale', time:'8分', label:'d、g、c 和聲小調（降號系列）'},
+          {type:'free',  time:'5分', label:'比較大調與和聲小調的音色差異'},
+        ]
+      },
+      {
+        num: 'B',
+        title: '旋律小調：上下行不同',
+        blocks: [
+          {type:'warm',  time:'5分', label:'a 和聲小調複習'},
+          {type:'scale', time:'10分', label:'a 旋律小調：上行升 F#、G#，下行還原'},
+          {type:'scale', time:'10分', label:'練習上行接下行不停頓（一個八度來回）'},
+          {type:'free',  time:'5分', label:'注意下行變換的音符，不要用上行指法'},
+        ]
+      },
+      {
+        num: 'C',
+        title: '速度提升：大調到 ♩=100',
+        blocks: [
+          {type:'warm',  time:'3分', label:'選一個最熟的調暖身'},
+          {type:'tech',  time:'10分', label:'用附點節奏練 C、F、G 大調（長短/短長交替）'},
+          {type:'scale', time:'12分', label:'節拍器 ♩=92，輪流練 5 個調'},
+          {type:'free',  time:'5分', label:'♩=100 衝刺一個最順的調'},
+        ]
+      },
+      {
+        num: 'D',
+        title: '小調完整輪流',
+        blocks: [
+          {type:'warm',  time:'5分', label:'大調暖身'},
+          {type:'scale', time:'20分', label:'15 個和聲小調依序各練一遍（右手→左手）'},
+          {type:'free',  time:'5分', label:'選三個最不熟的調加強'},
+        ]
+      },
+    ],
+    advance: '進階條件：全部大調 ♩=100，和聲小調 ♩=84 雙手合奏流暢，可進入 S3。'
+  },
+  {
+    id: 's3',
+    badge: 'S3',
+    badgeClass: 's3',
+    title: '技術期：半音階與琶音',
+    sub: '目標速度 ♩=100–120',
+    sessions: [
+      {
+        num: 'A',
+        title: '半音階基礎',
+        blocks: [
+          {type:'warm',  time:'5分', label:'大調暖身 ♩=100'},
+          {type:'tech',  time:'15分', label:'右手半音階：1-3-1-3（白鍵1指，黑鍵3指），從C慢起'},
+          {type:'tech',  time:'5分', label:'左手半音階，注意拇指過指位置'},
+          {type:'free',  time:'5分', label:'雙手合奏半音階，先求均勻再求速度'},
+        ]
+      },
+      {
+        num: 'B',
+        title: '三和弦琶音',
+        blocks: [
+          {type:'warm',  time:'5分', label:'半音階暖身'},
+          {type:'tech',  time:'15分', label:'C 大三和弦琶音（CEG）右手 1-2-3-1-2-3-4-5，過指在G'},
+          {type:'tech',  time:'5分', label:'左手琶音 5-4-2-1-4-2-1，手腕引導'},
+          {type:'free',  time:'5分', label:'加 F、G、Am 琶音'},
+        ]
+      },
+      {
+        num: 'C',
+        title: '震音（顫音）入門',
+        blocks: [
+          {type:'warm',  time:'5分', label:'音階暖身'},
+          {type:'tech',  time:'10分', label:'2-3 顫音（CD）、3-4 顫音（DE），各練 30 秒×3'},
+          {type:'tech',  time:'10分', label:'4-5 顫音（EF），最難，需要更多耐心'},
+          {type:'free',  time:'5分', label:'把顫音接在音階前後，練習銜接'},
+        ]
+      },
+      {
+        num: 'D',
+        title: '綜合技術課',
+        blocks: [
+          {type:'warm',  time:'5分', label:'全調大調 ♩=108 快速過一遍'},
+          {type:'tech',  time:'8分', label:'半音階'},
+          {type:'tech',  time:'8分', label:'三和弦琶音（各調）'},
+          {type:'tech',  time:'4分', label:'震音'},
+          {type:'free',  time:'5分', label:'自由選練最弱的技術'},
+        ]
+      },
+    ],
+    advance: '進階條件：半音階 ♩=100 均勻，琶音雙手合奏，可進入 S4。'
+  },
+  {
+    id: 's4',
+    badge: 'S4',
+    badgeClass: 's4',
+    title: '強化期：八度與雙音',
+    sub: '目標速度 ♩=108–126',
+    sessions: [
+      {
+        num: 'A',
+        title: '八度入門',
+        blocks: [
+          {type:'warm',  time:'5分', label:'技術暖身：音階＋琶音'},
+          {type:'tech',  time:'15分', label:'C 大調八度，♩=60 連奏，手腕完全放鬆'},
+          {type:'tech',  time:'5分', label:'斷奏八度（staccato），訓練手腕彈性'},
+          {type:'free',  time:'5分', label:'慢慢嘗試加速，絕不可手腕僵硬'},
+        ]
+      },
+      {
+        num: 'B',
+        title: '三度雙音',
+        blocks: [
+          {type:'warm',  time:'5分', label:'八度暖身'},
+          {type:'tech',  time:'15分', label:'右手三度（1-2, 2-3, 1-2 交替）從 C 大調開始'},
+          {type:'tech',  time:'5分', label:'左手三度，注意兩音音量均等'},
+          {type:'free',  time:'5分', label:'加六度雙音'},
+        ]
+      },
+      {
+        num: 'C',
+        title: '速度衝刺',
+        blocks: [
+          {type:'warm',  time:'5分', label:'選三個最熟的調暖身'},
+          {type:'scale', time:'10分', label:'全調輪流，節拍器 ♩=120'},
+          {type:'tech',  time:'10分', label:'半音階＋琶音 ♩=112'},
+          {type:'free',  time:'5分', label:'♩=126 自由衝刺'},
+        ]
+      },
+      {
+        num: 'D',
+        title: '對稱式練習',
+        blocks: [
+          {type:'warm',  time:'5分', label:'技術暖身'},
+          {type:'tech',  time:'15分', label:'雙手從中央C向外擴展，鏡像對稱音階'},
+          {type:'tech',  time:'5分', label:'對稱琶音'},
+          {type:'free',  time:'5分', label:'自由複習'},
+        ]
+      },
+    ],
+    advance: '進階條件：八度 ♩=84 手腕放鬆，全調音階 ♩=120，可進入 S5。'
+  },
+  {
+    id: 's5',
+    badge: 'S5',
+    badgeClass: 's5',
+    title: '精熟期：維持與表現',
+    sub: '目標速度 ♩=120+ 　長期維持',
+    sessions: [
+      {
+        num: 'A',
+        title: '每日維持課（全面複習）',
+        blocks: [
+          {type:'warm',  time:'3分', label:'自選暖身'},
+          {type:'scale', time:'8分', label:'大調輪流 ♩=120'},
+          {type:'scale', time:'5分', label:'小調輪流 ♩=100'},
+          {type:'tech',  time:'7分', label:'半音階＋琶音＋震音'},
+          {type:'tech',  time:'4分', label:'八度＋雙音'},
+          {type:'free',  time:'3分', label:'力度變化練習（pp→ff）'},
+        ]
+      },
+      {
+        num: 'B',
+        title: '音樂性練習',
+        blocks: [
+          {type:'warm',  time:'5分', label:'全調音階 ♩=126'},
+          {type:'tech',  time:'10分', label:'選一個技術，從 pp 到 ff 完整練一遍'},
+          {type:'free',  time:'15分', label:'把哈農技巧應用到正在學的曲子'},
+        ]
+      },
+    ],
+    advance: '到達這個階段，哈農已是你的工具，而非目的。隨時回到 S1 換個角度複習，或針對曲目需求選練特定技術。'
+  },
+];
+
+function renderPlan() {
+  const el = document.getElementById('plan-content');
+  if (!el) return;
+
+  const legend = `
+    <div class="plan-legend">
+      <div class="plan-block warm"><div class="plan-block-dot"></div>暖身</div>
+      <div class="plan-block scale"><div class="plan-block-dot"></div>音階練習</div>
+      <div class="plan-block tech"><div class="plan-block-dot"></div>技術練習</div>
+      <div class="plan-block free"><div class="plan-block-dot"></div>自由練習</div>
+    </div>
+  `;
+
+  const intro = `<p class="plan-intro">
+    每次練習 30 分鐘，按自己的步調進行——不規定幾天一次，每個階段練到「進階條件」達標再往下走。
+    點開每個階段，裡面有數個練習單元（A、B、C…），可以依序輪流，也可以重複練同一個直到熟練。
+  </p>`;
+
+  const stages = PLAN_STAGES.map(stage => `
+    <div class="plan-stage" id="${stage.id}">
+      <div class="plan-stage-header" onclick="toggleStage('${stage.id}')">
+        <div class="plan-stage-badge ${stage.badgeClass}">${stage.badge}</div>
+        <div class="plan-stage-info">
+          <div class="plan-stage-title">${stage.title}</div>
+          <div class="plan-stage-sub">${stage.sub}</div>
+        </div>
+        <svg class="plan-stage-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div class="plan-stage-body">
+        <div class="plan-sessions">
+          ${stage.sessions.map(s => `
+            <div class="plan-session">
+              <div class="plan-session-num">${s.num}</div>
+              <div class="plan-session-content">
+                <div class="plan-session-title">${s.title}</div>
+                <div class="plan-session-blocks">
+                  ${s.blocks.map(b => `
+                    <div class="plan-block ${b.type}">
+                      <div class="plan-block-dot"></div>
+                      <span>${b.time}｜${b.label}</span>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+        <div class="plan-advance">⬆ <strong>進階條件：</strong>${stage.advance.replace('進階條件：','')}</div>
+      </div>
+    </div>
+  `).join('');
+
+  el.innerHTML = `
+    <h2 class="supp-title" style="margin-bottom:16px">練習計劃 <em>Practice Plan</em></h2>
+    ${intro}
+    ${legend}
+    ${stages}
+  `;
+}
+
+function toggleStage(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+}
+
 function render() {
   const d = DATA[curKey][curMode];
   const rows = [
@@ -1352,6 +1802,7 @@ document.querySelectorAll('.mode-btn').forEach(b => {
 render();
 renderSupplement();
 initTabs();
+renderPlan();
 </script>
 </body>
 </html>
