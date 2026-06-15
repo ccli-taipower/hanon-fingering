@@ -636,6 +636,106 @@ select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
   gap: 10px;
   margin-bottom: 24px;
 }
+
+/* ── Checkpoints ── */
+.plan-checks {
+  margin-top: 20px;
+  padding: 16px 18px;
+  background: var(--paper-warm);
+  border-radius: var(--r-md);
+  border: 1px solid var(--line);
+}
+.plan-checks-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  gap: 12px;
+}
+.plan-checks-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+.plan-progress-wrap {
+  flex: 1;
+  max-width: 200px;
+}
+.plan-progress-bar-bg {
+  height: 6px;
+  background: var(--paper-deep);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.plan-progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), #4a6fd4);
+  border-radius: 3px;
+  transition: width .4s ease;
+}
+.plan-progress-pct {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--accent);
+  font-weight: 600;
+  margin-top: 3px;
+  text-align: right;
+}
+.plan-progress-pct.done { color: var(--pivot-ring); }
+.plan-check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background .1s;
+}
+.plan-check-item:last-child { border-bottom: none; }
+.plan-check-item:hover { background: var(--paper-deep); padding-left: 4px; }
+.plan-check-box {
+  width: 18px; height: 18px;
+  border-radius: 4px;
+  border: 1.5px solid var(--ink-muted);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 1px;
+  transition: all .15s;
+  background: var(--paper);
+}
+.plan-check-item.checked .plan-check-box {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.plan-check-tick {
+  display: none;
+  color: #fff;
+}
+.plan-check-item.checked .plan-check-tick { display: block; }
+.plan-check-text {
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+.plan-check-item.checked .plan-check-text {
+  color: var(--ink-muted);
+  text-decoration: line-through;
+  text-decoration-color: var(--ink-muted);
+}
+.plan-unlock {
+  margin-top: 12px;
+  padding: 8px 12px;
+  border-radius: var(--r-md);
+  background: #eaf5ee;
+  border: 1px solid #90c8a0;
+  font-size: 12px;
+  color: #1a5a2a;
+  display: none;
+}
+.plan-unlock.visible { display: block; }
 </style>
 </head>
 <body>
@@ -1492,6 +1592,13 @@ const PLAN_STAGES = [
         ]
       },
     ],
+    checks: [
+      '右手單手：全部 15 個大調上下行，♩=84，連續無錯音',
+      '左手單手：全部 15 個大調上下行，♩=84，連續無錯音',
+      '雙手合奏：C、F、G、D、A 大調，♩=84，各連續 3 次無錯音',
+      '雙手合奏：剩餘 10 個調，♩=72，各連續 2 次無錯音',
+      '轉指點流暢：換指時無聲音中斷或突強',
+    ],
     advance: '進階條件：所有 15 個大調，雙手合奏 ♩=84 不停頓、不錯音，可進入 S2。'
   },
   {
@@ -1540,6 +1647,13 @@ const PLAN_STAGES = [
           {type:'free',  time:'5分', label:'選三個最不熟的調加強'},
         ]
       },
+    ],
+    checks: [
+      '全部大調雙手合奏 ♩=100，連續不停頓',
+      '全部和聲小調右手 ♩=84，升7音不卡頓',
+      '全部和聲小調雙手合奏 ♩=72，各2次無錯',
+      '旋律小調（至少5個調）：上下行切換自然，下行音符正確還原',
+      '附點節奏：任選3個調，長短＋短長兩種節奏各彈一遍',
     ],
     advance: '進階條件：全部大調 ♩=100，和聲小調 ♩=84 雙手合奏流暢，可進入 S3。'
   },
@@ -1592,6 +1706,13 @@ const PLAN_STAGES = [
         ]
       },
     ],
+    checks: [
+      '半音階右手 ♩=80，1-3 指法均勻無突強',
+      '半音階雙手合奏 ♩=72，兩手同步',
+      '三和弦琶音（C、F、G、Am）雙手合奏，手腕放鬆',
+      '顫音 2-3、3-4、4-5 各連續 10 秒均勻不斷',
+      '半音階＋琶音連續練習 ♩=100，不中斷',
+    ],
     advance: '進階條件：半音階 ♩=100 均勻，琶音雙手合奏，可進入 S4。'
   },
   {
@@ -1642,6 +1763,13 @@ const PLAN_STAGES = [
         ]
       },
     ],
+    checks: [
+      '八度連奏 ♩=72，手腕完全放鬆（可以用另一手觸碰確認）',
+      '八度斷奏 ♩=80，音色乾淨',
+      '三度雙音（C 大調全音階）右手 ♩=72，兩音音量均等',
+      '全調大調音階 ♩=120，雙手合奏',
+      '對稱式音階（雙手向外）C、G、F 大調，♩=84',
+    ],
     advance: '進階條件：八度 ♩=84 手腕放鬆，全調音階 ♩=120，可進入 S5。'
   },
   {
@@ -1673,6 +1801,12 @@ const PLAN_STAGES = [
         ]
       },
     ],
+    checks: [
+      '每日維持課（A單元）連續7次完成，無技術退步',
+      '全部技術（音階、半音階、琶音、震音、八度）♩=108 以上流暢',
+      '把本週練習的曲子中出現的技術，在哈農中找到對應練習',
+      '挑戰：任選一個調，♩=126 雙手合奏音階無錯音',
+    ],
     advance: '到達這個階段，哈農已是你的工具，而非目的。隨時回到 S1 換個角度複習，或針對曲目需求選練特定技術。'
   },
 ];
@@ -1695,7 +1829,33 @@ function renderPlan() {
     點開每個階段，裡面有數個練習單元（A、B、C…），可以依序輪流，也可以重複練同一個直到熟練。
   </p>`;
 
-  const stages = PLAN_STAGES.map(stage => `
+  const stages = PLAN_STAGES.map(stage => {
+    const checksHtml = stage.checks ? `
+      <div class="plan-checks" id="checks-${stage.id}">
+        <div class="plan-checks-header">
+          <div class="plan-checks-label">查核點</div>
+          <div class="plan-progress-wrap">
+            <div class="plan-progress-bar-bg">
+              <div class="plan-progress-bar-fill" id="bar-${stage.id}" style="width:0%"></div>
+            </div>
+            <div class="plan-progress-pct" id="pct-${stage.id}">0%</div>
+          </div>
+        </div>
+        ${stage.checks.map((c, ci) => `
+          <div class="plan-check-item" id="chk-${stage.id}-${ci}" onclick="toggleCheck('${stage.id}', ${ci}, ${stage.checks.length})">
+            <div class="plan-check-box">
+              <svg class="plan-check-tick" viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 6l3 3 5-5"/></svg>
+            </div>
+            <div class="plan-check-text">${c}</div>
+          </div>
+        `).join('')}
+        <div class="plan-unlock" id="unlock-${stage.id}">
+          ✓ 所有查核點完成！可以進入下一階段了。
+        </div>
+      </div>
+    ` : '';
+
+    return `
     <div class="plan-stage" id="${stage.id}">
       <div class="plan-stage-header" onclick="toggleStage('${stage.id}')">
         <div class="plan-stage-badge ${stage.badgeClass}">${stage.badge}</div>
@@ -1724,10 +1884,11 @@ function renderPlan() {
             </div>
           `).join('')}
         </div>
+        ${checksHtml}
         <div class="plan-advance">⬆ <strong>進階條件：</strong>${stage.advance.replace('進階條件：','')}</div>
       </div>
     </div>
-  `).join('');
+  `}).join('');
 
   el.innerHTML = `
     <h2 class="supp-title" style="margin-bottom:16px">練習計劃 <em>Practice Plan</em></h2>
@@ -1740,6 +1901,47 @@ function renderPlan() {
 function toggleStage(id) {
   const el = document.getElementById(id);
   el.classList.toggle('open');
+}
+
+function toggleCheck(stageId, ci, total) {
+  const item = document.getElementById('chk-' + stageId + '-' + ci);
+  item.classList.toggle('checked');
+  // Save to localStorage
+  const key = 'hanon-check-' + stageId + '-' + ci;
+  localStorage.setItem(key, item.classList.contains('checked') ? '1' : '0');
+  updateProgress(stageId, total);
+}
+
+function updateProgress(stageId, total) {
+  let done = 0;
+  for (let i = 0; i < total; i++) {
+    const el = document.getElementById('chk-' + stageId + '-' + i);
+    if (el && el.classList.contains('checked')) done++;
+  }
+  const pct = Math.round(done / total * 100);
+  const bar = document.getElementById('bar-' + stageId);
+  const pctEl = document.getElementById('pct-' + stageId);
+  const unlock = document.getElementById('unlock-' + stageId);
+  if (bar) bar.style.width = pct + '%';
+  if (pctEl) {
+    pctEl.textContent = pct + '%';
+    pctEl.className = 'plan-progress-pct' + (pct === 100 ? ' done' : '');
+  }
+  if (unlock) unlock.className = 'plan-unlock' + (pct === 100 ? ' visible' : '');
+}
+
+function restoreChecks() {
+  PLAN_STAGES.forEach(stage => {
+    if (!stage.checks) return;
+    stage.checks.forEach((_, ci) => {
+      const key = 'hanon-check-' + stage.id + '-' + ci;
+      if (localStorage.getItem(key) === '1') {
+        const el = document.getElementById('chk-' + stage.id + '-' + ci);
+        if (el) el.classList.add('checked');
+      }
+    });
+    updateProgress(stage.id, stage.checks.length);
+  });
 }
 
 function render() {
@@ -1803,6 +2005,7 @@ render();
 renderSupplement();
 initTabs();
 renderPlan();
+restoreChecks();
 </script>
 </body>
 </html>
