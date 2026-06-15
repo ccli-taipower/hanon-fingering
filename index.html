@@ -693,7 +693,7 @@ function drawStaffSVG(key, mode, dir, hand) {
   const PAD_TOP_LABEL = 28;   // for RH/LH label
   const PAD_ABOVE_NOTE = 44;  // finger number above highest note
   const PAD_BELOW_NOTE = 50;  // finger number below lowest note
-  const STAFF_H = 4 * SP2;   // 5 lines = 4 gaps
+  const STAFF_H = 8 * SP2;   // 5 lines, each gap = 2 steps
 
   // STAFF_BOT position in SVG
   const STAFF_BOT = PAD_TOP_LABEL + PAD_ABOVE_NOTE + Math.max(0, -minRelY);
@@ -716,7 +716,7 @@ function drawStaffSVG(key, mode, dir, hand) {
 
   // Staff lines
   for (let i = 0; i < 5; i++) {
-    sv += '<line x1="' + ML2 + '" y1="' + (STAFF_TOP+i*SP2) + '" x2="' + (W-MR2) + '" y2="' + (STAFF_TOP+i*SP2) + '" stroke="#1a1612" stroke-width="0.8"/>';
+    sv += '<line x1="' + ML2 + '" y1="' + (STAFF_TOP+i*2*SP2) + '" x2="' + (W-MR2) + '" y2="' + (STAFF_TOP+i*2*SP2) + '" stroke="#1a1612" stroke-width="0.8"/>';
   }
   sv += '<line x1="' + ML2 + '" y1="' + STAFF_TOP + '" x2="' + ML2 + '" y2="' + STAFF_BOT + '" stroke="#1a1612" stroke-width="1.5"/>';
 
