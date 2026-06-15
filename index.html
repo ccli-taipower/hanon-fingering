@@ -681,7 +681,7 @@ function drawStaffSVG(key, mode, dir, hand) {
   // sY relative to STAFF_BOT (to be determined)
   function sYrel(s) {
     if (isRH) return -(s - 2) * SP2;      // E4=step2 → 0 (on STAFF_BOT)
-    else      return -(s + 11) * SP2;     // G2=step-11 → 0 (on STAFF_BOT)
+    else      return -(s + 10) * SP2;     // G2=step-10 → 0 (on STAFF_BOT)
   }
 
   // Find actual Y range of notes
@@ -757,10 +757,10 @@ function drawStaffSVG(key, mode, dir, hand) {
         sv += '<line x1="' + (x-r-4) + '" y1="' + sY(ls) + '" x2="' + (x+r+4) + '" y2="' + sY(ls) + '" stroke="#1a1612" stroke-width="0.8"/>';
       }
     } else {
-      for (let ls = -13; ls >= st; ls -= 2) {
+      for (let ls = -12; ls >= st; ls -= 2) {
         sv += '<line x1="' + (x-r-4) + '" y1="' + sY(ls) + '" x2="' + (x+r+4) + '" y2="' + sY(ls) + '" stroke="#1a1612" stroke-width="0.8"/>';
       }
-      for (let ls = -1; ls <= st; ls += 2) {
+      for (let ls = 0; ls <= st; ls += 2) {
         sv += '<line x1="' + (x-r-4) + '" y1="' + sY(ls) + '" x2="' + (x+r+4) + '" y2="' + sY(ls) + '" stroke="#1a1612" stroke-width="0.8"/>';
       }
     }
