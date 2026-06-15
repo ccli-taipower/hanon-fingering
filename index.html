@@ -459,6 +459,38 @@ select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
 }
 .tab-panel { display: none; }
 .tab-panel.active { display: block; }
+
+.supp-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.supp-card-icon {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  color: var(--accent);
+  opacity: 0.8;
+  margin-top: 2px;
+}
+.supp-card-icon svg { width: 100%; height: 100%; }
+.tip-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.tip-icon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  color: var(--accent);
+  opacity: 0.75;
+}
+.tip-icon svg { width: 100%; height: 100%; }
+.tip-card.green .tip-icon { color: var(--pivot-ring); }
+.tip-card.rust  .tip-icon { color: var(--accent-2); }
 </style>
 </head>
 <body>
@@ -1092,59 +1124,78 @@ function buildFingers(str, notes) {
 
 
 
+const ICONS = {
+  finger: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 11V6a2 2 0 0 0-2-2 2 2 0 0 0-2 2"/><path d="M14 10V4a2 2 0 0 0-2-2 2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2 2 2 0 0 0-2 2v8"/><path d="M18 11a2 2 0 1 1 4 0v3a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg>`,
+  chromatic: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="3" height="10" rx="0.5"/><rect x="6" y="3" width="2" height="7" rx="0.5" fill="currentColor" stroke="none"/><rect x="9" y="3" width="3" height="10" rx="0.5"/><rect x="13" y="3" width="2" height="7" rx="0.5" fill="currentColor" stroke="none"/><rect x="16" y="3" width="3" height="10" rx="0.5"/><rect x="20" y="3" width="2" height="7" rx="0.5" fill="currentColor" stroke="none"/><path d="M2 17h20M2 20h20" stroke-width="1.5"/></svg>`,
+  arpeggio: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="18" r="2"/><circle cx="10" cy="13" r="2"/><circle cx="15" cy="8" r="2"/><circle cx="20" cy="4" r="2"/><path d="M7 17l1-1M12 12l1-1M17 7l1-1"/></svg>`,
+  arpeggio7: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="4" cy="20" r="1.5"/><circle cx="9" cy="15" r="1.5"/><circle cx="14" cy="9" r="1.5"/><circle cx="19" cy="4" r="1.5"/><path d="M5.5 19l2-2M10.5 14l2-2M15.5 8l2-2"/><circle cx="21" cy="12" r="1.5" stroke-dasharray="3 2"/></svg>`,
+  trill: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12 C6 6, 8 18, 10 12 S14 6, 16 12 S20 18, 22 12"/><text x="3" y="22" font-size="7" fill="currentColor" stroke="none" font-style="italic">tr</text></svg>`,
+  octave: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="17" r="2.5"/><circle cx="18" cy="7" r="2.5"/><path d="M8.5 15.5l7-7"/><path d="M3 17h6M15 7h6"/></svg>`,
+  double: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="16" r="2"/><circle cx="13" cy="10" r="2"/><circle cx="10" cy="16" r="2"/><circle cx="16" cy="10" r="2"/><path d="M9 14.5l2-3M12 14.5l2-3"/></svg>`,
+  contrary: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12 L4 6M12 12 L20 6"/><path d="M12 12 L4 18M12 12 L20 18"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg>`,
+  metronome: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V12M8 22h8"/><path d="M5 22L9 4h6l4 18"/><path d="M12 12l4-5"/><circle cx="16" cy="7" r="1" fill="currentColor" stroke="none"/></svg>`,
+  legato: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16 Q12 8 20 16"/><circle cx="4" cy="16" r="2"/><circle cx="20" cy="16" r="2"/><circle cx="12" cy="11" r="1.5" stroke-dasharray="3 2"/></svg>`,
+  diagnose: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>`,
+  slowmo: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/><path d="M16.5 7.5l1.5-1.5"/></svg>`,
+  rhythm: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="18" r="2"/><path d="M7 18V8l10-3v10"/><circle cx="17" cy="15" r="2"/><path d="M7 11h10"/></svg>`,
+  dynamic: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18 L12 6 L20 18"/><text x="3" y="22" font-size="6" fill="currentColor" stroke="none">pp</text><text x="17" y="22" font-size="6" fill="currentColor" stroke="none">ff</text></svg>`,
+  clock: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>`,
+  wrist: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6 C9 3 15 3 15 6 L16 14 C16 17 8 17 8 14 Z"/><path d="M8 17 C6 19 6 22 12 22 C18 22 18 19 16 17"/><path d="M10 10 Q12 8 14 10"/></svg>`,
+};
+
 const EXERCISE_TYPES = [
   {
     num: 'No. 1–20',
-    title: '手指獨立性',
+    icon: 'finger', title: '手指獨立性',
     sub: 'Finger Independence',
     desc: '五指均勻獨立訓練，每個音符力度均等。建議以♩=60起步，逐漸提升到♩=108以上。',
     tag: '基礎', tagType: ''
   },
   {
     num: 'No. 28–32',
-    title: '半音階',
+    icon: 'chromatic', title: '半音階',
     sub: 'Chromatic Scale',
     desc: '右手：1指在白鍵，3指跨兩個黑鍵（3 1 3 1...），或 1 3 1 3 交替。左手鏡像。關鍵：拇指過指要流暢，黑鍵段落不可斷音。',
     tag: '進階', tagType: 'medium'
   },
   {
     num: 'No. 33–38',
-    title: '三和弦琶音',
+    icon: 'arpeggio', title: '三和弦琶音',
     sub: 'Arpeggio (Triads)',
     desc: '大三和弦（如C：C E G C）右手指法 1 2 3 1 2 3 4 5，過指在G上。左手從5指起，1指落在C。手腕要放鬆，跳躍時手腕略微引導。',
     tag: '中級', tagType: 'medium'
   },
   {
     num: 'No. 39–43',
-    title: '七和弦琶音',
+    icon: 'arpeggio7', title: '七和弦琶音',
     sub: 'Arpeggio (Dominant 7th)',
     desc: '屬七和弦（如G7：G B D F）跨越更大音域。右手 1 2 3 4 1 2 3 4，左手 5 4 3 2 1 3 2 1。需要更大幅度的手腕旋轉動作。',
     tag: '進階', tagType: 'medium'
   },
   {
     num: 'No. 44–46',
-    title: '震音（顫音）',
+    icon: 'trill', title: '震音（顫音）',
     sub: 'Trill',
     desc: '兩音快速交替（如 C-D 或 D-E）。指法：2-3、3-4、4-5，或 1-2。關鍵是手指要靠近琴鍵，不要抬太高。從慢速建立均勻感。',
     tag: '進階', tagType: 'medium'
   },
   {
     num: 'No. 47–50',
-    title: '八度',
+    icon: 'octave', title: '八度',
     sub: 'Octaves',
     desc: '雙手各奏八度音程，1指與5指（或4指，黑鍵時）同時按下。手腕要有彈性，不可僵硬。應從慢速連奏練起，再練斷奏（staccato）。',
     tag: '高難度', tagType: 'hard'
   },
   {
     num: 'No. 51–60',
-    title: '雙音（三度、六度）',
+    icon: 'double', title: '雙音（三度、六度）',
     sub: 'Double Notes (3rds, 6ths)',
     desc: '兩音同時彈奏，三度（如C-E、D-F）或六度（如C-A）。右手三度上行指法：1-2、2-3、1-2 交替。需要手指獨立控制，兩音音量要均等。',
     tag: '高難度', tagType: 'hard'
   },
   {
     num: '補充',
-    title: '對稱式練習',
+    icon: 'contrary', title: '對稱式練習',
     sub: 'Contrary Motion',
     desc: '雙手從中央C向外或向內同時移動，鏡像對稱。兩手指法完全對稱，視覺上容易理解，但仍需注意音量平衡。',
     tag: '中級', tagType: 'medium'
@@ -1153,42 +1204,42 @@ const EXERCISE_TYPES = [
 
 const PRACTICE_TIPS = [
   {
-    title: '速度層次：節拍器三段法',
+    icon: 'metronome', title: '速度層次：節拍器三段法',
     desc: '每個練習分三個速度：(1) 慢速（♩=60）確認指法與音名；(2) 中速（♩=84）建立連貫感；(3) 目標速度（♩=108+）維持均勻。切勿在指法不穩時就加速。',
     style: ''
   },
   {
-    title: '連奏與斷奏交替',
+    icon: 'legato', title: '連奏與斷奏交替',
     desc: '同一個練習先用連奏（legato）彈，再用斷奏（staccato）彈。斷奏能強化手指獨立性，並訓練手指快速離鍵的能力，對震音和快速音群特別有效。',
     style: 'green'
   },
   {
-    title: '雙手對心電診斷',
+    icon: 'diagnose', title: '雙手對心電診斷',
     desc: '先單手練習確認指法，再雙手合奏。如果雙手合奏時某個音符特別突出或某段不流暢，通常是其中一手的換指點出了問題，回到單手找出原因。',
     style: ''
   },
   {
-    title: '轉指點的慢動作練習',
+    icon: 'slowmo', title: '轉指點的慢動作練習',
     desc: '找出每個音階的轉指點（拇指過指或穿越的位置），單獨放慢練習那幾個音。例如C大調右手在F和高音C的過指，反覆練習直到完全自然無聲為止。',
     style: 'green'
   },
   {
-    title: '不同節奏型變奏',
+    icon: 'rhythm', title: '不同節奏型變奏',
     desc: '把均等的十六分音符改成附點節奏（長短長短或短長短長），強制讓手指輪流承受重音，能快速找出弱指（通常是4指或5指）並加強它。',
     style: 'rust'
   },
   {
-    title: '力度控制：pp 到 ff',
+    icon: 'dynamic', title: '力度控制：pp 到 ff',
     desc: '同一個練習從最弱（pp）練到最強（ff），全程保持速度不變、指法不變。這能訓練手指在不同觸鍵深度下的精準控制，也是演奏音樂性的基礎。',
     style: 'rust'
   },
   {
-    title: '練習時間建議',
+    icon: 'clock', title: '練習時間建議',
     desc: '每天 20–30 分鐘的專注練習比 2 小時漫無目的更有效。可分段：音階 10 分鐘、琶音 10 分鐘、震音或八度 10 分鐘。手感不好時寧可縮短，不強撐。',
     style: ''
   },
   {
-    title: '手腕放鬆的自我檢測',
+    icon: 'wrist', title: '手腕放鬆的自我檢測',
     desc: '用另一隻手輕碰彈奏的手腕：如果感覺到緊繃或僵硬，立刻停下來抖抖手，重新從慢速開始。長期手腕緊繃是肌腱炎的前兆，必須避免。',
     style: 'rust'
   },
@@ -1200,9 +1251,14 @@ function renderSupplement() {
   if (grid) {
     grid.innerHTML = EXERCISE_TYPES.map(e => `
       <div class="supp-card">
-        <div class="supp-card-num">${e.num}</div>
-        <div class="supp-card-title">${e.title}</div>
-        <div class="supp-card-sub">${e.sub}</div>
+        <div class="supp-card-header">
+          <div class="supp-card-icon">${ICONS[e.icon] || ''}</div>
+          <div>
+            <div class="supp-card-num">${e.num}</div>
+            <div class="supp-card-title">${e.title}</div>
+            <div class="supp-card-sub">${e.sub}</div>
+          </div>
+        </div>
         <div class="supp-card-desc">${e.desc}</div>
         <span class="supp-card-tag ${e.tagType}">${e.tag}</span>
       </div>
@@ -1214,7 +1270,10 @@ function renderSupplement() {
   if (tips) {
     tips.innerHTML = PRACTICE_TIPS.map(t => `
       <div class="tip-card ${t.style}">
-        <div class="tip-title">${t.title}</div>
+        <div class="tip-header">
+          <div class="tip-icon">${ICONS[t.icon] || ''}</div>
+          <div class="tip-title">${t.title}</div>
+        </div>
         <div class="tip-desc">${t.desc}</div>
       </div>
     `).join('');
