@@ -411,21 +411,21 @@ select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 // ── Scale note sequences (15 notes = 2 octaves + top) ──
 const MAJOR_SCALES = {
-  C:  ['C','D','E','F','G','A','B','C'],
-  G:  ['G','A','B','C','D','E','F#','G'],
-  D:  ['D','E','F#','G','A','B','C#','D'],
-  A:  ['A','B','C#','D','E','F#','G#','A'],
-  E:  ['E','F#','G#','A','B','C#','D#','E'],
-  B:  ['B','C#','D#','E','F#','G#','A#','B'],
-  Fs: ['F#','G#','A#','B','C#','D#','E#','F#'],
-  Cs: ['C#','D#','E#','F#','G#','A#','B#','C#'],
-  F:  ['F','G','A','Bb','C','D','E','F'],
-  Bb: ['Bb','C','D','Eb','F','G','A','Bb'],
-  Eb: ['Eb','F','G','Ab','Bb','C','D','Eb'],
-  Ab: ['Ab','Bb','C','Db','Eb','F','G','Ab'],
-  Db: ['Db','Eb','F','Gb','Ab','Bb','C','Db'],
-  Gb: ['Gb','Ab','Bb','Cb','Db','Eb','F','Gb'],
-  Cb: ['Cb','Db','Eb','Fb','Gb','Ab','Bb','Cb'],
+  C:  ['C','D','Eb','F','G','A','B','C','D','Eb','F','G','A','B','C'],
+  G:  ['G','A','Bb','C','D','E','F#','G','A','Bb','C','D','E','F#','G'],
+  D:  ['D','E','F','G','A','B','C#','D','E','F','G','A','B','C#','D'],
+  A:  ['A','B','C','D','E','F#','G#','A','B','C','D','E','F#','G#','A'],
+  E:  ['E','F#','G','A','B','C#','D#','E','F#','G','A','B','C#','D#','E'],
+  B:  ['B','C#','D','E','F#','G#','A#','B','C#','D','E','F#','G#','A#','B'],
+  Fs: ['F#','G#','A#','B','C#','D#','E#','F#','G#','A#','B','C#','D#','E#','F#'],
+  Cs: ['C#','D#','E#','F#','G#','A#','B#','C#','D#','E#','F#','G#','A#','B#','C#'],
+  F:  ['F','G','Ab','Bb','C','D','E','F','G','Ab','Bb','C','D','E','F'],
+  Bb: ['Bb','C','Db','Eb','F','G','A','Bb','C','Db','Eb','F','G','A','Bb'],
+  Eb: ['Eb','F','Gb','Ab','Bb','C','D','Eb','F','Gb','Ab','Bb','C','D','Eb'],
+  Ab: ['Ab','Bb','Cb','Db','Eb','F','G','Ab','Bb','Cb','Db','Eb','F','G','Ab'],
+  Db: ['Db','Eb','F','Gb','Ab','Bb','C','Db','Eb','F','Gb','Ab','Bb','C','Db'],
+  Gb: ['Gb','Ab','Bb','Cb','Db','Eb','F','Gb','Ab','Bb','Cb','Db','Eb','F','Gb'],
+  Cb: ['Cb','Db','Eb','Fb','Gb','Ab','Bb','Cb','Db','Eb','Fb','Gb','Ab','Bb','Cb'],
 };
 
 const MINOR_TONICS = {
@@ -437,11 +437,11 @@ const NATURAL_MINOR = {
   A:  ['A','B','C','D','E','F','G','A'],
   E:  ['E','F#','G','A','B','C','D','E'],
   B:  ['B','C#','D','E','F#','G','A','B'],
-  'F#':['F#','G#','A','B','C#','D','E','F#'],
-  'C#':['C#','D#','E','F#','G#','A','B','C#'],
-  'G#':['G#','A#','B','C#','D#','E','F#','G#'],
-  'D#':['D#','E#','F#','G#','A#','B','C#','D#'],
-  'A#':['A#','B#','C#','D#','E#','F#','G#','A#'],
+  'F#':['F#','G#','A','B','C#','D#','E#','F#','G#','A','B','C#','D#','E#','F#'],
+  'C#':['C#','D#','E','F#','G#','A#','B#','C#','D#','E','F#','G#','A#','B#','C#'],
+  'G#':['G#','A#','B','C#','D#','E#','F##','G#','A#','B','C#','D#','E#','F##','G#'],
+  'D#':['D#','E#','F#','G#','A#','B#','C##','D#','E#','F#','G#','A#','B#','C##','D#'],
+  'A#':['A#','B#','C#','D#','E#','F##','G##','A#','B#','C#','D#','E#','F##','G##','A#'],
   D:  ['D','E','F','G','A','Bb','C','D'],
   G:  ['G','A','Bb','C','D','Eb','F','G'],
   C:  ['C','D','Eb','F','G','Ab','Bb','C'],
@@ -581,7 +581,7 @@ const FL_BASS   = [-2, 1,-3, 0,-4,-1,-5];
 
 function keySigSVG(key, mode) {
   const ks = KS[key] || {t:'',n:0};
-  if (ks.n === 0) return {svg:'', w:0};
+  if (ks.n === 0) return {svg:'', w:0, type:'', n:0};
   const sym = ks.t === '#' ? '♯' : '♭';
   const tSteps = ks.t === '#' ? SH_TREBLE : FL_TREBLE;
   const bSteps = ks.t === '#' ? SH_BASS   : FL_BASS;
@@ -593,7 +593,7 @@ function keySigSVG(key, mode) {
     svg += `<text x="${x}" y="${stepY(tSteps[i])+5}" font-size="14" font-family="serif" fill="#1a1612" text-anchor="middle">${sym}</text>`;
     svg += `<text x="${x}" y="${stepY(bSteps[i])+5}" font-size="14" font-family="serif" fill="#1a1612" text-anchor="middle">${sym}</text>`;
   }
-  return {svg, w: ks.n * dx + 4};
+  return {svg, w: ks.n * dx + 4, type: ks.t, n: ks.n};
 }
 
 // Check if a note's accidental is already covered by key sig
@@ -635,7 +635,7 @@ function extendFingering(str, total) {
   return result.slice(0, total);
 }
 
-function parseFinGroups(str, total=8) {
+function parseFinGroups(str, total=15) {
   const groups = str.split(' | ');
   const nums = extendFingering(str, total);
   let gi = 0, posInGroup = 0;
@@ -659,63 +659,138 @@ function parseFinGroups(str, total=8) {
   return res;
 }
 
-function drawScore(key, mode, dir) {
+function drawStaffSVG(key, mode, dir, hand) {
   const notes = getScaleNotes(key, mode, dir);
-  const rOct = rhOct(key, mode);
-  const lOct = lhOct(key, mode);
+  const isRH = hand === 'rh';
+  const oct = isRH ? rhOct(key, mode) : lhOct(key, mode);
+  const startOct = dir === 'asc' ? oct : oct + 2;
 
-  const rhSteps = dir === 'asc'
-    ? assignSteps(notes, rOct)
-    : assignStepsDesc(notes, rOct + 2);
-  const lhSteps = dir === 'asc'
-    ? assignSteps(notes, lOct)
-    : assignStepsDesc(notes, lOct + 2);
+  const steps = dir === 'asc'
+    ? assignSteps(notes, oct)
+    : assignStepsDesc(notes, oct + 2);
 
-  const rhFinStr = (DATA[key][mode]['rh_'+dir] || {fingers:''}).fingers;
-  const lhFinStr = (DATA[key][mode]['lh_'+dir] || {fingers:''}).fingers;
-  const rhFin = parseFinGroups(rhFinStr);
-  const lhFin = parseFinGroups(lhFinStr);
+  const finStr = (DATA[key][mode][hand+'_'+dir] || {fingers:''}).fingers;
+  const fin = parseFinGroups(finStr);
 
   const ks = keySigSVG(key, mode);
-  const noteStartX = ML + 36 + ks.w + 8;
+  const noteStartX = ML + 52 + ks.w + 8;
   const noteEndX = SVG_W - MR;
-  const xStep = (noteEndX - noteStartX) / 7;
+  const xStep = (noteEndX - noteStartX) / 14;
 
-  let svg = `<svg viewBox="0 0 ${SVG_W} ${SVG_H}" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;display:block">`;
-  svg += `<rect width="${SVG_W}" height="${SVG_H}" fill="#f7f4ef"/>`;
+  // Single-staff SVG layout
+  const S_TOP = 52;
+  const S_BOT = S_TOP + 4*SP;
+  const S_H = S_BOT + 60;
 
-  // Staves
-  for (let i = 0; i < 5; i++) {
-    svg += `<line x1="${ML}" y1="${T_TOP+i*SP}" x2="${SVG_W-MR}" y2="${T_TOP+i*SP}" stroke="#1a1612" stroke-width="0.65"/>`;
-    svg += `<line x1="${ML}" y1="${B_TOP+i*SP}" x2="${SVG_W-MR}" y2="${B_TOP+i*SP}" stroke="#1a1612" stroke-width="0.65"/>`;
+  // stepY for this single staff (treble: E4=step2 on S_BOT; bass: A3=step-3 on S_BOT? no)
+  // For RH: treble clef, E4 sits on S_BOT
+  // For LH: bass clef, we offset steps so bass notes sit on the staff lines
+  // Bass clef bottom line = G2 = step -11, top line = A3 = step -3
+  // We want A3 (step -3) to sit on S_TOP, G2 (step -11) on S_BOT
+  // So: y = S_BOT - (step - (-11)) * SP = S_BOT - (step+11)*SP ... but that's 4 lines = 4SP
+  // Actually for bass: S_TOP=A3=step-3, S_BOT=G2=step-11? No: 5 lines, 4 gaps
+  // treble: lines at E4(2),G4(4),B4(6),D5(8),F5(10) => S_BOT=step2, S_TOP=step10
+  // bass:   lines at G2(-11),B2(-9),D3(-7),F3(-5),A3(-3) => S_BOT=step-11, S_TOP=step-3
+  // For bass we want S_BOT to correspond to step -11
+  // stepY_single: for RH: y = S_BOT - (s-2)*SP; for LH: y = S_BOT - (s-(-11))*SP = S_BOT-(s+11)*SP
+  function stepYS(s) {
+    if (isRH) return S_BOT - (s - 2) * SP;
+    else      return S_BOT - (s + 11) * SP;
   }
-  // Brace + barline
-  svg += `<line x1="${ML}" y1="${T_TOP}" x2="${ML}" y2="${B_BOT}" stroke="#1a1612" stroke-width="1.8"/>`;
-  svg += `<line x1="${ML-5}" y1="${T_TOP}" x2="${ML-5}" y2="${B_BOT}" stroke="#1a1612" stroke-width="3"/>`;
 
-  // Clefs
-  svg += `<text x="${ML+2}" y="${T_BOT+2}" font-size="52" font-family="serif" fill="#1a1612">𝄞</text>`;
-  svg += `<text x="${ML+4}" y="${B_TOP+10}" font-size="28" font-family="serif" fill="#1a1612">𝄢</text>`;
-  // Bass clef dots
-  svg += `<circle cx="${ML+20}" cy="${B_TOP+3}" r="2.5" fill="#1a1612"/>`;
-  svg += `<circle cx="${ML+20}" cy="${B_TOP+7}" r="2.5" fill="#1a1612"/>`;
+  let svg = \`<svg viewBox="0 0 \${SVG_W} \${S_H}" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;display:block;margin-bottom:8px">\`;
+  svg += \`<rect width="\${SVG_W}" height="\${S_H}" fill="#f7f4ef"/>\`;
 
-  // Key sig
-  svg += ks.svg;
+  // Staff lines
+  for (let i = 0; i < 5; i++) {
+    svg += \`<line x1="\${ML}" y1="\${S_TOP+i*SP}" x2="\${SVG_W-MR}" y2="\${S_TOP+i*SP}" stroke="#1a1612" stroke-width="0.7"/>\`;
+  }
+  // Barline
+  svg += \`<line x1="\${ML}" y1="\${S_TOP}" x2="\${ML}" y2="\${S_BOT}" stroke="#1a1612" stroke-width="1.5"/>\`;
+
+  // Clef
+  if (isRH) {
+    svg += \`<text x="\${ML+2}" y="\${S_BOT+2}" font-size="50" font-family="serif" fill="#1a1612">𝄞</text>\`;
+  } else {
+    svg += \`<text x="\${ML+4}" y="\${S_TOP+13}" font-size="28" font-family="serif" fill="#1a1612">𝄢</text>\`;
+    svg += \`<circle cx="\${ML+21}" cy="\${S_TOP+4}" r="2.5" fill="#1a1612"/>\`;
+    svg += \`<circle cx="\${ML+21}" cy="\${S_TOP+10}" r="2.5" fill="#1a1612"/>\`;
+  }
+
+  // Label
+  const label = isRH ? '右手 RH' : '左手 LH';
+  svg += \`<text x="\${ML}" y="14" font-size="11" font-family="monospace" fill="#2c3e7a" font-weight="600">\${label}</text>\`;
+
+  // Key signature
+  const ksn = ks.n || 0;
+  if (ksn > 0) {
+    const sym = ks.type === '#' ? '♯' : '♭';
+    const tSteps = ks.type === '#' ? SH_TREBLE : FL_TREBLE;
+    const bSteps = ks.type === '#' ? SH_BASS   : FL_BASS;
+    const accSteps = isRH ? tSteps : bSteps;
+    const startX = ML + 52;
+    for (let i = 0; i < ksn; i++) {
+      svg += \`<text x="\${startX + i*9}" y="\${stepYS(accSteps[i])+4}" font-size="14" font-family="serif" fill="#1a1612" text-anchor="middle">\${sym}</text>\`;
+    }
+  }
 
   // Notes
-  for (let i = 0; i < 8; i++) {
+  const r = 5;
+  for (let i = 0; i < 15; i++) {
     const x = noteStartX + i * xStep;
-    svg += drawNote(x, rhSteps[i], notes[i], rhFin[i]||{f:0}, 'rh', key, mode);
-    svg += drawNote(x, lhSteps[i], notes[i], lhFin[i]||{f:0}, 'lh', key, mode);
-  }
+    const s = steps[i];
+    if (s === undefined) continue;
+    const y = stepYS(s);
+    const finInfo = fin[i] || {f:0, isThumb:false, isPivot:false};
 
-  // Labels
-  svg += `<text x="${ML}" y="${SVG_H-4}" font-size="11" font-family="monospace" fill="#8a847e">右手 RH（高音譜）</text>`;
-  svg += `<text x="${SVG_W/2}" y="${SVG_H-4}" font-size="11" font-family="monospace" fill="#8a847e" text-anchor="middle">左手 LH（低音譜，低一個八度）</text>`;
+    // Ledger lines
+    if (isRH) {
+      for (let ls = 0; ls >= s; ls -= 2) {
+        svg += \`<line x1="\${x-r-3}" y1="\${stepYS(ls)}" x2="\${x+r+3}" y2="\${stepYS(ls)}" stroke="#1a1612" stroke-width="0.7"/>\`;
+      }
+      for (let ls = 12; ls <= s; ls += 2) {
+        svg += \`<line x1="\${x-r-3}" y1="\${stepYS(ls)}" x2="\${x+r+3}" y2="\${stepYS(ls)}" stroke="#1a1612" stroke-width="0.7"/>\`;
+      }
+    } else {
+      // Bass: below G2 (step -11 = S_BOT), above A3 (step -3 = S_TOP)
+      for (let ls = -13; ls >= s; ls -= 2) {
+        svg += \`<line x1="\${x-r-3}" y1="\${stepYS(ls)}" x2="\${x+r+3}" y2="\${stepYS(ls)}" stroke="#1a1612" stroke-width="0.7"/>\`;
+      }
+      for (let ls = -1; ls <= s; ls += 2) {
+        svg += \`<line x1="\${x-r-3}" y1="\${stepYS(ls)}" x2="\${x+r+3}" y2="\${stepYS(ls)}" stroke="#1a1612" stroke-width="0.7"/>\`;
+      }
+    }
+
+    // Accidental
+    const accSym = needsAcc(notes[i], key, mode);
+    if (accSym) {
+      svg += \`<text x="\${x-r-4}" y="\${y+4}" font-size="11" font-family="serif" fill="#1a1612" text-anchor="end">\${accSym}</text>\`;
+    }
+
+    // Note head
+    let fill = '#f7f4ef', stroke = '#1a1612', sw = '1.2';
+    if (finInfo.isThumb)  { fill='#d4e0f5'; stroke='#1a3066'; sw='1.8'; }
+    if (finInfo.isPivot)  { stroke='#2a7a5a'; sw='2.2'; }
+    svg += \`<ellipse cx="\${x}" cy="\${y}" rx="\${r}" ry="\${r*0.78}" fill="\${fill}" stroke="\${stroke}" stroke-width="\${sw}"/>\`;
+
+    // Stem: RH up, LH down
+    if (isRH) svg += \`<line x1="\${x+r}" y1="\${y}" x2="\${x+r}" y2="\${y-26}" stroke="#1a1612" stroke-width="1"/>\`;
+    else      svg += \`<line x1="\${x-r}" y1="\${y}" x2="\${x-r}" y2="\${y+26}" stroke="#1a1612" stroke-width="1"/>\`;
+
+    // Finger number
+    if (finInfo.f > 0) {
+      const fc = finInfo.isThumb ? '#1a3066' : finInfo.isPivot ? '#2a7a5a' : '#2c3e7a';
+      const fy = isRH ? y - 32 : y + 40;
+      svg += \`<text x="\${x}" y="\${fy}" font-size="12" font-family="monospace" font-weight="700" fill="\${fc}" text-anchor="middle">\${finInfo.f}</text>\`;
+    }
+  }
 
   svg += '</svg>';
   return svg;
+}
+
+function drawScore(key, mode, dir) {
+  return drawStaffSVG(key, mode, dir, 'rh') + drawStaffSVG(key, mode, dir, 'lh');
 }
 
 function drawNote(x, step, noteName, finInfo, hand, key, mode) {
