@@ -736,6 +736,175 @@ select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
   display: none;
 }
 .plan-unlock.visible { display: block; }
+
+/* ── Gantt ── */
+.gantt-wrap { overflow-x: auto; }
+.gantt-intro {
+  font-family: var(--serif);
+  font-size: 14px;
+  color: var(--ink-soft);
+  line-height: 1.8;
+  margin-bottom: 28px;
+  max-width: 600px;
+}
+.gantt-table {
+  width: 100%;
+  min-width: 700px;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.gantt-table th {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  padding: 6px 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+.gantt-table th.session-th {
+  text-align: center;
+  width: 32px;
+  padding: 6px 2px;
+}
+.gantt-row { transition: background .1s; }
+.gantt-row:hover { background: var(--paper-warm); }
+.gantt-stage-cell {
+  padding: 10px 10px 10px 0;
+  vertical-align: middle;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--line);
+}
+.gantt-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+.gantt-badge.s2 { background: #2a7a5a; }
+.gantt-badge.s3 { background: var(--accent-2); }
+.gantt-badge.s4 { background: #6a3a9a; }
+.gantt-badge.s5 { background: #1a6a6a; }
+.gantt-stage-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.gantt-stage-range {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-muted);
+  margin-top: 1px;
+}
+.gantt-bar-cell {
+  padding: 4px 2px;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--line);
+  text-align: center;
+}
+.gantt-cell-inner {
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-family: var(--mono);
+  color: #fff;
+  font-weight: 600;
+}
+.gantt-cell-inner.active { opacity: 1; }
+.gantt-cell-inner.done {
+  background: var(--paper-deep) !important;
+  color: var(--ink-muted);
+}
+.gantt-cell-inner.done::after { content: '✓'; font-size: 11px; }
+.gantt-cell-inner.empty { background: transparent; }
+.gantt-progress-col {
+  padding: 4px 10px;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--line);
+  min-width: 100px;
+}
+.gantt-mini-bar {
+  height: 6px;
+  background: var(--paper-deep);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 3px;
+}
+.gantt-mini-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width .4s;
+}
+.gantt-mini-pct {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-muted);
+}
+.gantt-legend {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.gantt-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+.gantt-legend-dot {
+  width: 14px; height: 14px;
+  border-radius: 3px;
+}
+.gantt-current-line {
+  border-left: 2px dashed var(--accent-2);
+  position: relative;
+}
+.gantt-summary {
+  margin-top: 24px;
+  padding: 16px 20px;
+  background: var(--paper-warm);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 16px;
+}
+.gantt-stat-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin-bottom: 4px;
+}
+.gantt-stat-value {
+  font-family: var(--serif);
+  font-size: 22px;
+  color: var(--accent);
+  font-weight: 400;
+}
+.gantt-stat-unit {
+  font-size: 12px;
+  color: var(--ink-muted);
+  margin-left: 3px;
+}
 </style>
 </head>
 <body>
@@ -752,6 +921,7 @@ select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
     <button class="tab-btn active" data-tab="fingering" role="tab">指法查詢</button>
     <button class="tab-btn" data-tab="guide" role="tab">練習指南</button>
     <button class="tab-btn" data-tab="plan" role="tab">練習計劃</button>
+    <button class="tab-btn" data-tab="gantt" role="tab">進度總覽</button>
   </nav>
 
   <div class="tab-panel active" id="tab-fingering">
@@ -838,6 +1008,10 @@ select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
   <div class="tab-panel" id="tab-plan">
     <div id="plan-content"></div>
   </div><!-- /tab-plan -->
+
+  <div class="tab-panel" id="tab-gantt">
+    <div id="gantt-content"></div>
+  </div><!-- /tab-gantt -->
 
   <footer class="footer">
     <span>哈農音階指法查詢 · Hanon Scale Fingering Dashboard</span>
@@ -1944,6 +2118,172 @@ function restoreChecks() {
   });
 }
 
+
+// Stage definitions for gantt: estimated session range per stage
+const GANTT_STAGES = [
+  { id:'s1', badge:'S1', badgeClass:'',   name:'奠基期',   nameEn:'白鍵音階',     start:1,  end:20,  color:'#2c3e7a', sessions:4 },
+  { id:'s2', badge:'S2', badgeClass:'s2', name:'擴展期',   nameEn:'小調與速度',   start:21, end:45,  color:'#2a7a5a', sessions:4 },
+  { id:'s3', badge:'S3', badgeClass:'s3', name:'技術期',   nameEn:'半音階與琶音', start:46, end:70,  color:'#7a3a2c', sessions:4 },
+  { id:'s4', badge:'S4', badgeClass:'s4', name:'強化期',   nameEn:'八度與雙音',   start:71, end:95,  color:'#6a3a9a', sessions:4 },
+  { id:'s5', badge:'S5', badgeClass:'s5', name:'精熟期',   nameEn:'維持與表現',   start:96, end:120, color:'#1a6a6a', sessions:2 },
+];
+
+const TOTAL_SESSIONS = 120;
+
+function getCheckProgress(stageId) {
+  const stage = PLAN_STAGES.find(s => s.id === stageId);
+  if (!stage || !stage.checks) return { done: 0, total: 0, pct: 0 };
+  let done = 0;
+  stage.checks.forEach((_, ci) => {
+    if (localStorage.getItem('hanon-check-' + stageId + '-' + ci) === '1') done++;
+  });
+  return { done, total: stage.checks.length, pct: Math.round(done / stage.checks.length * 100) };
+}
+
+function getCurrentSession() {
+  // Estimate current session from checkpoints
+  for (let i = 0; i < GANTT_STAGES.length; i++) {
+    const gs = GANTT_STAGES[i];
+    const prog = getCheckProgress(gs.id);
+    if (prog.pct < 100) {
+      const within = Math.round((gs.end - gs.start) * prog.pct / 100);
+      return gs.start + within;
+    }
+  }
+  return TOTAL_SESSIONS;
+}
+
+function renderGantt() {
+  const el = document.getElementById('gantt-content');
+  if (!el) return;
+
+  const currentSession = getCurrentSession();
+  const totalCompleted = GANTT_STAGES.reduce((acc, gs) => {
+    return acc + (getCheckProgress(gs.id).pct === 100 ? (gs.end - gs.start + 1) : 0);
+  }, 0);
+
+  // Build header: session numbers (show every 5)
+  const tickInterval = 10;
+  const ticks = [];
+  for (let i = 1; i <= TOTAL_SESSIONS; i += tickInterval) ticks.push(i);
+
+  const thCells = ticks.map(t =>
+    `<th class="session-th" colspan="${tickInterval}" style="border-left:1px solid var(--line)">${t}</th>`
+  ).join('');
+
+  // Build rows
+  const rows = GANTT_STAGES.map(gs => {
+    const prog = getCheckProgress(gs.id);
+    const stageLen = gs.end - gs.start + 1;
+
+    // Build bar cells (one cell per tickInterval block)
+    let barCells = '';
+    for (let t = 1; t <= TOTAL_SESSIONS; t += tickInterval) {
+      const blockEnd = t + tickInterval - 1;
+      const inStage = t <= gs.end && blockEnd >= gs.start;
+
+      if (!inStage) {
+        barCells += `<td class="gantt-bar-cell"><div class="gantt-cell-inner empty"></div></td>`;
+        continue;
+      }
+
+      // Is this block fully completed? partly? current?
+      const blockMid = t + tickInterval / 2;
+      const isDone = prog.pct === 100 || (gs.end < currentSession && blockMid <= gs.end);
+      const isCurrent = !isDone && blockMid >= gs.start && blockMid <= gs.end;
+      const opacity = isCurrent ? Math.max(0.3, prog.pct / 100) : 1;
+
+      if (isDone) {
+        barCells += `<td class="gantt-bar-cell"><div class="gantt-cell-inner done" style="background:${gs.color}20"></div></td>`;
+      } else if (isCurrent) {
+        const fillPct = prog.pct;
+        barCells += `<td class="gantt-bar-cell" title="${gs.name} ${fillPct}%">
+          <div class="gantt-cell-inner active" style="background:${gs.color};opacity:${0.4 + fillPct/167}"></div>
+        </td>`;
+      } else {
+        barCells += `<td class="gantt-bar-cell"><div class="gantt-cell-inner" style="background:${gs.color}30;color:${gs.color}88">-</div></td>`;
+      }
+    }
+
+    return `
+      <tr class="gantt-row">
+        <td class="gantt-stage-cell">
+          <div style="display:flex;align-items:center">
+            <div class="gantt-badge ${gs.badgeClass}">${gs.badge}</div>
+            <div>
+              <div class="gantt-stage-name">${gs.name}</div>
+              <div class="gantt-stage-range">${gs.nameEn}　#${gs.start}–${gs.end}</div>
+            </div>
+          </div>
+        </td>
+        ${barCells}
+        <td class="gantt-progress-col">
+          <div class="gantt-mini-bar">
+            <div class="gantt-mini-fill" style="width:${prog.pct}%;background:${gs.color}"></div>
+          </div>
+          <div class="gantt-mini-pct">${prog.done}/${prog.total} 查核點　${prog.pct}%</div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+
+  // Summary stats
+  const completedStages = GANTT_STAGES.filter(gs => getCheckProgress(gs.id).pct === 100).length;
+  const allChecks = PLAN_STAGES.reduce((a, s) => a + (s.checks ? s.checks.length : 0), 0);
+  const doneChecks = PLAN_STAGES.reduce((a, s) => {
+    if (!s.checks) return a;
+    return a + s.checks.filter((_, ci) => localStorage.getItem('hanon-check-' + s.id + '-' + ci) === '1').length;
+  }, 0);
+
+  el.innerHTML = `
+    <h2 class="supp-title" style="margin-bottom:16px">進度總覽 <em>Progress Overview</em></h2>
+    <p class="gantt-intro">橫軸為練習次數（每次 30 分鐘），顏色深淺反映各階段的查核點完成度。勾選「練習計劃」tab 中的查核點後，這裡會自動更新。</p>
+
+    <div class="gantt-legend">
+      <div class="gantt-legend-item"><div class="gantt-legend-dot" style="background:#2c3e7a;opacity:.9"></div>進行中</div>
+      <div class="gantt-legend-item"><div class="gantt-legend-dot" style="background:#e0dbd2;border:1px solid #ccc"></div>✓ 已完成</div>
+      <div class="gantt-legend-item"><div class="gantt-legend-dot" style="background:#e8e4de;border:1px dashed #bbb"></div>尚未開始</div>
+    </div>
+
+    <div class="gantt-wrap">
+      <table class="gantt-table">
+        <thead>
+          <tr>
+            <th style="min-width:180px">階段</th>
+            ${thCells}
+            <th style="min-width:140px;padding-left:10px">查核進度</th>
+          </tr>
+          <tr>
+            <td></td>
+            ${ticks.map(t => `<td colspan="${tickInterval}" style="padding:2px 2px 6px;text-align:center;border-left:1px solid var(--line)"><span style="font-family:var(--mono);font-size:9px;color:var(--ink-muted)">${t}次</span></td>`).join('')}
+            <td></td>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+
+    <div class="gantt-summary">
+      <div>
+        <div class="gantt-stat-label">目前進度</div>
+        <div class="gantt-stat-value">#${currentSession}<span class="gantt-stat-unit">次</span></div>
+      </div>
+      <div>
+        <div class="gantt-stat-label">完成階段</div>
+        <div class="gantt-stat-value">${completedStages}<span class="gantt-stat-unit">/ 5</span></div>
+      </div>
+      <div>
+        <div class="gantt-stat-label">查核點</div>
+        <div class="gantt-stat-value">${doneChecks}<span class="gantt-stat-unit">/ ${allChecks}</span></div>
+      </div>
+      <div>
+        <div class="gantt-stat-label">預估剩餘</div>
+        <div class="gantt-stat-value">${Math.max(0, TOTAL_SESSIONS - currentSession)}<span class="gantt-stat-unit">次</span></div>
+      </div>
+    </div>
+  `;
+}
+
 function render() {
   const d = DATA[curKey][curMode];
   const rows = [
@@ -2006,6 +2346,7 @@ renderSupplement();
 initTabs();
 renderPlan();
 restoreChecks();
+renderGantt();
 </script>
 </body>
 </html>
