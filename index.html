@@ -662,9 +662,8 @@ function parseFinGroups(str, total=15) {
 function drawStaffSVG(key, mode, dir, hand) {
   const notes = getScaleNotes(key, mode, dir);
   const isRH = hand === 'rh';
-
-  // Each hand uses its own octave range
   const oct = isRH ? rhOct(key, mode) : lhOct(key, mode);
+
   const steps = dir === 'asc'
     ? assignSteps(notes, oct)
     : assignStepsDesc(notes, oct + 2);
@@ -673,49 +672,61 @@ function drawStaffSVG(key, mode, dir, hand) {
   const fin = parseFinGroups(finStr);
   const ks = keySigSVG(key, mode);
 
-  // Layout constants — each SVG is fully independent
   const W = 960;
   const ML2 = 60;
   const MR2 = 16;
-  const SP2 = 11;        // space between staff lines
-  const STAFF_TOP = 60;  // room for finger numbers above
-  const STAFF_BOT = STAFF_TOP + 4 * SP2;
-  const SVG_H2 = STAFF_BOT + 70; // room for finger numbers below
+  const SP2 = 11;
+  const r = 6;
 
-  // For RH (treble): E4 = step 2 sits on STAFF_BOT
-  // For LH (bass):   G2 = step -11 sits on STAFF_BOT
-  //   => A3=-3 on STAFF_TOP, i.e. 4 lines above G2
-  function sY(s) {
-    if (isRH) return STAFF_BOT - (s - 2) * SP2;
-    else      return STAFF_BOT - (s + 11) * SP2;
+  // sY relative to STAFF_BOT (to be determined)
+  function sYrel(s) {
+    if (isRH) return -(s - 2) * SP2;      // E4=step2 → 0 (on STAFF_BOT)
+    else      return -(s + 11) * SP2;     // G2=step-11 → 0 (on STAFF_BOT)
   }
+
+  // Find actual Y range of notes
+  const relYs = steps.map(sYrel);
+  const minRelY = Math.min(...relYs);  // most negative = highest on page = needs room above STAFF_BOT
+  const maxRelY = Math.max(...relYs);  // most positive = lowest on page = needs room below STAFF_BOT
+
+  // Padding: above needs room for finger numbers (38px above note) + label
+  const PAD_TOP_LABEL = 28;   // for RH/LH label
+  const PAD_ABOVE_NOTE = 44;  // finger number above highest note
+  const PAD_BELOW_NOTE = 50;  // finger number below lowest note
+  const STAFF_H = 4 * SP2;   // 5 lines = 4 gaps
+
+  // STAFF_BOT position in SVG
+  const STAFF_BOT = PAD_TOP_LABEL + PAD_ABOVE_NOTE + Math.max(0, -minRelY);
+  const STAFF_TOP = STAFF_BOT - STAFF_H;
+  const SVG_H2 = STAFF_BOT + Math.max(maxRelY, 0) + PAD_BELOW_NOTE;
+
+  function sY(s) { return STAFF_BOT + sYrel(s); }
 
   const ksW = (ks.n || 0) * 10 + (ks.n > 0 ? 6 : 0);
   const noteStart = ML2 + 58 + ksW;
   const noteEnd   = W - MR2;
   const xStep     = (noteEnd - noteStart) / 14;
 
-  let s = '<svg viewBox="0 0 ' + W + ' ' + SVG_H2 + '" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;margin-bottom:4px">';
-  s += '<rect width="' + W + '" height="' + SVG_H2 + '" fill="#f7f4ef"/>';
+  let sv = '<svg viewBox="0 0 ' + W + ' ' + SVG_H2 + '" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;margin-bottom:6px">';
+  sv += '<rect width="' + W + '" height="' + SVG_H2 + '" fill="#f7f4ef"/>';
 
   // Label
   const lbl = isRH ? '右手 RH' : '左手 LH';
-  s += '<text x="' + ML2 + '" y="16" font-size="12" font-family="monospace" fill="#2c3e7a" font-weight="700">' + lbl + '</text>';
+  sv += '<text x="' + ML2 + '" y="18" font-size="12" font-family="monospace" fill="#2c3e7a" font-weight="700">' + lbl + '</text>';
 
   // Staff lines
   for (let i = 0; i < 5; i++) {
-    s += '<line x1="' + ML2 + '" y1="' + (STAFF_TOP + i*SP2) + '" x2="' + (W-MR2) + '" y2="' + (STAFF_TOP + i*SP2) + '" stroke="#1a1612" stroke-width="0.8"/>';
+    sv += '<line x1="' + ML2 + '" y1="' + (STAFF_TOP+i*SP2) + '" x2="' + (W-MR2) + '" y2="' + (STAFF_TOP+i*SP2) + '" stroke="#1a1612" stroke-width="0.8"/>';
   }
-  // Barline
-  s += '<line x1="' + ML2 + '" y1="' + STAFF_TOP + '" x2="' + ML2 + '" y2="' + STAFF_BOT + '" stroke="#1a1612" stroke-width="1.5"/>';
+  sv += '<line x1="' + ML2 + '" y1="' + STAFF_TOP + '" x2="' + ML2 + '" y2="' + STAFF_BOT + '" stroke="#1a1612" stroke-width="1.5"/>';
 
   // Clef
   if (isRH) {
-    s += '<text x="' + (ML2+2) + '" y="' + (STAFF_BOT+3) + '" font-size="56" font-family="serif" fill="#1a1612">𝄞</text>';
+    sv += '<text x="' + (ML2+2) + '" y="' + (STAFF_BOT+3) + '" font-size="56" font-family="serif" fill="#1a1612">𝄞</text>';
   } else {
-    s += '<text x="' + (ML2+4) + '" y="' + (STAFF_TOP+15) + '" font-size="32" font-family="serif" fill="#1a1612">𝄢</text>';
-    s += '<circle cx="' + (ML2+24) + '" cy="' + (STAFF_TOP+5) + '" r="3" fill="#1a1612"/>';
-    s += '<circle cx="' + (ML2+24) + '" cy="' + (STAFF_TOP+12) + '" r="3" fill="#1a1612"/>';
+    sv += '<text x="' + (ML2+4) + '" y="' + (STAFF_TOP+15) + '" font-size="32" font-family="serif" fill="#1a1612">𝄢</text>';
+    sv += '<circle cx="' + (ML2+24) + '" cy="' + (STAFF_TOP+5) + '" r="3" fill="#1a1612"/>';
+    sv += '<circle cx="' + (ML2+24) + '" cy="' + (STAFF_TOP+12) + '" r="3" fill="#1a1612"/>';
   }
 
   // Key signature
@@ -725,12 +736,11 @@ function drawStaffSVG(key, mode, dir, hand) {
     const bSteps = ks.type === '#' ? SH_BASS   : FL_BASS;
     const accSteps = isRH ? tSteps : bSteps;
     for (let i = 0; i < ks.n; i++) {
-      s += '<text x="' + (ML2+56+i*10) + '" y="' + (sY(accSteps[i])+5) + '" font-size="15" font-family="serif" fill="#1a1612" text-anchor="middle">' + sym + '</text>';
+      sv += '<text x="' + (ML2+56+i*10) + '" y="' + (sY(accSteps[i])+5) + '" font-size="15" font-family="serif" fill="#1a1612" text-anchor="middle">' + sym + '</text>';
     }
   }
 
   // Notes
-  const r = 6;
   for (let i = 0; i < 15; i++) {
     const x = noteStart + i * xStep;
     const st = steps[i];
@@ -740,56 +750,53 @@ function drawStaffSVG(key, mode, dir, hand) {
 
     // Ledger lines
     if (isRH) {
-      // Below treble bottom line (E4 = step 2)
       for (let ls = 0; ls >= st; ls -= 2) {
-        s += '<line x1="' + (x-r-4) + '" y1="' + sY(ls) + '" x2="' + (x+r+4) + '" y2="' + sY(ls) + '" stroke="#1a1612" stroke-width="0.8"/>';
+        sv += '<line x1="' + (x-r-4) + '" y1="' + sY(ls) + '" x2="' + (x+r+4) + '" y2="' + sY(ls) + '" stroke="#1a1612" stroke-width="0.8"/>';
       }
-      // Above treble top line (F5 = step 10)
       for (let ls = 12; ls <= st; ls += 2) {
-        s += '<line x1="' + (x-r-4) + '" y1="' + sY(ls) + '" x2="' + (x+r+4) + '" y2="' + sY(ls) + '" stroke="#1a1612" stroke-width="0.8"/>';
+        sv += '<line x1="' + (x-r-4) + '" y1="' + sY(ls) + '" x2="' + (x+r+4) + '" y2="' + sY(ls) + '" stroke="#1a1612" stroke-width="0.8"/>';
       }
     } else {
-      // Below bass bottom line (G2 = step -11)
       for (let ls = -13; ls >= st; ls -= 2) {
-        s += '<line x1="' + (x-r-4) + '" y1="' + sY(ls) + '" x2="' + (x+r+4) + '" y2="' + sY(ls) + '" stroke="#1a1612" stroke-width="0.8"/>';
+        sv += '<line x1="' + (x-r-4) + '" y1="' + sY(ls) + '" x2="' + (x+r+4) + '" y2="' + sY(ls) + '" stroke="#1a1612" stroke-width="0.8"/>';
       }
-      // Above bass top line (A3 = step -3)
       for (let ls = -1; ls <= st; ls += 2) {
-        s += '<line x1="' + (x-r-4) + '" y1="' + sY(ls) + '" x2="' + (x+r+4) + '" y2="' + sY(ls) + '" stroke="#1a1612" stroke-width="0.8"/>';
+        sv += '<line x1="' + (x-r-4) + '" y1="' + sY(ls) + '" x2="' + (x+r+4) + '" y2="' + sY(ls) + '" stroke="#1a1612" stroke-width="0.8"/>';
       }
     }
 
     // Accidental
     const accSym = needsAcc(notes[i], key, mode);
     if (accSym) {
-      s += '<text x="' + (x-r-5) + '" y="' + (y+5) + '" font-size="12" font-family="serif" fill="#1a1612" text-anchor="end">' + accSym + '</text>';
+      sv += '<text x="' + (x-r-5) + '" y="' + (y+5) + '" font-size="12" font-family="serif" fill="#1a1612" text-anchor="end">' + accSym + '</text>';
     }
 
     // Note head
     let fill = '#f7f4ef', stroke = '#1a1612', sw = '1.3';
     if (fi.isThumb) { fill = '#d4e0f5'; stroke = '#1a3066'; sw = '2'; }
     if (fi.isPivot) { stroke = '#2a7a5a'; sw = '2.2'; }
-    s += '<ellipse cx="' + x + '" cy="' + y + '" rx="' + r + '" ry="' + (r*0.76) + '" fill="' + fill + '" stroke="' + stroke + '" stroke-width="' + sw + '"/>';
+    sv += '<ellipse cx="' + x + '" cy="' + y + '" rx="' + r + '" ry="' + (r*0.76) + '" fill="' + fill + '" stroke="' + stroke + '" stroke-width="' + sw + '"/>';
 
-    // Stem: RH up, LH down
-    if (isRH) s += '<line x1="' + (x+r) + '" y1="' + y + '" x2="' + (x+r) + '" y2="' + (y-30) + '" stroke="#1a1612" stroke-width="1.1"/>';
-    else      s += '<line x1="' + (x-r) + '" y1="' + y + '" x2="' + (x-r) + '" y2="' + (y+30) + '" stroke="#1a1612" stroke-width="1.1"/>';
+    // Stem
+    if (isRH) sv += '<line x1="' + (x+r) + '" y1="' + y + '" x2="' + (x+r) + '" y2="' + (y-28) + '" stroke="#1a1612" stroke-width="1.1"/>';
+    else      sv += '<line x1="' + (x-r) + '" y1="' + y + '" x2="' + (x-r) + '" y2="' + (y+28) + '" stroke="#1a1612" stroke-width="1.1"/>';
 
     // Finger number
     if (fi.f > 0) {
       const fc = fi.isThumb ? '#1a3066' : fi.isPivot ? '#2a7a5a' : '#2c3e7a';
       const fy = isRH ? y - 38 : y + 48;
-      s += '<text x="' + x + '" y="' + fy + '" font-size="13" font-family="monospace" font-weight="700" fill="' + fc + '" text-anchor="middle">' + fi.f + '</text>';
+      sv += '<text x="' + x + '" y="' + fy + '" font-size="13" font-family="monospace" font-weight="700" fill="' + fc + '" text-anchor="middle">' + fi.f + '</text>';
     }
   }
 
-  s += '</svg>';
-  return s;
+  sv += '</svg>';
+  return sv;
 }
 
 function drawScore(key, mode, dir) {
   return drawStaffSVG(key, mode, dir, 'rh') + drawStaffSVG(key, mode, dir, 'lh');
 }
+
 
 
 function drawNote(x, step, noteName, finInfo, hand, key, mode) {
