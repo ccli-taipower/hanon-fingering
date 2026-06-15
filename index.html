@@ -949,15 +949,17 @@ function render() {
 
   let html = `<div style="font-family:var(--serif);font-style:italic;color:var(--ink-muted);font-size:13px;margin-bottom:14px;">${scaleName} ${modeName}</div>`;
 
+  const dirMap = {rh_asc:'asc', rh_desc:'desc', lh_asc:'asc', lh_desc:'desc'};
   rows.forEach(r => {
     const entry = d[r.key];
+    const scaleNotes = getScaleNotes(curKey, curMode, dirMap[r.key]);
     html += `<div class="row-card" role="row">
       <div class="row-label">
         <span class="hand">${r.label}</span>
         <span class="dir">${r.dir}</span>
       </div>
       <div class="row-content">
-        <div class="fingers">${buildFingers(entry.fingers)}</div>
+        <div class="fingers">${buildFingers(entry.fingers, scaleNotes)}</div>
         <div class="row-rule">${entry.rule}</div>
       </div>
     </div>`;
