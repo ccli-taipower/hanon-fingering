@@ -905,6 +905,117 @@ select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
   color: var(--ink-muted);
   margin-left: 3px;
 }
+/* ── Circle of Fifths ── */
+.circle-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: start;
+}
+@media (max-width: 640px) { .circle-layout { grid-template-columns: 1fr; } }
+.circle-svg-wrap { position: relative; }
+.circle-hint {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--ink-muted);
+  font-size: 14px;
+  padding-top: 40px;
+  text-align: center;
+}
+.circle-info-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 20px;
+}
+.circle-info-header {
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+.circle-info-key {
+  font-family: var(--serif);
+  font-size: 32px;
+  font-weight: 400;
+  color: var(--ink);
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+.circle-info-minor {
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin-bottom: 8px;
+}
+.circle-tag {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-family: var(--mono);
+  font-size: 11px;
+  background: var(--paper-warm);
+  border: 1px solid var(--line);
+  color: var(--ink-muted);
+}
+.circle-tag.sharp { background: #eef2ff; color: var(--accent); border-color: #b0c0e8; }
+.circle-tag.flat  { background: #fff4ee; color: var(--accent-2); border-color: #e8c8b0; }
+
+.circle-relations {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.circle-rel-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+.circle-rel-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.circle-rel-item.dominant    .circle-rel-dot { background: #2c3e7a; }
+.circle-rel-item.subdominant .circle-rel-dot { background: #7a5a2c; }
+.circle-rel-item.relative    .circle-rel-dot { background: #2a7a5a; }
+.circle-rel-item.enh         .circle-rel-dot { background: #8a847e; }
+.circle-rel-label { color: var(--ink-muted); min-width: 120px; font-size: 12px; }
+.circle-rel-key   { color: var(--ink); font-weight: 500; font-family: var(--serif); }
+
+.circle-finger-preview {
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  background: var(--paper-warm);
+  border-radius: var(--r-md);
+}
+.circle-fp-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin-bottom: 6px;
+}
+.circle-goto-btn {
+  width: 100%;
+  margin-top: 14px;
+  padding: 10px;
+  border: 1px solid var(--accent);
+  border-radius: var(--r-md);
+  background: transparent;
+  color: var(--accent);
+  font-family: var(--zh);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all .15s;
+  text-align: center;
+}
+.circle-goto-btn:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
 </style>
 </head>
 <body>
@@ -919,10 +1030,14 @@ select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   <nav class="tab-nav" role="tablist">
     <button class="tab-btn active" data-tab="fingering" role="tab">指法查詢</button>
-    <button class="tab-btn" data-tab="guide" role="tab">練習指南</button>
-    <button class="tab-btn" data-tab="plan" role="tab">練習計劃</button>
+    <button class="tab-btn" data-tab="circle" role="tab">五度圈</button>
+    <button class="tab-btn" data-tab="practice" role="tab">練習指南 &amp; 計劃</button>
     <button class="tab-btn" data-tab="gantt" role="tab">進度總覽</button>
   </nav>
+
+  <div class="tab-panel" id="tab-circle">
+    <div id="circle-content"></div>
+  </div>
 
   <div class="tab-panel active" id="tab-fingering">
   <div class="controls">
@@ -981,7 +1096,7 @@ select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   </div><!-- /tab-fingering -->
 
-  <div class="tab-panel" id="tab-guide">
+  <div class="tab-panel" id="tab-practice">
   <!-- Supplement sections -->
   <div class="supplement" id="supplement">
 
@@ -1003,11 +1118,10 @@ select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   </div>
 
-  </div><!-- /tab-guide -->
-
-  <div class="tab-panel" id="tab-plan">
+  <div style="margin-top:48px;border-top:2px solid var(--line);padding-top:40px" id="plan-wrapper">
     <div id="plan-content"></div>
-  </div><!-- /tab-plan -->
+  </div><!-- /plan-wrapper -->
+  </div><!-- /tab-practice -->
 
   <div class="tab-panel" id="tab-gantt">
     <div id="gantt-content"></div>
@@ -1713,6 +1827,7 @@ function initTabs() {
       document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
       btn.classList.add('active');
       document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+      if (btn.dataset.tab === 'gantt') renderGantt();
     });
   });
 }
@@ -2285,6 +2400,331 @@ function renderGantt() {
   `;
 }
 
+// ── Circle of Fifths ─────────────────────────────────────────────────────────
+
+const CIRCLE_KEYS = [
+  { id:'C',  major:'C',  minor:'a',  sharps:0, flats:0,  angle:0   },
+  { id:'G',  major:'G',  minor:'e',  sharps:1, flats:0,  angle:30  },
+  { id:'D',  major:'D',  minor:'b',  sharps:2, flats:0,  angle:60  },
+  { id:'A',  major:'A',  minor:'f#', sharps:3, flats:0,  angle:90  },
+  { id:'E',  major:'E',  minor:'c#', sharps:4, flats:0,  angle:120 },
+  { id:'B',  major:'B',  minor:'g#', sharps:5, flats:0,  angle:150 },
+  { id:'Fs', major:'F#', minor:'d#', sharps:6, flats:0,  angle:180 },
+  { id:'Cb', major:'C♭', minor:'a♭', sharps:0, flats:7,  angle:180 },
+  { id:'Gb', major:'G♭', minor:'e♭', sharps:0, flats:6,  angle:210 },
+  { id:'Db', major:'D♭', minor:'b♭', sharps:0, flats:5,  angle:240 },
+  { id:'Ab', major:'A♭', minor:'f',  sharps:0, flats:4,  angle:270 },
+  { id:'Eb', major:'E♭', minor:'c',  sharps:0, flats:3,  angle:300 },
+  { id:'Bb', major:'B♭', minor:'g',  sharps:0, flats:2,  angle:330 },
+  { id:'F',  major:'F',  minor:'d',  sharps:0, flats:1,  angle:360 },
+];
+
+// Unique 12 positions (F#/Gb share 180°, Cb is separate slice)
+const CIRCLE_12 = [
+  { id:'C',  major:'C',   minor:'a',   acc:'',     angle:0   },
+  { id:'G',  major:'G',   minor:'e',   acc:'1♯',   angle:30  },
+  { id:'D',  major:'D',   minor:'b',   acc:'2♯',   angle:60  },
+  { id:'A',  major:'A',   minor:'f♯',  acc:'3♯',   angle:90  },
+  { id:'E',  major:'E',   minor:'c♯',  acc:'4♯',   angle:120 },
+  { id:'B',  major:'B',   minor:'g♯',  acc:'5♯',   angle:150 },
+  { id:'Fs', major:'F♯',  minor:'d♯',  acc:'6♯/6♭', angle:180 },
+  { id:'Gb', major:'G♭',  minor:'e♭',  acc:'6♭',   angle:210 },
+  { id:'Db', major:'D♭',  minor:'b♭',  acc:'5♭',   angle:240 },
+  { id:'Ab', major:'A♭',  minor:'f',   acc:'4♭',   angle:270 },
+  { id:'Eb', major:'E♭',  minor:'c',   acc:'3♭',   angle:300 },
+  { id:'Bb', major:'B♭',  minor:'g',   acc:'2♭',   angle:330 },
+  { id:'F',  major:'F',   minor:'d',   acc:'1♭',   angle:0   },
+];
+
+// 12 unique positions, going clockwise from C
+const POS12 = [
+  { id:'C',  major:'C',   minor:'a',   acc:'',      enharmonic:null },
+  { id:'G',  major:'G',   minor:'e',   acc:'1♯',    enharmonic:null },
+  { id:'D',  major:'D',   minor:'b',   acc:'2♯',    enharmonic:null },
+  { id:'A',  major:'A',   minor:'f♯',  acc:'3♯',    enharmonic:null },
+  { id:'E',  major:'E',   minor:'c♯',  acc:'4♯',    enharmonic:null },
+  { id:'B',  major:'B',   minor:'g♯',  acc:'5♯',    enharmonic:'Cb' },
+  { id:'Fs', major:'F♯',  minor:'d♯',  acc:'6♯',    enharmonic:'Gb' },
+  { id:'Cs', major:'C♯',  minor:'a♯',  acc:'7♯',    enharmonic:'Db' },
+  { id:'Ab', major:'A♭',  minor:'f',   acc:'4♭',    enharmonic:null },
+  { id:'Eb', major:'E♭',  minor:'c',   acc:'3♭',    enharmonic:null },
+  { id:'Bb', major:'B♭',  minor:'g',   acc:'2♭',    enharmonic:null },
+  { id:'F',  major:'F',   minor:'d',   acc:'1♭',    enharmonic:null },
+];
+
+// Enharmonic pairs shown at the bottom of flat-side
+const ENHARM = {
+  'B':'Cb', 'Cb':'B',
+  'Fs':'Gb', 'Gb':'Fs',
+  'Cs':'Db', 'Db':'Cs',
+};
+
+let selectedKey = null;
+
+function renderCircle() {
+  const el = document.getElementById('circle-content');
+  if (!el) return;
+
+  el.innerHTML = `
+    <h2 class="supp-title" style="margin-bottom:16px">五度圈 <em>Circle of Fifths</em></h2>
+    <div class="circle-layout">
+      <div class="circle-svg-wrap">
+        <svg id="cof-svg" viewBox="-200 -200 400 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;display:block;margin:0 auto;cursor:pointer"></svg>
+      </div>
+      <div class="circle-info" id="circle-info">
+        <div class="circle-hint">點選任一調性查看關係</div>
+      </div>
+    </div>
+  `;
+
+  drawCoF();
+}
+
+function drawCoF(highlightId) {
+  const svg = document.getElementById('cof-svg');
+  if (!svg) return;
+
+  const n = 12;
+  const sliceAngle = 360 / n;
+  const R_outer = 180;  // outer edge
+  const R_major = 140;  // major ring outer
+  const R_minor = 100;  // minor ring outer
+  const R_acc   = 68;   // accidental ring outer
+  const R_inner = 36;   // center
+
+  // Colors
+  const COL_MAJOR_DEFAULT = '#e8ecf5';
+  const COL_MAJOR_SELECT  = '#2c3e7a';
+  const COL_MINOR_DEFAULT = '#eaf4ee';
+  const COL_MINOR_SELECT  = '#2a7a5a';
+  const COL_ACC_BG        = '#f5f0e8';
+  const COL_STROKE        = '#c8c4bc';
+  const COL_SHARP         = '#2c3e7a';
+  const COL_FLAT          = '#7a3a2c';
+
+  function polarToXY(angleDeg, r) {
+    const rad = (angleDeg - 90) * Math.PI / 180;
+    return { x: r * Math.cos(rad), y: r * Math.sin(rad) };
+  }
+
+  function slicePath(r1, r2, startAngle, endAngle) {
+    const s1 = polarToXY(startAngle, r1);
+    const s2 = polarToXY(startAngle, r2);
+    const e1 = polarToXY(endAngle, r1);
+    const e2 = polarToXY(endAngle, r2);
+    const large = (endAngle - startAngle) > 180 ? 1 : 0;
+    return `M ${s2.x} ${s2.y} A ${r2} ${r2} 0 ${large} 1 ${e2.x} ${e2.y} L ${e1.x} ${e1.y} A ${r1} ${r1} 0 ${large} 0 ${s1.x} ${s1.y} Z`;
+  }
+
+  let html = '';
+
+  // Draw slices for each of 12 positions
+  POS12.forEach((pos, i) => {
+    const startAngle = i * sliceAngle - sliceAngle / 2;
+    const endAngle   = startAngle + sliceAngle;
+    const midAngle   = i * sliceAngle;
+
+    const isSelected = highlightId && (pos.id === highlightId || pos.enharmonic === highlightId);
+
+    // Relationship coloring
+    let majorFill = isSelected ? COL_MAJOR_SELECT : COL_MAJOR_DEFAULT;
+    let minorFill = isSelected ? COL_MINOR_SELECT : COL_MINOR_DEFAULT;
+    let majorTextColor = isSelected ? '#fff' : '#1a1612';
+    let minorTextColor = isSelected ? '#fff' : '#2a7a5a';
+    let majorStroke = COL_STROKE;
+    let minorStroke = COL_STROKE;
+
+    if (highlightId && !isSelected) {
+      const sel = POS12.find(p => p.id === highlightId);
+      if (sel) {
+        const selIdx = POS12.indexOf(sel);
+        const diff = ((i - selIdx) + 12) % 12;
+        if (diff === 1) { // dominant (5th up)
+          majorFill = '#ddeaff'; majorStroke = '#2c3e7a';
+          minorFill = '#ddeaff'; minorStroke = '#2c3e7a';
+        } else if (diff === 11) { // subdominant (5th down)
+          majorFill = '#ffeedd'; majorStroke = '#7a5a2c';
+          minorFill = '#ffeedd'; minorStroke = '#7a5a2c';
+        } else if (diff === 3) { // relative minor of selected
+          minorFill = '#d4f0e0'; minorStroke = '#2a7a5a';
+        } else if (diff === 9) { // relative major of selected minor
+          majorFill = '#d4e8d4'; majorStroke = '#2a7a5a';
+        }
+      }
+    }
+
+    // Major ring slice
+    html += `<path d="${slicePath(R_major, R_outer, startAngle, endAngle)}"
+      fill="${majorFill}" stroke="${majorStroke}" stroke-width="0.8"
+      data-id="${pos.id}" data-ring="major"
+      onclick="selectKey('${pos.id}')" />`;
+
+    // Minor ring slice
+    html += `<path d="${slicePath(R_minor, R_major, startAngle, endAngle)}"
+      fill="${minorFill}" stroke="${minorStroke}" stroke-width="0.8"
+      data-id="${pos.id}" data-ring="minor"
+      onclick="selectKey('${pos.id}')" />`;
+
+    // Accidental ring slice
+    const accFill = pos.acc.includes('♯') ? '#eef2ff' : pos.acc.includes('♭') ? '#fff4ee' : '#f5f2ee';
+    html += `<path d="${slicePath(R_acc, R_minor, startAngle, endAngle)}"
+      fill="${accFill}" stroke="${COL_STROKE}" stroke-width="0.8" />`;
+
+    // Major label
+    const mPos = polarToXY(midAngle, (R_major + R_outer) / 2);
+    html += `<text x="${mPos.x}" y="${mPos.y + 4}" text-anchor="middle"
+      font-size="12" font-family="serif" font-weight="${isSelected ? '700' : '500'}"
+      fill="${majorTextColor}" pointer-events="none">${pos.major}</text>`;
+
+    // Enharmonic label (smaller, below)
+    if (pos.enharmonic) {
+      const enh = POS12.find(p => p.id === pos.enharmonic) ||
+                  [{major:'C♭'},{major:'D♭'},{major:'G♭'}].find(x => x.id === pos.enharmonic);
+      const enhName = pos.id === 'B' ? 'C♭' : pos.id === 'Fs' ? 'G♭' : pos.id === 'Cs' ? 'D♭' : '';
+      if (enhName) {
+        html += `<text x="${mPos.x}" y="${mPos.y + 15}" text-anchor="middle"
+          font-size="8" font-family="serif" fill="#8a847e" pointer-events="none">${enhName}</text>`;
+      }
+    }
+
+    // Minor label
+    const nPos = polarToXY(midAngle, (R_minor + R_major) / 2);
+    html += `<text x="${nPos.x}" y="${nPos.y + 3}" text-anchor="middle"
+      font-size="9.5" font-family="serif" font-style="italic"
+      fill="${minorTextColor}" pointer-events="none">${pos.minor}</text>`;
+
+    // Accidental label
+    if (pos.acc) {
+      const aPos = polarToXY(midAngle, (R_acc + R_minor) / 2);
+      const aColor = pos.acc.includes('♯') ? COL_SHARP : COL_FLAT;
+      html += `<text x="${aPos.x}" y="${aPos.y + 3}" text-anchor="middle"
+        font-size="8" font-family="monospace" fill="${aColor}" pointer-events="none">${pos.acc}</text>`;
+    }
+  });
+
+  // Center circle
+  html += `<circle cx="0" cy="0" r="${R_inner}" fill="#f0ece4" stroke="${COL_STROKE}" stroke-width="0.8"/>`;
+  html += `<text x="0" y="-6" text-anchor="middle" font-size="9" font-family="monospace" fill="#8a847e">五度圈</text>`;
+  html += `<text x="0" y="7" text-anchor="middle" font-size="8" font-family="monospace" fill="#8a847e">Circle</text>`;
+  html += `<text x="0" y="18" text-anchor="middle" font-size="8" font-family="monospace" fill="#8a847e">of 5ths</text>`;
+
+  // Legend arrows: ↑ dominant, ↓ subdominant
+  if (highlightId) {
+    const sel = POS12.find(p => p.id === highlightId);
+    if (sel) {
+      const selIdx = POS12.indexOf(sel);
+      // dominant: next clockwise
+      const domIdx = (selIdx + 1) % 12;
+      const subIdx = (selIdx + 11) % 12;
+      const dAngle = domIdx * sliceAngle;
+      const sAngle = subIdx * sliceAngle;
+      const dPos = polarToXY(dAngle, R_outer + 12);
+      const sPos = polarToXY(sAngle, R_outer + 12);
+      html += `<text x="${dPos.x}" y="${dPos.y+3}" text-anchor="middle" font-size="9" fill="#2c3e7a" pointer-events="none">屬</text>`;
+      html += `<text x="${sPos.x}" y="${sPos.y+3}" text-anchor="middle" font-size="9" fill="#7a5a2c" pointer-events="none">下屬</text>`;
+    }
+  }
+
+  svg.innerHTML = html;
+}
+
+function selectKey(keyId) {
+  selectedKey = keyId;
+  drawCoF(keyId);
+  showKeyInfo(keyId);
+}
+
+function showKeyInfo(keyId) {
+  const pos = POS12.find(p => p.id === keyId);
+  if (!pos) return;
+
+  const idx = POS12.indexOf(pos);
+  const domPos  = POS12[(idx + 1) % 12];
+  const subPos  = POS12[(idx + 11) % 12];
+  const relMinor = pos.minor;
+  const relMajorPos = POS12[(idx + 9) % 12]; // relative major of minor
+
+  // Key in DATA
+  const hasData = typeof DATA !== 'undefined' && DATA[keyId];
+  const fingerHtml = hasData ? `
+    <div class="circle-finger-preview">
+      <div class="circle-fp-label">大調右手上行</div>
+      <div class="fingers" style="margin-bottom:0">${buildFingers(DATA[keyId].major.rh_asc.fingers, getScaleNotes(keyId, 'major', 'asc'))}</div>
+    </div>
+    <div class="circle-finger-preview">
+      <div class="circle-fp-label">大調左手上行</div>
+      <div class="fingers" style="margin-bottom:0">${buildFingers(DATA[keyId].major.lh_asc.fingers, getScaleNotes(keyId, 'major', 'asc'))}</div>
+    </div>
+  ` : '';
+
+  const accHtml = pos.acc
+    ? `<span class="circle-tag ${pos.acc.includes('♯') ? 'sharp' : 'flat'}">${pos.acc}</span>`
+    : `<span class="circle-tag">無升降號</span>`;
+
+  const enhId = pos.enharmonic;
+  const enhHtml = enhId ? `
+    <div class="circle-rel-item enh">
+      <span class="circle-rel-dot"></span>
+      <span class="circle-rel-label">等音調</span>
+      <span class="circle-rel-key">${POS12.find(p=>p.id===enhId)?.major || enhId} / ${POS12.find(p=>p.id===enhId)?.minor || '?'}</span>
+    </div>` : '';
+
+  document.getElementById('circle-info').innerHTML = `
+    <div class="circle-info-card">
+      <div class="circle-info-header">
+        <div class="circle-info-key">${pos.major}</div>
+        <div class="circle-info-minor">平行小調：${pos.minor} 小調</div>
+        ${accHtml}
+      </div>
+
+      <div class="circle-relations">
+        <div class="circle-rel-item dominant">
+          <span class="circle-rel-dot"></span>
+          <span class="circle-rel-label">屬調（五度上）</span>
+          <span class="circle-rel-key">${domPos.major} 大調</span>
+        </div>
+        <div class="circle-rel-item subdominant">
+          <span class="circle-rel-dot"></span>
+          <span class="circle-rel-label">下屬調（五度下）</span>
+          <span class="circle-rel-key">${subPos.major} 大調</span>
+        </div>
+        <div class="circle-rel-item relative">
+          <span class="circle-rel-dot"></span>
+          <span class="circle-rel-label">關係小調</span>
+          <span class="circle-rel-key">${relMinor} 小調</span>
+        </div>
+        ${enhHtml}
+      </div>
+
+      ${fingerHtml}
+
+      <button class="circle-goto-btn" onclick="gotoFingering('${keyId}')">
+        → 前往指法查詢
+      </button>
+    </div>
+  `;
+}
+
+function gotoFingering(keyId) {
+  // Switch to fingering tab
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelector('[data-tab="fingering"]').classList.add('active');
+  document.getElementById('tab-fingering').classList.add('active');
+  // Set the key selector
+  const sel = document.getElementById('key-sel');
+  if (sel) {
+    // Find option with matching value
+    for (let opt of sel.options) {
+      if (opt.value === keyId) { sel.value = keyId; break; }
+    }
+    curKey = keyId;
+    render();
+    // Scroll to top
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+}
+
 function render() {
   const d = DATA[curKey][curMode];
   const rows = [
@@ -2348,6 +2788,7 @@ initTabs();
 renderPlan();
 restoreChecks();
 renderGantt();
+renderCircle();
 </script>
 </body>
 </html>
