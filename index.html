@@ -411,21 +411,21 @@ select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 // ── Scale note sequences (15 notes = 2 octaves + top) ──
 const MAJOR_SCALES = {
-  C:  ['C','D','E','F','G','A','B','C','D','E','F','G','A','B','C'],
-  G:  ['G','A','B','C','D','E','F#','G','A','B','C','D','E','F#','G'],
-  D:  ['D','E','F#','G','A','B','C#','D','E','F#','G','A','B','C#','D'],
-  A:  ['A','B','C#','D','E','F#','G#','A','B','C#','D','E','F#','G#','A'],
-  E:  ['E','F#','G#','A','B','C#','D#','E','F#','G#','A','B','C#','D#','E'],
-  B:  ['B','C#','D#','E','F#','G#','A#','B','C#','D#','E','F#','G#','A#','B'],
-  Fs: ['F#','G#','A#','B','C#','D#','E#','F#','G#','A#','B','C#','D#','E#','F#'],
-  Cs: ['C#','D#','E#','F#','G#','A#','B#','C#','D#','E#','F#','G#','A#','B#','C#'],
-  F:  ['F','G','A','Bb','C','D','E','F','G','A','Bb','C','D','E','F'],
-  Bb: ['Bb','C','D','Eb','F','G','A','Bb','C','D','Eb','F','G','A','Bb'],
-  Eb: ['Eb','F','G','Ab','Bb','C','D','Eb','F','G','Ab','Bb','C','D','Eb'],
-  Ab: ['Ab','Bb','C','Db','Eb','F','G','Ab','Bb','C','Db','Eb','F','G','Ab'],
-  Db: ['Db','Eb','F','Gb','Ab','Bb','C','Db','Eb','F','Gb','Ab','Bb','C','Db'],
-  Gb: ['Gb','Ab','Bb','Cb','Db','Eb','F','Gb','Ab','Bb','Cb','Db','Eb','F','Gb'],
-  Cb: ['Cb','Db','Eb','Fb','Gb','Ab','Bb','Cb','Db','Eb','Fb','Gb','Ab','Bb','Cb'],
+  C:  ['C','D','E','F','G','A','B','C'],
+  G:  ['G','A','B','C','D','E','F#','G'],
+  D:  ['D','E','F#','G','A','B','C#','D'],
+  A:  ['A','B','C#','D','E','F#','G#','A'],
+  E:  ['E','F#','G#','A','B','C#','D#','E'],
+  B:  ['B','C#','D#','E','F#','G#','A#','B'],
+  Fs: ['F#','G#','A#','B','C#','D#','E#','F#'],
+  Cs: ['C#','D#','E#','F#','G#','A#','B#','C#'],
+  F:  ['F','G','A','Bb','C','D','E','F'],
+  Bb: ['Bb','C','D','Eb','F','G','A','Bb'],
+  Eb: ['Eb','F','G','Ab','Bb','C','D','Eb'],
+  Ab: ['Ab','Bb','C','Db','Eb','F','G','Ab'],
+  Db: ['Db','Eb','F','Gb','Ab','Bb','C','Db'],
+  Gb: ['Gb','Ab','Bb','Cb','Db','Eb','F','Gb'],
+  Cb: ['Cb','Db','Eb','Fb','Gb','Ab','Bb','Cb'],
 };
 
 const MINOR_TONICS = {
@@ -434,57 +434,57 @@ const MINOR_TONICS = {
 };
 
 const NATURAL_MINOR = {
-  A:  ['A','B','C','D','E','F','G','A','B','C','D','E','F','G','A'],
-  E:  ['E','F#','G','A','B','C','D','E','F#','G','A','B','C','D','E'],
-  B:  ['B','C#','D','E','F#','G','A','B','C#','D','E','F#','G','A','B'],
-  'F#':['F#','G#','A','B','C#','D','E','F#','G#','A','B','C#','D','E','F#'],
-  'C#':['C#','D#','E','F#','G#','A','B','C#','D#','E','F#','G#','A','B','C#'],
-  'G#':['G#','A#','B','C#','D#','E','F#','G#','A#','B','C#','D#','E','F#','G#'],
-  'D#':['D#','E#','F#','G#','A#','B','C#','D#','E#','F#','G#','A#','B','C#','D#'],
-  'A#':['A#','B#','C#','D#','E#','F#','G#','A#','B#','C#','D#','E#','F#','G#','A#'],
-  D:  ['D','E','F','G','A','Bb','C','D','E','F','G','A','Bb','C','D'],
-  G:  ['G','A','Bb','C','D','Eb','F','G','A','Bb','C','D','Eb','F','G'],
-  C:  ['C','D','Eb','F','G','Ab','Bb','C','D','Eb','F','G','Ab','Bb','C'],
-  F:  ['F','G','Ab','Bb','C','Db','Eb','F','G','Ab','Bb','C','Db','Eb','F'],
-  Bb: ['Bb','C','Db','Eb','F','Gb','Ab','Bb','C','Db','Eb','F','Gb','Ab','Bb'],
-  Eb: ['Eb','F','Gb','Ab','Bb','Cb','Db','Eb','F','Gb','Ab','Bb','Cb','Db','Eb'],
-  Ab: ['Ab','Bb','Cb','Db','Eb','Fb','Gb','Ab','Bb','Cb','Db','Eb','Fb','Gb','Ab'],
+  A:  ['A','B','C','D','E','F','G','A'],
+  E:  ['E','F#','G','A','B','C','D','E'],
+  B:  ['B','C#','D','E','F#','G','A','B'],
+  'F#':['F#','G#','A','B','C#','D','E','F#'],
+  'C#':['C#','D#','E','F#','G#','A','B','C#'],
+  'G#':['G#','A#','B','C#','D#','E','F#','G#'],
+  'D#':['D#','E#','F#','G#','A#','B','C#','D#'],
+  'A#':['A#','B#','C#','D#','E#','F#','G#','A#'],
+  D:  ['D','E','F','G','A','Bb','C','D'],
+  G:  ['G','A','Bb','C','D','Eb','F','G'],
+  C:  ['C','D','Eb','F','G','Ab','Bb','C'],
+  F:  ['F','G','Ab','Bb','C','Db','Eb','F'],
+  Bb: ['Bb','C','Db','Eb','F','Gb','Ab','Bb'],
+  Eb: ['Eb','F','Gb','Ab','Bb','Cb','Db','Eb'],
+  Ab: ['Ab','Bb','Cb','Db','Eb','Fb','Gb','Ab'],
 };
 
 const HARMONIC_MINOR = {
-  A:  ['A','B','C','D','E','F','G#','A','B','C','D','E','F','G#','A'],
-  E:  ['E','F#','G','A','B','C','D#','E','F#','G','A','B','C','D#','E'],
-  B:  ['B','C#','D','E','F#','G','A#','B','C#','D','E','F#','G','A#','B'],
-  'F#':['F#','G#','A','B','C#','D','E#','F#','G#','A','B','C#','D','E#','F#'],
-  'C#':['C#','D#','E','F#','G#','A','B#','C#','D#','E','F#','G#','A','B#','C#'],
-  'G#':['G#','A#','B','C#','D#','E','F##','G#','A#','B','C#','D#','E','F##','G#'],
-  'D#':['D#','E#','F#','G#','A#','B','C##','D#','E#','F#','G#','A#','B','C##','D#'],
-  'A#':['A#','B#','C#','D#','E#','F#','G##','A#','B#','C#','D#','E#','F#','G##','A#'],
-  D:  ['D','E','F','G','A','Bb','C#','D','E','F','G','A','Bb','C#','D'],
-  G:  ['G','A','Bb','C','D','Eb','F#','G','A','Bb','C','D','Eb','F#','G'],
-  C:  ['C','D','Eb','F','G','Ab','B','C','D','Eb','F','G','Ab','B','C'],
-  F:  ['F','G','Ab','Bb','C','Db','E','F','G','Ab','Bb','C','Db','E','F'],
-  Bb: ['Bb','C','Db','Eb','F','Gb','A','Bb','C','Db','Eb','F','Gb','A','Bb'],
-  Eb: ['Eb','F','Gb','Ab','Bb','Cb','D','Eb','F','Gb','Ab','Bb','Cb','D','Eb'],
-  Ab: ['Ab','Bb','Cb','Db','Eb','Fb','G','Ab','Bb','Cb','Db','Eb','Fb','G','Ab'],
+  A:  ['A','B','C','D','E','F','G#','A'],
+  E:  ['E','F#','G','A','B','C','D#','E'],
+  B:  ['B','C#','D','E','F#','G','A#','B'],
+  'F#':['F#','G#','A','B','C#','D','E#','F#'],
+  'C#':['C#','D#','E','F#','G#','A','B#','C#'],
+  'G#':['G#','A#','B','C#','D#','E','F##','G#'],
+  'D#':['D#','E#','F#','G#','A#','B','C##','D#'],
+  'A#':['A#','B#','C#','D#','E#','F#','G##','A#'],
+  D:  ['D','E','F','G','A','Bb','C#','D'],
+  G:  ['G','A','Bb','C','D','Eb','F#','G'],
+  C:  ['C','D','Eb','F','G','Ab','B','C'],
+  F:  ['F','G','Ab','Bb','C','Db','E','F'],
+  Bb: ['Bb','C','Db','Eb','F','Gb','A','Bb'],
+  Eb: ['Eb','F','Gb','Ab','Bb','Cb','D','Eb'],
+  Ab: ['Ab','Bb','Cb','Db','Eb','Fb','G','Ab'],
 };
 
 const MELODIC_MINOR_ASC = {
-  A:  ['A','B','C','D','E','F#','G#','A','B','C','D','E','F#','G#','A'],
-  E:  ['E','F#','G','A','B','C#','D#','E','F#','G','A','B','C#','D#','E'],
-  B:  ['B','C#','D','E','F#','G#','A#','B','C#','D','E','F#','G#','A#','B'],
-  'F#':['F#','G#','A','B','C#','D#','E#','F#','G#','A','B','C#','D#','E#','F#'],
-  'C#':['C#','D#','E','F#','G#','A#','B#','C#','D#','E','F#','G#','A#','B#','C#'],
-  'G#':['G#','A#','B','C#','D#','E#','F##','G#','A#','B','C#','D#','E#','F##','G#'],
-  'D#':['D#','E#','F#','G#','A#','B#','C##','D#','E#','F#','G#','A#','B#','C##','D#'],
-  'A#':['A#','B#','C#','D#','E#','F##','G##','A#','B#','C#','D#','E#','F##','G##','A#'],
-  D:  ['D','E','F','G','A','B','C#','D','E','F','G','A','B','C#','D'],
-  G:  ['G','A','Bb','C','D','E','F#','G','A','Bb','C','D','E','F#','G'],
-  C:  ['C','D','Eb','F','G','A','B','C','D','Eb','F','G','A','B','C'],
-  F:  ['F','G','Ab','Bb','C','D','E','F','G','Ab','Bb','C','D','E','F'],
-  Bb: ['Bb','C','Db','Eb','F','G','A','Bb','C','Db','Eb','F','G','A','Bb'],
-  Eb: ['Eb','F','Gb','Ab','Bb','C','D','Eb','F','Gb','Ab','Bb','C','D','Eb'],
-  Ab: ['Ab','Bb','Cb','Db','Eb','F','G','Ab','Bb','Cb','Db','Eb','F','G','Ab'],
+  A:  ['A','B','C','D','E','F#','G#','A'],
+  E:  ['E','F#','G','A','B','C#','D#','E'],
+  B:  ['B','C#','D','E','F#','G#','A#','B'],
+  'F#':['F#','G#','A','B','C#','D#','E#','F#'],
+  'C#':['C#','D#','E','F#','G#','A#','B#','C#'],
+  'G#':['G#','A#','B','C#','D#','E#','F##','G#'],
+  'D#':['D#','E#','F#','G#','A#','B#','C##','D#'],
+  'A#':['A#','B#','C#','D#','E#','F##','G##','A#'],
+  D:  ['D','E','F','G','A','B','C#','D'],
+  G:  ['G','A','Bb','C','D','E','F#','G'],
+  C:  ['C','D','Eb','F','G','A','B','C'],
+  F:  ['F','G','Ab','Bb','C','D','E','F'],
+  Bb: ['Bb','C','Db','Eb','F','G','A','Bb'],
+  Eb: ['Eb','F','Gb','Ab','Bb','C','D','Eb'],
+  Ab: ['Ab','Bb','Cb','Db','Eb','F','G','Ab'],
 };
 
 function getScaleNotes(key, mode, dir) {
@@ -635,7 +635,7 @@ function extendFingering(str, total) {
   return result.slice(0, total);
 }
 
-function parseFinGroups(str, total=15) {
+function parseFinGroups(str, total=8) {
   const groups = str.split(' | ');
   const nums = extendFingering(str, total);
   let gi = 0, posInGroup = 0;
@@ -679,7 +679,7 @@ function drawScore(key, mode, dir) {
   const ks = keySigSVG(key, mode);
   const noteStartX = ML + 36 + ks.w + 8;
   const noteEndX = SVG_W - MR;
-  const xStep = (noteEndX - noteStartX) / 14;
+  const xStep = (noteEndX - noteStartX) / 7;
 
   let svg = `<svg viewBox="0 0 ${SVG_W} ${SVG_H}" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;display:block">`;
   svg += `<rect width="${SVG_W}" height="${SVG_H}" fill="#f7f4ef"/>`;
