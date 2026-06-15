@@ -501,16 +501,16 @@ function getScaleNotes(key, mode, dir) {
 }
 
 // ── Staff SVG constants ──
-const SP = 7;   // half-space (step height in px)
-const SVG_W = 800;
+const SP = 10;   // half-space (step height in px)
+const SVG_W = 860;
 const ML = 56;   // left margin
 const MR = 16;
-const T_TOP = 28;               // treble staff top line Y
+const T_TOP = 36;               // treble staff top line Y
 const T_BOT = T_TOP + 4*SP;    // treble staff bottom line Y  (E4)
-const GAP   = 44;
+const GAP   = 60;
 const B_TOP = T_BOT + GAP;     // bass staff top line Y  (A3)
 const B_BOT = B_TOP + 4*SP;    // bass staff bottom line Y  (G2)
-const SVG_H = B_BOT + 48;
+const SVG_H = B_BOT + 56;
 
 // Diatonic steps from C4 (middle C = 0)
 // C4=0, D4=1, E4=2, F4=3, G4=4, A4=5, B4=6, C5=7 ...
@@ -590,8 +590,8 @@ function keySigSVG(key, mode) {
   let svg = '';
   for (let i = 0; i < ks.n; i++) {
     const x = startX + i * dx;
-    svg += `<text x="${x}" y="${stepY(tSteps[i])+4}" font-size="11" font-family="serif" fill="#1a1612" text-anchor="middle">${sym}</text>`;
-    svg += `<text x="${x}" y="${stepY(bSteps[i])+4}" font-size="11" font-family="serif" fill="#1a1612" text-anchor="middle">${sym}</text>`;
+    svg += `<text x="${x}" y="${stepY(tSteps[i])+5}" font-size="14" font-family="serif" fill="#1a1612" text-anchor="middle">${sym}</text>`;
+    svg += `<text x="${x}" y="${stepY(bSteps[i])+5}" font-size="14" font-family="serif" fill="#1a1612" text-anchor="middle">${sym}</text>`;
   }
   return {svg, w: ks.n * dx + 4};
 }
@@ -666,11 +666,11 @@ function drawScore(key, mode, dir) {
   svg += `<line x1="${ML-5}" y1="${T_TOP}" x2="${ML-5}" y2="${B_BOT}" stroke="#1a1612" stroke-width="3"/>`;
 
   // Clefs
-  svg += `<text x="${ML+2}" y="${T_BOT+2}" font-size="36" font-family="serif" fill="#1a1612">𝄞</text>`;
-  svg += `<text x="${ML+4}" y="${B_TOP+10}" font-size="20" font-family="serif" fill="#1a1612">𝄢</text>`;
+  svg += `<text x="${ML+2}" y="${T_BOT+2}" font-size="52" font-family="serif" fill="#1a1612">𝄞</text>`;
+  svg += `<text x="${ML+4}" y="${B_TOP+10}" font-size="28" font-family="serif" fill="#1a1612">𝄢</text>`;
   // Bass clef dots
-  svg += `<circle cx="${ML+20}" cy="${B_TOP+3}" r="2" fill="#1a1612"/>`;
-  svg += `<circle cx="${ML+20}" cy="${B_TOP+7}" r="2" fill="#1a1612"/>`;
+  svg += `<circle cx="${ML+20}" cy="${B_TOP+3}" r="2.5" fill="#1a1612"/>`;
+  svg += `<circle cx="${ML+20}" cy="${B_TOP+7}" r="2.5" fill="#1a1612"/>`;
 
   // Key sig
   svg += ks.svg;
@@ -683,8 +683,8 @@ function drawScore(key, mode, dir) {
   }
 
   // Labels
-  svg += `<text x="${ML}" y="${SVG_H-4}" font-size="8.5" font-family="monospace" fill="#8a847e">右手 RH（高音譜）</text>`;
-  svg += `<text x="${SVG_W/2}" y="${SVG_H-4}" font-size="8.5" font-family="monospace" fill="#8a847e" text-anchor="middle">左手 LH（低音譜，低一個八度）</text>`;
+  svg += `<text x="${ML}" y="${SVG_H-4}" font-size="11" font-family="monospace" fill="#8a847e">右手 RH（高音譜）</text>`;
+  svg += `<text x="${SVG_W/2}" y="${SVG_H-4}" font-size="11" font-family="monospace" fill="#8a847e" text-anchor="middle">左手 LH（低音譜，低一個八度）</text>`;
 
   svg += '</svg>';
   return svg;
@@ -740,18 +740,18 @@ function drawNote(x, step, noteName, finInfo, hand, key, mode) {
   let fill = '#f7f4ef', stroke = '#1a1612', sw = '1.2';
   if (finInfo.isThumb)  { fill='#d4e0f5'; stroke='#1a3066'; sw='1.5'; }
   if (finInfo.isPivot)  { stroke='#2a7a5a'; sw='2'; }
-  svg += `<ellipse cx="${x}" cy="${y}" rx="${r}" ry="${r*0.78}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}"/>`;
+  svg += `<ellipse cx="${x}" cy="${y}" rx="${r+2}" ry="${(r+2)*0.78}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}"/>`;
 
   // Stem
-  const stemUp = step < 6;
-  if (stemUp) svg += `<line x1="${x+r-0.5}" y1="${y}" x2="${x+r-0.5}" y2="${y-20}" stroke="#1a1612" stroke-width="1"/>`;
-  else        svg += `<line x1="${x-r+0.5}" y1="${y}" x2="${x-r+0.5}" y2="${y+20}" stroke="#1a1612" stroke-width="1"/>`;
+  const stemUp = hand === 'rh';
+  if (stemUp) svg += `<line x1="${x+r-0.5}" y1="${y}" x2="${x+r-0.5}" y2="${y-28}" stroke="#1a1612" stroke-width="1"/>`;
+  else        svg += `<line x1="${x-r+0.5}" y1="${y}" x2="${x-r+0.5}" y2="${y+28}" stroke="#1a1612" stroke-width="1"/>`;
 
   // Finger number
   if (finInfo.f > 0) {
     const fc = finInfo.isThumb ? '#1a3066' : finInfo.isPivot ? '#2a7a5a' : '#2c3e7a';
-    const fy = stemUp ? y - 26 : y + 30;
-    svg += `<text x="${x}" y="${fy}" font-size="9" font-family="monospace" font-weight="600" fill="${fc}" text-anchor="middle">${finInfo.f}</text>`;
+    const fy = hand === 'rh' ? y - 34 : y + 42;
+    svg += `<text x="${x}" y="${fy}" font-size="12" font-family="monospace" font-weight="700" fill="${fc}" text-anchor="middle">${finInfo.f}</text>`;
   }
 
   return svg;
