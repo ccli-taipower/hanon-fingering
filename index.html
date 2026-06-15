@@ -519,7 +519,7 @@ function letterStep(letter) {
   return {C:0,D:1,E:2,F:3,G:4,A:5,B:6}[letter] || 0;
 }
 
-// Assign absolute diatonic steps for a 15-note ascending sequence starting at given octave
+// Assign absolute diatonic steps for an 8-note (1 octave) sequence starting at given octave
 function assignSteps(notes, startOct) {
   const LO = ['C','D','E','F','G','A','B'];
   let oct = startOct, prevIdx = -1, result = [];
@@ -704,7 +704,7 @@ function drawScore(key, mode, dir) {
   svg += ks.svg;
 
   // Notes
-  for (let i = 0; i < 15; i++) {
+  for (let i = 0; i < 8; i++) {
     const x = noteStartX + i * xStep;
     svg += drawNote(x, rhSteps[i], notes[i], rhFin[i]||{f:0}, 'rh', key, mode);
     svg += drawNote(x, lhSteps[i], notes[i], lhFin[i]||{f:0}, 'lh', key, mode);
