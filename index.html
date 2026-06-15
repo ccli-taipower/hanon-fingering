@@ -620,13 +620,41 @@ function needsAcc(noteName, key, mode) {
   return null;
 }
 
-function parseFinGroups(str) {
+function extendFingering(str, total) {
   const groups = str.split(' | ');
+  let nums = [];
+  groups.forEach(g => g.trim().split(' ').forEach(n => nums.push(n)));
+  if (nums.length >= total) return nums.slice(0, total);
+  let result = [...nums];
+  let gi = 0;
+  while (result.length < total) {
+    const group = groups[gi % groups.length].trim().split(' ');
+    group.forEach(n => { if (result.length < total) result.push(n); });
+    gi++;
+  }
+  return result.slice(0, total);
+}
+
+function parseFinGroups(str, total=15) {
+  const groups = str.split(' | ');
+  const nums = extendFingering(str, total);
+  let gi = 0, posInGroup = 0;
+  let groupLengths = groups.map(g => g.trim().split(' ').length);
   let res = [];
-  groups.forEach((g, gi) => {
-    g.trim().split(' ').forEach((n, ni) => {
-      res.push({f: parseInt(n), isThumb: n==='1', isPivot: ni===0 && gi>0});
-    });
+  let cumIdx = 0;
+  nums.forEach((n, i) => {
+    // determine group index by cycling
+    let runningTotal = 0;
+    let gIdx = 0;
+    let posIdx = i;
+    while (true) {
+      const gl = groupLengths[gIdx % groupLengths.length];
+      if (posIdx < gl) break;
+      posIdx -= gl;
+      gIdx++;
+    }
+    const isPivot = posIdx === 0 && gIdx > 0;
+    res.push({f: parseInt(n), isThumb: n==='1', isPivot});
   });
   return res;
 }
