@@ -45,6 +45,8 @@
 - 和聲小調指法速查表
 - 旋律小調指法速查表
 
+**[📥 下載 PDF](https://github.com/ccli-taipower/hanon-fingering/raw/main/hanon_cheatsheet.pdf)**
+
 ---
 
 *為哈農練習者而作。*
