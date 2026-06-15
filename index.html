@@ -574,10 +574,10 @@ const KS = {
 // Standard step positions for key sig accidentals
 // Sharps: F5,C5,G5,D5,A4,E5,B4 → steps: 9,6,10(use 3 on treble),7,4,8,5
 // Convention: G# goes to step 10 but we pull it down an octave to 3
-const SH_TREBLE = [9, 6, 3, 7, 4, 8, 5];  // F#C#G#D#A#E#B#
-const SH_BASS   = [2,-1,-4, 0,-3, 1,-2];
-const FL_TREBLE = [5, 8, 4, 7, 3, 6, 2];  // BbEbAbDbGbCbFb
-const FL_BASS   = [-2, 1,-3, 0,-4,-1,-5];
+const SH_TREBLE = [10, 7, 4, 8, 5, 9, 6];  // F#C#G#D#A#E#B#
+const SH_BASS   = [-4,-7,-10,-6,-9,-5,-8];  // F#C#G#D#A#E#B#
+const FL_TREBLE = [6, 9, 5, 8, 4, 7, 3];  // BbEbAbDbGbCbFb
+const FL_BASS   = [-1,-5,-9,-6,-10,-7,-11];  // BbEbAbDbGbCbFb
 
 function keySigSVG(key, mode) {
   const ks = KS[key] || {t:'',n:0};
