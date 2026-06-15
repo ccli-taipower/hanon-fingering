@@ -784,7 +784,7 @@ function drawStaffSVG(key, mode, dir, hand) {
     // Finger number
     if (fi.f > 0) {
       const fc = fi.isThumb ? '#1a3066' : fi.isPivot ? '#2a7a5a' : '#2c3e7a';
-      const fy = isRH ? y - 38 : y + 48;
+      const fy = y - 38;
       sv += '<text x="' + x + '" y="' + fy + '" font-size="13" font-family="monospace" font-weight="700" fill="' + fc + '" text-anchor="middle">' + fi.f + '</text>';
     }
   }
