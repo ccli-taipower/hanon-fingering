@@ -663,7 +663,6 @@ function drawStaffSVG(key, mode, dir, hand) {
   const notes = getScaleNotes(key, mode, dir);
   const isRH = hand === 'rh';
   const oct = isRH ? rhOct(key, mode) : lhOct(key, mode);
-  const startOct = dir === 'asc' ? oct : oct + 2;
 
   const steps = dir === 'asc'
     ? assignSteps(notes, oct)
@@ -677,51 +676,34 @@ function drawStaffSVG(key, mode, dir, hand) {
   const noteEndX = SVG_W - MR;
   const xStep = (noteEndX - noteStartX) / 14;
 
-  // Single-staff SVG layout
   const S_TOP = 52;
-  const S_BOT = S_TOP + 4*SP;
-  const S_H = S_BOT + 60;
+  const S_BOT = S_TOP + 4 * SP;
+  const S_H = S_BOT + 64;
 
-  // stepY for this single staff (treble: E4=step2 on S_BOT; bass: A3=step-3 on S_BOT? no)
-  // For RH: treble clef, E4 sits on S_BOT
-  // For LH: bass clef, we offset steps so bass notes sit on the staff lines
-  // Bass clef bottom line = G2 = step -11, top line = A3 = step -3
-  // We want A3 (step -3) to sit on S_TOP, G2 (step -11) on S_BOT
-  // So: y = S_BOT - (step - (-11)) * SP = S_BOT - (step+11)*SP ... but that's 4 lines = 4SP
-  // Actually for bass: S_TOP=A3=step-3, S_BOT=G2=step-11? No: 5 lines, 4 gaps
-  // treble: lines at E4(2),G4(4),B4(6),D5(8),F5(10) => S_BOT=step2, S_TOP=step10
-  // bass:   lines at G2(-11),B2(-9),D3(-7),F3(-5),A3(-3) => S_BOT=step-11, S_TOP=step-3
-  // For bass we want S_BOT to correspond to step -11
-  // stepY_single: for RH: y = S_BOT - (s-2)*SP; for LH: y = S_BOT - (s-(-11))*SP = S_BOT-(s+11)*SP
   function stepYS(s) {
     if (isRH) return S_BOT - (s - 2) * SP;
     else      return S_BOT - (s + 11) * SP;
   }
 
-  let svg = \`<svg viewBox="0 0 \${SVG_W} \${S_H}" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;display:block;margin-bottom:8px">\`;
-  svg += \`<rect width="\${SVG_W}" height="\${S_H}" fill="#f7f4ef"/>\`;
+  let svg = '<svg viewBox="0 0 ' + SVG_W + ' ' + S_H + '" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;display:block;margin-bottom:8px">';
+  svg += '<rect width="' + SVG_W + '" height="' + S_H + '" fill="#f7f4ef"/>';
 
-  // Staff lines
   for (let i = 0; i < 5; i++) {
-    svg += \`<line x1="\${ML}" y1="\${S_TOP+i*SP}" x2="\${SVG_W-MR}" y2="\${S_TOP+i*SP}" stroke="#1a1612" stroke-width="0.7"/>\`;
+    svg += '<line x1="' + ML + '" y1="' + (S_TOP+i*SP) + '" x2="' + (SVG_W-MR) + '" y2="' + (S_TOP+i*SP) + '" stroke="#1a1612" stroke-width="0.7"/>';
   }
-  // Barline
-  svg += \`<line x1="\${ML}" y1="\${S_TOP}" x2="\${ML}" y2="\${S_BOT}" stroke="#1a1612" stroke-width="1.5"/>\`;
+  svg += '<line x1="' + ML + '" y1="' + S_TOP + '" x2="' + ML + '" y2="' + S_BOT + '" stroke="#1a1612" stroke-width="1.5"/>';
 
-  // Clef
-  if (isRH) {
-    svg += \`<text x="\${ML+2}" y="\${S_BOT+2}" font-size="50" font-family="serif" fill="#1a1612">𝄞</text>\`;
-  } else {
-    svg += \`<text x="\${ML+4}" y="\${S_TOP+13}" font-size="28" font-family="serif" fill="#1a1612">𝄢</text>\`;
-    svg += \`<circle cx="\${ML+21}" cy="\${S_TOP+4}" r="2.5" fill="#1a1612"/>\`;
-    svg += \`<circle cx="\${ML+21}" cy="\${S_TOP+10}" r="2.5" fill="#1a1612"/>\`;
-  }
-
-  // Label
   const label = isRH ? '右手 RH' : '左手 LH';
-  svg += \`<text x="\${ML}" y="14" font-size="11" font-family="monospace" fill="#2c3e7a" font-weight="600">\${label}</text>\`;
+  svg += '<text x="' + ML + '" y="14" font-size="11" font-family="monospace" fill="#2c3e7a" font-weight="600">' + label + '</text>';
 
-  // Key signature
+  if (isRH) {
+    svg += '<text x="' + (ML+2) + '" y="' + (S_BOT+2) + '" font-size="50" font-family="serif" fill="#1a1612">𝄞</text>';
+  } else {
+    svg += '<text x="' + (ML+4) + '" y="' + (S_TOP+13) + '" font-size="28" font-family="serif" fill="#1a1612">𝄢</text>';
+    svg += '<circle cx="' + (ML+21) + '" cy="' + (S_TOP+4) + '" r="2.5" fill="#1a1612"/>';
+    svg += '<circle cx="' + (ML+21) + '" cy="' + (S_TOP+10) + '" r="2.5" fill="#1a1612"/>';
+  }
+
   const ksn = ks.n || 0;
   if (ksn > 0) {
     const sym = ks.type === '#' ? '♯' : '♭';
@@ -730,11 +712,10 @@ function drawStaffSVG(key, mode, dir, hand) {
     const accSteps = isRH ? tSteps : bSteps;
     const startX = ML + 52;
     for (let i = 0; i < ksn; i++) {
-      svg += \`<text x="\${startX + i*9}" y="\${stepYS(accSteps[i])+4}" font-size="14" font-family="serif" fill="#1a1612" text-anchor="middle">\${sym}</text>\`;
+      svg += '<text x="' + (startX+i*9) + '" y="' + (stepYS(accSteps[i])+4) + '" font-size="14" font-family="serif" fill="#1a1612" text-anchor="middle">' + sym + '</text>';
     }
   }
 
-  // Notes
   const r = 5;
   for (let i = 0; i < 15; i++) {
     const x = noteStartX + i * xStep;
@@ -743,45 +724,39 @@ function drawStaffSVG(key, mode, dir, hand) {
     const y = stepYS(s);
     const finInfo = fin[i] || {f:0, isThumb:false, isPivot:false};
 
-    // Ledger lines
     if (isRH) {
       for (let ls = 0; ls >= s; ls -= 2) {
-        svg += \`<line x1="\${x-r-3}" y1="\${stepYS(ls)}" x2="\${x+r+3}" y2="\${stepYS(ls)}" stroke="#1a1612" stroke-width="0.7"/>\`;
+        svg += '<line x1="' + (x-r-3) + '" y1="' + stepYS(ls) + '" x2="' + (x+r+3) + '" y2="' + stepYS(ls) + '" stroke="#1a1612" stroke-width="0.7"/>';
       }
       for (let ls = 12; ls <= s; ls += 2) {
-        svg += \`<line x1="\${x-r-3}" y1="\${stepYS(ls)}" x2="\${x+r+3}" y2="\${stepYS(ls)}" stroke="#1a1612" stroke-width="0.7"/>\`;
+        svg += '<line x1="' + (x-r-3) + '" y1="' + stepYS(ls) + '" x2="' + (x+r+3) + '" y2="' + stepYS(ls) + '" stroke="#1a1612" stroke-width="0.7"/>';
       }
     } else {
-      // Bass: below G2 (step -11 = S_BOT), above A3 (step -3 = S_TOP)
       for (let ls = -13; ls >= s; ls -= 2) {
-        svg += \`<line x1="\${x-r-3}" y1="\${stepYS(ls)}" x2="\${x+r+3}" y2="\${stepYS(ls)}" stroke="#1a1612" stroke-width="0.7"/>\`;
+        svg += '<line x1="' + (x-r-3) + '" y1="' + stepYS(ls) + '" x2="' + (x+r+3) + '" y2="' + stepYS(ls) + '" stroke="#1a1612" stroke-width="0.7"/>';
       }
       for (let ls = -1; ls <= s; ls += 2) {
-        svg += \`<line x1="\${x-r-3}" y1="\${stepYS(ls)}" x2="\${x+r+3}" y2="\${stepYS(ls)}" stroke="#1a1612" stroke-width="0.7"/>\`;
+        svg += '<line x1="' + (x-r-3) + '" y1="' + stepYS(ls) + '" x2="' + (x+r+3) + '" y2="' + stepYS(ls) + '" stroke="#1a1612" stroke-width="0.7"/>';
       }
     }
 
-    // Accidental
     const accSym = needsAcc(notes[i], key, mode);
     if (accSym) {
-      svg += \`<text x="\${x-r-4}" y="\${y+4}" font-size="11" font-family="serif" fill="#1a1612" text-anchor="end">\${accSym}</text>\`;
+      svg += '<text x="' + (x-r-4) + '" y="' + (y+4) + '" font-size="11" font-family="serif" fill="#1a1612" text-anchor="end">' + accSym + '</text>';
     }
 
-    // Note head
     let fill = '#f7f4ef', stroke = '#1a1612', sw = '1.2';
-    if (finInfo.isThumb)  { fill='#d4e0f5'; stroke='#1a3066'; sw='1.8'; }
-    if (finInfo.isPivot)  { stroke='#2a7a5a'; sw='2.2'; }
-    svg += \`<ellipse cx="\${x}" cy="\${y}" rx="\${r}" ry="\${r*0.78}" fill="\${fill}" stroke="\${stroke}" stroke-width="\${sw}"/>\`;
+    if (finInfo.isThumb) { fill = '#d4e0f5'; stroke = '#1a3066'; sw = '1.8'; }
+    if (finInfo.isPivot) { stroke = '#2a7a5a'; sw = '2.2'; }
+    svg += '<ellipse cx="' + x + '" cy="' + y + '" rx="' + r + '" ry="' + (r*0.78) + '" fill="' + fill + '" stroke="' + stroke + '" stroke-width="' + sw + '"/>';
 
-    // Stem: RH up, LH down
-    if (isRH) svg += \`<line x1="\${x+r}" y1="\${y}" x2="\${x+r}" y2="\${y-26}" stroke="#1a1612" stroke-width="1"/>\`;
-    else      svg += \`<line x1="\${x-r}" y1="\${y}" x2="\${x-r}" y2="\${y+26}" stroke="#1a1612" stroke-width="1"/>\`;
+    if (isRH) svg += '<line x1="' + (x+r) + '" y1="' + y + '" x2="' + (x+r) + '" y2="' + (y-26) + '" stroke="#1a1612" stroke-width="1"/>';
+    else      svg += '<line x1="' + (x-r) + '" y1="' + y + '" x2="' + (x-r) + '" y2="' + (y+26) + '" stroke="#1a1612" stroke-width="1"/>';
 
-    // Finger number
     if (finInfo.f > 0) {
       const fc = finInfo.isThumb ? '#1a3066' : finInfo.isPivot ? '#2a7a5a' : '#2c3e7a';
       const fy = isRH ? y - 32 : y + 40;
-      svg += \`<text x="\${x}" y="\${fy}" font-size="12" font-family="monospace" font-weight="700" fill="\${fc}" text-anchor="middle">\${finInfo.f}</text>\`;
+      svg += '<text x="' + x + '" y="' + fy + '" font-size="12" font-family="monospace" font-weight="700" fill="' + fc + '" text-anchor="middle">' + finInfo.f + '</text>';
     }
   }
 
