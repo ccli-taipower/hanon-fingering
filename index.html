@@ -333,6 +333,104 @@ select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
 /* ── Treble clef watermark on result ── */
 .result-wrap { position: relative; }
 
+
+/* ── Supplement ── */
+.supplement {
+  margin-top: 56px;
+  border-top: 2px solid var(--line);
+  padding-top: 40px;
+}
+.supp-header { margin-bottom: 32px; }
+.supp-section { margin-bottom: 48px; }
+.supp-title {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--ink);
+  margin-bottom: 20px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+.supp-title em { font-style: italic; color: var(--accent-2); }
+
+.supp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+}
+.supp-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 16px 18px;
+  transition: box-shadow .15s;
+}
+.supp-card:hover { box-shadow: 0 2px 12px rgba(44,62,122,0.08); }
+.supp-card-num {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: .12em;
+  margin-bottom: 4px;
+}
+.supp-card-title {
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.supp-card-sub {
+  font-size: 11px;
+  color: var(--ink-muted);
+  font-family: var(--mono);
+  margin-bottom: 8px;
+}
+.supp-card-desc {
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.65;
+}
+.supp-card-tag {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-family: var(--mono);
+  background: var(--paper-warm);
+  color: var(--ink-muted);
+  border: 1px solid var(--line);
+}
+.supp-card-tag.hard { background: #f5e8e8; color: #8a3030; border-color: #e0c0c0; }
+.supp-card-tag.medium { background: #e8f0f5; color: #2c4a6a; border-color: #b0c8e0; }
+
+.tips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+}
+.tip-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--r-lg) var(--r-lg) 0;
+  padding: 14px 16px;
+}
+.tip-card.green { border-left-color: var(--pivot-ring); }
+.tip-card.rust  { border-left-color: var(--accent-2); }
+.tip-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 5px;
+  font-family: var(--serif);
+}
+.tip-desc {
+  font-size: 12px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
 </style>
 </head>
 <body>
@@ -397,6 +495,28 @@ select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
   </div>
 
   <div class="rules-panel" id="rules-panel"></div>
+
+
+  <!-- Supplement sections -->
+  <div class="supplement" id="supplement">
+
+    <div class="supp-header">
+      <div class="eyebrow" style="margin-bottom:0">哈農完整練習體系</div>
+    </div>
+
+    <!-- Practice types -->
+    <div class="supp-section">
+      <h2 class="supp-title">其他練習類型 <em>Other Exercise Types</em></h2>
+      <div class="supp-grid" id="supp-grid"></div>
+    </div>
+
+    <!-- Practice tips -->
+    <div class="supp-section">
+      <h2 class="supp-title">練習建議 <em>Practice Tips</em></h2>
+      <div class="tips-grid" id="tips-grid"></div>
+    </div>
+
+  </div>
 
   <footer class="footer">
     <span>哈農音階指法查詢 · Hanon Scale Fingering Dashboard</span>
@@ -931,6 +1051,136 @@ function buildFingers(str, notes) {
   return html;
 }
 
+
+
+const EXERCISE_TYPES = [
+  {
+    num: 'No. 1–20',
+    title: '手指獨立性',
+    sub: 'Finger Independence',
+    desc: '五指均勻獨立訓練，每個音符力度均等。建議以♩=60起步，逐漸提升到♩=108以上。',
+    tag: '基礎', tagType: ''
+  },
+  {
+    num: 'No. 28–32',
+    title: '半音階',
+    sub: 'Chromatic Scale',
+    desc: '右手：1指在白鍵，3指跨兩個黑鍵（3 1 3 1...），或 1 3 1 3 交替。左手鏡像。關鍵：拇指過指要流暢，黑鍵段落不可斷音。',
+    tag: '進階', tagType: 'medium'
+  },
+  {
+    num: 'No. 33–38',
+    title: '三和弦琶音',
+    sub: 'Arpeggio (Triads)',
+    desc: '大三和弦（如C：C E G C）右手指法 1 2 3 1 2 3 4 5，過指在G上。左手從5指起，1指落在C。手腕要放鬆，跳躍時手腕略微引導。',
+    tag: '中級', tagType: 'medium'
+  },
+  {
+    num: 'No. 39–43',
+    title: '七和弦琶音',
+    sub: 'Arpeggio (Dominant 7th)',
+    desc: '屬七和弦（如G7：G B D F）跨越更大音域。右手 1 2 3 4 1 2 3 4，左手 5 4 3 2 1 3 2 1。需要更大幅度的手腕旋轉動作。',
+    tag: '進階', tagType: 'medium'
+  },
+  {
+    num: 'No. 44–46',
+    title: '震音（顫音）',
+    sub: 'Trill',
+    desc: '兩音快速交替（如 C-D 或 D-E）。指法：2-3、3-4、4-5，或 1-2。關鍵是手指要靠近琴鍵，不要抬太高。從慢速建立均勻感。',
+    tag: '進階', tagType: 'medium'
+  },
+  {
+    num: 'No. 47–50',
+    title: '八度',
+    sub: 'Octaves',
+    desc: '雙手各奏八度音程，1指與5指（或4指，黑鍵時）同時按下。手腕要有彈性，不可僵硬。應從慢速連奏練起，再練斷奏（staccato）。',
+    tag: '高難度', tagType: 'hard'
+  },
+  {
+    num: 'No. 51–60',
+    title: '雙音（三度、六度）',
+    sub: 'Double Notes (3rds, 6ths)',
+    desc: '兩音同時彈奏，三度（如C-E、D-F）或六度（如C-A）。右手三度上行指法：1-2、2-3、1-2 交替。需要手指獨立控制，兩音音量要均等。',
+    tag: '高難度', tagType: 'hard'
+  },
+  {
+    num: '補充',
+    title: '對稱式練習',
+    sub: 'Contrary Motion',
+    desc: '雙手從中央C向外或向內同時移動，鏡像對稱。兩手指法完全對稱，視覺上容易理解，但仍需注意音量平衡。',
+    tag: '中級', tagType: 'medium'
+  },
+];
+
+const PRACTICE_TIPS = [
+  {
+    title: '速度層次：節拍器三段法',
+    desc: '每個練習分三個速度：(1) 慢速（♩=60）確認指法與音名；(2) 中速（♩=84）建立連貫感；(3) 目標速度（♩=108+）維持均勻。切勿在指法不穩時就加速。',
+    style: ''
+  },
+  {
+    title: '連奏與斷奏交替',
+    desc: '同一個練習先用連奏（legato）彈，再用斷奏（staccato）彈。斷奏能強化手指獨立性，並訓練手指快速離鍵的能力，對震音和快速音群特別有效。',
+    style: 'green'
+  },
+  {
+    title: '雙手對心電診斷',
+    desc: '先單手練習確認指法，再雙手合奏。如果雙手合奏時某個音符特別突出或某段不流暢，通常是其中一手的換指點出了問題，回到單手找出原因。',
+    style: ''
+  },
+  {
+    title: '轉指點的慢動作練習',
+    desc: '找出每個音階的轉指點（拇指過指或穿越的位置），單獨放慢練習那幾個音。例如C大調右手在F和高音C的過指，反覆練習直到完全自然無聲為止。',
+    style: 'green'
+  },
+  {
+    title: '不同節奏型變奏',
+    desc: '把均等的十六分音符改成附點節奏（長短長短或短長短長），強制讓手指輪流承受重音，能快速找出弱指（通常是4指或5指）並加強它。',
+    style: 'rust'
+  },
+  {
+    title: '力度控制：pp 到 ff',
+    desc: '同一個練習從最弱（pp）練到最強（ff），全程保持速度不變、指法不變。這能訓練手指在不同觸鍵深度下的精準控制，也是演奏音樂性的基礎。',
+    style: 'rust'
+  },
+  {
+    title: '練習時間建議',
+    desc: '每天 20–30 分鐘的專注練習比 2 小時漫無目的更有效。可分段：音階 10 分鐘、琶音 10 分鐘、震音或八度 10 分鐘。手感不好時寧可縮短，不強撐。',
+    style: ''
+  },
+  {
+    title: '手腕放鬆的自我檢測',
+    desc: '用另一隻手輕碰彈奏的手腕：如果感覺到緊繃或僵硬，立刻停下來抖抖手，重新從慢速開始。長期手腕緊繃是肌腱炎的前兆，必須避免。',
+    style: 'rust'
+  },
+];
+
+function renderSupplement() {
+  // Exercise types
+  const grid = document.getElementById('supp-grid');
+  if (grid) {
+    grid.innerHTML = EXERCISE_TYPES.map(e => `
+      <div class="supp-card">
+        <div class="supp-card-num">${e.num}</div>
+        <div class="supp-card-title">${e.title}</div>
+        <div class="supp-card-sub">${e.sub}</div>
+        <div class="supp-card-desc">${e.desc}</div>
+        <span class="supp-card-tag ${e.tagType}">${e.tag}</span>
+      </div>
+    `).join('');
+  }
+
+  // Practice tips
+  const tips = document.getElementById('tips-grid');
+  if (tips) {
+    tips.innerHTML = PRACTICE_TIPS.map(t => `
+      <div class="tip-card ${t.style}">
+        <div class="tip-title">${t.title}</div>
+        <div class="tip-desc">${t.desc}</div>
+      </div>
+    `).join('');
+  }
+}
 
 function render() {
   const d = DATA[curKey][curMode];
