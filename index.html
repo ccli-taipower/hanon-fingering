@@ -2755,16 +2755,36 @@ function render() {
   let html = `<div style="font-family:var(--serif);font-style:italic;color:var(--ink-muted);font-size:13px;margin-bottom:14px;">${scaleName} ${modeName}</div>`;
 
   const dirMap = {rh_asc:'asc', rh_desc:'desc', lh_asc:'asc', lh_desc:'desc'};
+
+  // Compute mirror sets: same note + same finger between RH and LH
+  function parseFin(s) { return s.split(' | ').flatMap(g => g.trim().split(' ')); }
+  function getMirror(keyA, keyB, dir) {
+    const notesA = getScaleNotes(curKey, curMode, dir);
+    const notesB = getScaleNotes(curKey, curMode, dir);
+    const fA = parseFin(d[keyA]?.fingers || '');
+    const fB = parseFin(d[keyB]?.fingers || '');
+    const sA = new Set(), sB = new Set();
+    const len = Math.min(fA.length, fB.length, notesA.length, notesB.length);
+    for (let i = 0; i < len; i++) {
+      if (fA[i] === fB[i] && notesA[i] === notesB[i]) { sA.add(i); sB.add(i); }
+    }
+    return { sA, sB };
+  }
+  const { sA: mRhAsc,  sB: mLhAsc  } = getMirror('rh_asc',  'lh_asc',  'asc');
+  const { sA: mRhDesc, sB: mLhDesc } = getMirror('rh_desc', 'lh_desc', 'desc');
+  const mirrorMap = { rh_asc: mRhAsc, lh_asc: mLhAsc, rh_desc: mRhDesc, lh_desc: mLhDesc };
+
   rows.forEach(r => {
     const entry = d[r.key];
     const scaleNotes = getScaleNotes(curKey, curMode, dirMap[r.key]);
+    const mirrorSet = mirrorMap[r.key];
     html += `<div class="row-card" role="row">
       <div class="row-label">
         <span class="hand">${r.label}</span>
         <span class="dir">${r.dir}</span>
       </div>
       <div class="row-content">
-        <div class="fingers">${buildFingers(entry.fingers, scaleNotes)}</div>
+        <div class="fingers">${buildFingers(entry.fingers, scaleNotes, mirrorSet)}</div>
         <div class="row-rule">${entry.rule}</div>
       </div>
     </div>`;
