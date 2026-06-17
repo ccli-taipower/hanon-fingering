@@ -1016,6 +1016,13 @@ select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
   color: #fff;
 }
 
+
+.fn.mirror {
+  background: #f5e0f5;
+  color: #6a1a8a;
+  border: 1.5px solid #b060c0;
+}
+.fn-note.mirror-note { color: #6a1a8a; }
 </style>
 </head>
 <body>
@@ -1081,6 +1088,7 @@ select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
     <div class="legend-item"><div class="legend-dot ld-thumb"></div>拇指（1指）落點</div>
     <div class="legend-item"><div class="legend-dot ld-pivot"></div>轉指點（穿越起始）</div>
     <div class="legend-item"><div class="legend-dot ld-normal"></div>一般手指</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#f5e0f5;border:1.5px solid #b060c0"></div>雙手同音同指</div>
   </div>
 
   <div class="result-wrap">
@@ -1640,7 +1648,8 @@ function fmtNote(n) {
   return n.replace(/#/g,'♯').replace(/b/g,'♭');
 }
 
-function buildFingers(str, notes) {
+function buildFingers(str, notes, mirrorSet) {
+  // mirrorSet: Set of indices where same note+finger appears in the other hand
   const groups = str.split(' | ');
   let html = '';
   let noteIdx = 0;
@@ -1649,9 +1658,12 @@ function buildFingers(str, notes) {
     nums.forEach((n, ni) => {
       const isThumb = n === '1';
       const isPivot = ni === 0 && gi > 0;
-      const showNote = notes && (isThumb || isPivot);
-      const noteName = showNote && notes[noteIdx] ? `<span class="fn-note">${fmtNote(notes[noteIdx])}</span>` : '';
-      html += `<span class="fn-wrap"><span class="fn${isThumb?' thumb':''}${isPivot?' pivot':''}">${n}</span>${noteName}</span>`;
+      const isMirror = mirrorSet && mirrorSet.has(noteIdx);
+      const showNote = notes && (isThumb || isPivot || isMirror);
+      const noteClass = isMirror ? ' mirror-note' : '';
+      const noteName = showNote && notes[noteIdx] ? `<span class="fn-note${noteClass}">${fmtNote(notes[noteIdx])}</span>` : '';
+      const extraClass = isMirror ? ' mirror' : '';
+      html += `<span class="fn-wrap"><span class="fn${isThumb?' thumb':''}${isPivot?' pivot':''}${extraClass}" title="${isMirror?'雙手同音同指':''}${isThumb?'拇指落點':''}${isPivot?' 轉指點':''}">${n}</span>${noteName}</span>`;
       noteIdx++;
     });
     if (gi < groups.length - 1) {
