@@ -1023,6 +1023,245 @@ select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
   border: 1.5px solid #b060c0;
 }
 .fn-note.mirror-note { color: #6a1a8a; }
+
+/* ── Decision Tree ── */
+.decision-wrap {
+  margin-top: 40px;
+  border-top: 1px solid var(--line);
+  padding-top: 32px;
+}
+.decision-title {
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.decision-title em { font-style: italic; color: var(--accent-2); }
+.decision-subtitle {
+  font-size: 13px;
+  color: var(--ink-muted);
+  font-family: var(--serif);
+  font-style: italic;
+  margin-bottom: 24px;
+}
+.dtree {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.dnode {
+  display: flex;
+  gap: 0;
+}
+.dnode-line {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 32px;
+  flex-shrink: 0;
+}
+.dnode-dot {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 2px var(--accent);
+  flex-shrink: 0;
+  margin-top: 14px;
+}
+.dnode-dot.q { background: var(--accent-2); box-shadow: 0 0 0 2px var(--accent-2); }
+.dnode-dot.end { background: var(--pivot-ring); box-shadow: 0 0 0 2px var(--pivot-ring); }
+.dnode-vline {
+  width: 2px;
+  flex: 1;
+  background: var(--line);
+  min-height: 16px;
+}
+.dnode-content {
+  padding: 10px 0 10px 14px;
+  flex: 1;
+}
+.dnode-q {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.dnode-branches {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-left: 4px;
+}
+.dbranch {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 8px 12px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--line);
+  background: var(--paper);
+  font-size: 12px;
+}
+.dbranch.sharp { border-color: #b0c0e8; background: #eef2ff; }
+.dbranch.flat  { border-color: #e8c8a0; background: #fff4ee; }
+.dbranch.result { border-color: #90c8a0; background: #eaf5ee; cursor: pointer; transition: all .15s; }
+.dbranch.result:hover { background: #d4f0e0; transform: translateX(3px); }
+.dbranch-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.dbranch.sharp .dbranch-label { background: #2c3e7a; color: #fff; }
+.dbranch.flat  .dbranch-label { background: #7a3a2c; color: #fff; }
+.dbranch.result .dbranch-label { background: var(--pivot-ring); color: #fff; }
+.dbranch-text { color: var(--ink-soft); line-height: 1.5; }
+.dbranch-text strong { color: var(--ink); }
+.dbranch-formula {
+  margin-top: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.dformula-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-family: var(--mono);
+}
+.dft-rh { background: #e8ecf5; color: var(--accent); border: 1px solid #b0c0e8; }
+.dft-lh { background: #eaf5ee; color: var(--pivot-ring); border: 1px solid #90c8a0; }
+.dft-sep { color: var(--ink-muted); font-size: 10px; align-self: center; }
+.dtree-note {
+  margin-top: 16px;
+  padding: 10px 14px;
+  background: var(--paper-warm);
+  border-radius: var(--r-md);
+  font-size: 12px;
+  color: var(--ink-soft);
+  font-style: italic;
+  font-family: var(--serif);
+}
+
+/* Interactive acc counter */
+.acc-counter {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.acc-type-btns { display: flex; gap: 8px; }
+.acc-type-btn {
+  padding: 6px 16px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--line);
+  background: var(--paper);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all .15s;
+  font-family: var(--mono);
+}
+.acc-type-btn.sharp.active { background: #2c3e7a; color: #fff; border-color: #2c3e7a; }
+.acc-type-btn.flat.active  { background: #7a3a2c; color: #fff; border-color: #7a3a2c; }
+.acc-count-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.acc-count-btn {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .1s;
+}
+.acc-count-btn:hover { background: var(--paper-deep); }
+.acc-count-num {
+  font-family: var(--mono);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+  min-width: 24px;
+  text-align: center;
+}
+.acc-count-num.flat { color: var(--accent-2); }
+.acc-result-box {
+  margin-top: 4px;
+  padding: 16px 20px;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--line);
+  background: var(--paper);
+  display: none;
+}
+.acc-result-box.visible { display: block; }
+.acc-result-key {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.acc-result-sub {
+  font-size: 12px;
+  color: var(--ink-muted);
+  margin-bottom: 14px;
+  font-family: var(--mono);
+}
+.acc-result-formula {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+@media(max-width:480px) { .acc-result-formula { grid-template-columns: 1fr; } }
+.acc-formula-cell {
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--line);
+}
+.acc-formula-cell.rh { background: #eef2ff; border-color: #b0c0e8; }
+.acc-formula-cell.lh { background: #eaf5ee; border-color: #90c8a0; }
+.acc-formula-hand {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin-bottom: 4px;
+}
+.acc-formula-data {
+  font-size: 13px;
+  color: var(--ink);
+  line-height: 1.6;
+}
+.acc-formula-data strong {
+  font-family: var(--mono);
+  font-size: 15px;
+  color: var(--accent);
+}
+.acc-formula-cell.lh .acc-formula-data strong { color: var(--pivot-ring); }
+.acc-goto {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 6px 14px;
+  border: 1px solid var(--accent);
+  border-radius: var(--r-md);
+  color: var(--accent);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all .15s;
+}
+.acc-goto:hover { background: var(--accent); color: #fff; }
 </style>
 </head>
 <body>
@@ -2937,6 +3176,166 @@ function buildRulesPanel(mode) {
   `;
 }
 
+
+// ── Key identification + fingering formula data ──
+const KEY_FORMULA = {
+  // sharps
+  sharp: {
+    0: { major:'C', minor:'a',  rh_asc:'1指起，3+4分組', rh_desc:'5指起，5-4-3-2-1過指', lh_asc:'5指起，鏡像右手下行', lh_desc:'1指起，鏡像右手上行', rh_start:1, lh_start:5 },
+    1: { major:'G', minor:'e',  rh_asc:'1指起，3+4分組', rh_desc:'5指起，在B轉指', lh_asc:'5指起，在B穿越', lh_desc:'1指起，3+4分組', rh_start:1, lh_start:5 },
+    2: { major:'D', minor:'b',  rh_asc:'1指起，3+4分組', rh_desc:'5指起，在C#轉指', lh_asc:'5指起，在C#穿越', lh_desc:'1指起', rh_start:1, lh_start:5 },
+    3: { major:'A', minor:'f#', rh_asc:'1指起，3+4分組', rh_desc:'5指起，在G#轉指', lh_asc:'5指起，在G#穿越', lh_desc:'1指起', rh_start:1, lh_start:5 },
+    4: { major:'E', minor:'c#', rh_asc:'1指起，3+4分組', rh_desc:'5指起，在D#轉指', lh_asc:'5指起，在D#穿越', lh_desc:'1指起', rh_start:1, lh_start:5 },
+    5: { major:'B', minor:'g#', rh_asc:'1指起，4+4分組', rh_desc:'5指起，在A#轉指', lh_asc:'4指起，4+4分組', lh_desc:'1指起，4+4分組', rh_start:1, lh_start:4 },
+    6: { major:'F#', minor:'d#', rh_asc:'2指起（黑鍵起始）', rh_desc:'4指起，避黑鍵', lh_asc:'2指起', lh_desc:'4指起', rh_start:2, lh_start:2 },
+    7: { major:'C#', minor:'a#', rh_asc:'2指起（全黑鍵策略）', rh_desc:'4指起', lh_asc:'3指起', lh_desc:'1指起', rh_start:2, lh_start:3 },
+  },
+  flat: {
+    0: { major:'C', minor:'a',  rh_asc:'1指起，3+4分組', rh_desc:'5指起', lh_asc:'5指起', lh_desc:'1指起', rh_start:1, lh_start:5 },
+    1: { major:'F', minor:'d',  rh_asc:'1指起，4+3分組（F C 換指）', rh_desc:'4指起（Bb用4指）', lh_asc:'5指起，在E/Bb穿越', lh_desc:'1指起，Bb用4指', rh_start:1, lh_start:5 },
+    2: { major:'Bb', minor:'g', rh_asc:'4指起（Bb黑鍵）', rh_desc:'3指起', lh_asc:'3指起', lh_desc:'4指起', rh_start:4, lh_start:3 },
+    3: { major:'Eb', minor:'c', rh_asc:'3指起（Eb黑鍵）', rh_desc:'4指起', lh_asc:'3指起', lh_desc:'4指起', rh_start:3, lh_start:3 },
+    4: { major:'Ab', minor:'f', rh_asc:'3指起（Ab黑鍵）', rh_desc:'2指起', lh_asc:'3指起', lh_desc:'4指起', rh_start:3, lh_start:3 },
+    5: { major:'Db', minor:'bb', rh_asc:'2指起（Db黑鍵）', rh_desc:'2指起', lh_asc:'3指起', lh_desc:'3指起', rh_start:2, lh_start:3 },
+    6: { major:'Gb', minor:'eb', rh_asc:'2指起（幾乎全黑鍵）', rh_desc:'2指起', lh_asc:'4指起', lh_desc:'3指起', rh_start:2, lh_start:4 },
+    7: { major:'Cb', minor:'ab', rh_asc:'2指起（同Db策略）', rh_desc:'2指起', lh_asc:'3指起', lh_desc:'3指起', rh_start:2, lh_start:3 },
+  }
+};
+
+const SHARP_ORDER = ['F','C','G','D','A','E','B'];
+const FLAT_ORDER  = ['B','E','A','D','G','C','F'];
+
+// Map major key name to DATA key id
+const KEY_NAME_TO_ID = {
+  'C':'C','G':'G','D':'D','A':'A','E':'E','B':'B','F#':'Fs','C#':'Cs',
+  'F':'F','Bb':'Bb','Eb':'Eb','Ab':'Ab','Db':'Db','Gb':'Gb','Cb':'Cb'
+};
+
+let accType = 'sharp';
+let accCount = 0;
+
+function renderDecisionTree() {
+  const wrap = document.getElementById('decision-wrap');
+  if (!wrap) return;
+
+  wrap.innerHTML = `
+    <div class="decision-wrap">
+      <h2 class="decision-title">調性識別公式 <em>Key Formula</em></h2>
+      <p class="decision-subtitle">看到升降記號數量，立刻知道什麼調、從哪個手指開始</p>
+
+      <div class="acc-counter">
+        <div class="acc-type-btns">
+          <button class="acc-type-btn sharp ${accType==='sharp'?'active':''}" onclick="setAccType('sharp')">♯ 升號</button>
+          <button class="acc-type-btn flat  ${accType==='flat' ?'active':''}" onclick="setAccType('flat')">♭ 降號</button>
+        </div>
+        <div class="acc-count-wrap">
+          <button class="acc-count-btn" onclick="setAccCount(Math.max(0,accCount-1))">−</button>
+          <div class="acc-count-num ${accType==='flat'?'flat':''}" id="acc-num">${accCount}</div>
+          <button class="acc-count-btn" onclick="setAccCount(Math.min(7,accCount+1))">+</button>
+          <span style="font-size:12px;color:var(--ink-muted);font-family:var(--mono)">個${accType==='sharp'?'升號':'降號'}</span>
+        </div>
+      </div>
+
+      <div class="acc-result-box" id="acc-result"></div>
+
+      <div class="dtree-note">
+        升號調：最後一個升號往上半音＝調名。&nbsp;&nbsp;
+        降號調：倒數第二個降號＝調名（F大調例外，只有一個降號Bb）。
+      </div>
+    </div>
+  `;
+
+  updateAccResult();
+}
+
+function setAccType(type) {
+  accType = type;
+  accCount = 0;
+  renderDecisionTree();
+}
+
+function setAccCount(n) {
+  accCount = n;
+  document.getElementById('acc-num').textContent = n;
+  document.getElementById('acc-num').className = 'acc-count-num' + (accType==='flat'?' flat':'');
+  updateAccResult();
+}
+
+function updateAccResult() {
+  const box = document.getElementById('acc-result');
+  if (!box) return;
+
+  if (accCount === 0) {
+    box.className = 'acc-result-box visible';
+    box.innerHTML = `
+      <div class="acc-result-key">C 大調 / a 小調</div>
+      <div class="acc-result-sub">無升降號</div>
+      <div class="acc-result-formula">
+        <div class="acc-formula-cell rh">
+          <div class="acc-formula-hand">右手</div>
+          <div class="acc-formula-data">上行：<strong>1</strong>指起，3+4分組<br>下行：<strong>5</strong>指起，5→1→3→1</div>
+        </div>
+        <div class="acc-formula-cell lh">
+          <div class="acc-formula-hand">左手</div>
+          <div class="acc-formula-data">上行：<strong>5</strong>指起，鏡像右手下行<br>下行：<strong>1</strong>指起，鏡像右手上行</div>
+        </div>
+      </div>
+      <div onclick="gotoFingering('C')" class="acc-goto">→ 前往 C 大調指法查詢</div>
+    `;
+    return;
+  }
+
+  const formula = KEY_FORMULA[accType][accCount];
+  if (!formula) { box.className = 'acc-result-box'; return; }
+
+  const accSymbol = accType === 'sharp' ? '♯' : '♭';
+  const keyId = KEY_NAME_TO_ID[formula.major];
+
+  // What are the accidentals?
+  const order = accType === 'sharp' ? SHARP_ORDER : FLAT_ORDER;
+  const accList = order.slice(0, accCount).map(n => n + accSymbol).join('  ');
+
+  // How to identify: sharp = last acc + semitone, flat = 2nd to last
+  let identifyHint = '';
+  if (accType === 'sharp') {
+    const lastAcc = order[accCount-1] + '♯';
+    identifyHint = `最後一個升號是 ${lastAcc} → 往上半音 = <strong>${formula.major}</strong>`;
+  } else if (accCount === 1) {
+    identifyHint = `只有一個降號（B♭）→ 記住：<strong>F 大調</strong>`;
+  } else {
+    const secondLast = order[accCount-2] + '♭';
+    identifyHint = `倒數第二個降號是 ${secondLast} → 就是 <strong>${formula.major}</strong> 大調`;
+  }
+
+  box.className = 'acc-result-box visible';
+  box.innerHTML = `
+    <div class="acc-result-key">${formula.major} 大調 <span style="font-size:16px;color:var(--ink-muted)">/ ${formula.minor} 小調</span></div>
+    <div class="acc-result-sub">${accCount}${accSymbol}　${accList}</div>
+    <div style="font-size:12px;color:var(--ink-soft);margin-bottom:14px;padding:8px 12px;background:var(--paper-warm);border-radius:var(--r-md)">
+      識別方法：${identifyHint}
+    </div>
+    <div class="acc-result-formula">
+      <div class="acc-formula-cell rh">
+        <div class="acc-formula-hand">右手 RH</div>
+        <div class="acc-formula-data">
+          上行：<strong>${formula.rh_start}</strong>指起<br>
+          <span style="font-size:11px;color:var(--ink-muted)">${formula.rh_asc}</span><br>
+          <span style="margin-top:4px;display:block">下行：${formula.rh_desc}</span>
+        </div>
+      </div>
+      <div class="acc-formula-cell lh">
+        <div class="acc-formula-hand">左手 LH</div>
+        <div class="acc-formula-data">
+          上行：<strong>${formula.lh_start}</strong>指起<br>
+          <span style="font-size:11px;color:var(--ink-muted)">${formula.lh_asc}</span><br>
+          <span style="margin-top:4px;display:block">下行：${formula.lh_desc}</span>
+        </div>
+      </div>
+    </div>
+    ${keyId ? `<div onclick="gotoFingering('${keyId}')" class="acc-goto">→ 前往 ${formula.major} 大調指法查詢</div>` : ''}
+  `;
+}
+
 function render() {
   const d = DATA[curKey][curMode];
   const rows = [
@@ -3013,6 +3412,7 @@ renderPlan();
 restoreChecks();
 renderGantt();
 renderCircle();
+renderDecisionTree();
 </script>
 </body>
 </html>
