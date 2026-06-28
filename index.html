@@ -3239,7 +3239,7 @@ function renderDecisionTree() {
       <div class="acc-result-box" id="acc-result"></div>
 
       <div class="dtree-note">
-        升號調：最後一個升號往上半音＝調名。&nbsp;&nbsp;
+        升號調：最後一個升號往上一個自然音級＝調名（如最後是 F♯ → G，最後是 E♯ → F♯）。&nbsp;&nbsp;
         降號調：倒數第二個降號＝調名（F大調例外，只有一個降號Bb）。
       </div>
     </div>
@@ -3295,11 +3295,22 @@ function updateAccResult() {
   const order = accType === 'sharp' ? SHARP_ORDER : FLAT_ORDER;
   const accList = order.slice(0, accCount).map(n => n + accSymbol).join('  ');
 
+  // Enharmonic equivalents
+  const ENHARM_MAP = {
+    sharp: { 5:'Cb大調（7♭）', 6:'Gb大調（6♭）', 7:'Db大調（5♭）' },
+    flat:  { 5:'B大調（5♯）',  6:'F#大調（6♯）', 7:'C#大調（7♯）' },
+  };
+  const enharmKey = ENHARM_MAP[accType]?.[accCount];
+
   // How to identify: sharp = last acc + semitone, flat = 2nd to last
   let identifyHint = '';
   if (accType === 'sharp') {
     const lastAcc = order[accCount-1] + '♯';
-    identifyHint = `最後一個升號是 ${lastAcc} → 往上半音 = <strong>${formula.major}</strong>`;
+    // "last sharp + one diatonic step up" = key name
+    // Simpler: remove the ♯ from last acc letter, that letter + ♯ = next key
+    // e.g. last = F♯ → key = G; last = E♯ → key = F♯
+    const lastLetter = order[accCount-1];
+    identifyHint = `最後一個升號是 ${lastAcc}，往上一個自然音級 = <strong>${formula.major}</strong>`;
   } else if (accCount === 1) {
     identifyHint = `只有一個降號（B♭）→ 記住：<strong>F 大調</strong>`;
   } else {
@@ -3311,9 +3322,12 @@ function updateAccResult() {
   box.innerHTML = `
     <div class="acc-result-key">${formula.major} 大調 <span style="font-size:16px;color:var(--ink-muted)">/ ${formula.minor} 小調</span></div>
     <div class="acc-result-sub">${accCount}${accSymbol}　${accList}</div>
-    <div style="font-size:12px;color:var(--ink-soft);margin-bottom:14px;padding:8px 12px;background:var(--paper-warm);border-radius:var(--r-md)">
+    <div style="font-size:12px;color:var(--ink-soft);margin-bottom:8px;padding:8px 12px;background:var(--paper-warm);border-radius:var(--r-md)">
       識別方法：${identifyHint}
     </div>
+    ${enharmKey ? `<div style="font-size:12px;color:var(--ink-soft);margin-bottom:14px;padding:8px 12px;background:#f5f0ff;border:1px solid #d0b8f0;border-radius:var(--r-md)">
+      🎹 等音調：<strong>${enharmKey}</strong>——兩者在鋼琴上按同一個黑鍵，音高相同，只是記譜方式不同。
+    </div>` : '<div style="margin-bottom:14px"></div>'}
     <div class="acc-result-formula">
       <div class="acc-formula-cell rh">
         <div class="acc-formula-hand">右手 RH</div>
