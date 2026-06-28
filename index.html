@@ -3350,6 +3350,65 @@ function updateAccResult() {
   `;
 }
 
+
+function renderAnchorMethod() {
+  const wrap = document.getElementById('anchor-wrap');
+  if (!wrap) return;
+
+  const FLAT_KEYS = [
+    { key:'C',  anchor:'C', dist:0, fingers:['1'],             desc:'1指起' },
+    { key:'F',  anchor:'F', dist:0, fingers:['1'],             desc:'1指起' },
+    { key:'B♭', anchor:'C', dist:1, fingers:['2','1'],         desc:'2指起，下一個轉1' },
+    { key:'E♭', anchor:'F', dist:1, fingers:['2','1'],         desc:'2指起，下一個轉1' },
+    { key:'A♭', anchor:'C', dist:2, fingers:['2','3','1'],     desc:'2-3後轉1' },
+    { key:'D♭', anchor:'F', dist:2, fingers:['2','3','1'],     desc:'2-3後轉1' },
+    { key:'G♭', anchor:'C', dist:3, fingers:['2','3','4','1'], desc:'2-3-4後轉1' },
+  ];
+
+  const rows = FLAT_KEYS.map(k => {
+    const chips = k.fingers.map((f, i) => {
+      const isThumb = f === '1';
+      const isLast = i === k.fingers.length - 1;
+      return `<span style="display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:${isThumb?'#d4e0f5':'#f5ece0'};color:${isThumb?'#1a3066':'#6a3a0a'};border:${isThumb?'2px':'1px'} solid ${isThumb?'#1a3066':'#d0a870'};font-family:var(--mono);font-size:12px;font-weight:${isThumb?'700':'500'}">${f}</span>${isLast?'':'<span style="color:var(--ink-muted);margin:0 2px">→</span>'}`;
+    }).join('');
+
+    return `<div style="display:grid;grid-template-columns:50px 70px 1fr;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)">
+      <div style="font-family:var(--serif);font-size:16px;color:var(--ink);font-weight:500">${k.key}</div>
+      <div style="display:flex;align-items:center;gap:4px">
+        <span style="font-family:var(--mono);font-size:11px;color:var(--ink-muted)">→${k.anchor}</span>
+        <span style="display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;border-radius:10px;background:var(--accent);color:#fff;font-family:var(--mono);font-size:10px;font-weight:600">${k.dist}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:2px;flex-wrap:wrap">${chips}<span style="font-size:11px;color:var(--ink-muted);font-style:italic;font-family:var(--serif);margin-left:8px">${k.desc}</span></div>
+    </div>`;
+  }).join('');
+
+  wrap.innerHTML = `
+    <div style="margin-top:32px;border-top:1px solid var(--line);padding-top:28px">
+      <h2 class="decision-title">右手上行起始指公式 <em>Anchor Method</em></h2>
+      <p class="decision-subtitle">降號調專用——錨點 C／F 交替，看起始音到錨點的距離決定起始指</p>
+      <div style="background:var(--paper-warm);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px 20px;margin-bottom:20px">
+        <div style="font-size:13px;color:var(--ink-soft);line-height:1.8">
+          <strong style="color:var(--ink)">核心原則：</strong>右手上行時，<span style="color:var(--accent);font-weight:600">C 和 F 永遠用 1 指轉指</span>。<br>
+          所以 <span style="font-family:var(--mono);font-size:12px">C-D-E = 1-2-3</span>，<span style="font-family:var(--mono);font-size:12px">F-G-A-B = 1-2-3-4</span>，固定不變。<br>
+          起始指就看起始音往上到最近的 C 或 F 之間隔幾個音。
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:50px 70px 1fr;gap:12px;padding-bottom:8px;border-bottom:2px solid var(--line)">
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-muted)">調</div>
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-muted)">錨點/距離</div>
+        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-muted)">起始指法</div>
+      </div>
+      ${rows}
+      <div style="margin-top:16px;padding:10px 14px;background:#f5f0ff;border:1px solid #d0b8f0;border-radius:var(--r-md);font-size:12px;color:var(--ink-soft);line-height:1.6">
+        <strong>例外 — C♭ 大調（7♭）：</strong>等音於 B 大調（5♯），實際改用 B 大調指法：1指起，C 音用 2 指，不符合上述錨點規律。
+      </div>
+      <div style="margin-top:12px;padding:10px 14px;background:var(--paper-warm);border-radius:var(--r-md);font-size:12px;color:var(--ink-muted);font-style:italic;font-family:var(--serif)">
+        錨點依五度圈順序（C→F→B♭→E♭→A♭→D♭→G♭）交替為 C, F, C, F, C, F, C。
+      </div>
+    </div>
+  `;
+}
+
 function render() {
   const d = DATA[curKey][curMode];
   const rows = [
@@ -3427,6 +3486,7 @@ restoreChecks();
 renderGantt();
 renderCircle();
 renderDecisionTree();
+renderAnchorMethod();
 </script>
 </body>
 </html>
