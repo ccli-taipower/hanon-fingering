@@ -1283,15 +1283,20 @@ select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   <div class="tab-panel" id="tab-circle">
     <div id="circle-content"></div>
-    <div id="four-rules-wrap"></div>
     <div id="decision-wrap"></div>
-    <div id="anchor-wrap"></div>
-    <div id="lh-anchor-wrap"></div>
-    <div id="rh-desc-wrap"></div>
   </div>
 
   <div class="tab-panel active" id="tab-fingering">
-  <div class="controls">
+  <div id="howto-wrap"></div>
+  <div id="four-rules-wrap"></div>
+  <div id="anchor-wrap"></div>
+  <div id="lh-anchor-wrap"></div>
+  <div id="rh-desc-wrap"></div>
+  <div style="margin-top:40px;border-top:2px solid var(--line);padding-top:24px;margin-bottom:8px">
+    <h2 class="decision-title">各調指法查詢 <em>Lookup by Key</em></h2>
+    <p class="decision-subtitle">選擇調性與調式，對照上方通則檢視每個方向的錨點</p>
+  </div>
+  <div class="controls" style="margin-top:16px">
     <div class="ctrl-group">
       <div class="ctrl-label">調性 Key</div>
       <select id="key-sel" aria-label="選擇調性">
@@ -1785,7 +1790,7 @@ const RULES = {
   major: [
     "拇指（1指）永遠只踩白鍵——這是所有指法的根本原則。",
     "右手上行：拇指錨點——降號調固定落在 C、F；升號調落在主音與第4音。",
-    "右手下行：3 指落在第3音、4 指落在第7音（降號調即 E、B 字母音）。",
+    "右手下行：降號調 3 指落 E 字母、4 指落 B 字母；升號調 3 指落第3音、4 指落第7音（C 大調兩者重合）。",
     "左手（上行＆下行共用同一套拇指錨點）：主音踩白鍵→第1、5音；踩黑鍵→第3、7音。左手上行與下行只是方向相反，錨點相同。",
     "多黑鍵調（Bb、Eb、Ab、Db、Gb）：右手上行起始指改為 2 或 3，讓拇指等到白鍵才出現。",
     "左手例外（拇指錨點遇黑鍵時往白鍵調整）：Gb 大調第3音 Bb 是黑鍵，拇指改落第4、7音 Cb(=B)、F；B 大調第5音 F♯ 是黑鍵，拇指改落第1、4音 B、E。完整規律見「五度圈」分頁。",
@@ -3261,12 +3266,60 @@ function updateAccResult() {
 
 
 
+
+function renderHowTo() {
+  const wrap = document.getElementById('howto-wrap');
+  if (!wrap) return;
+  wrap.innerHTML = `
+    <div style="padding-top:8px;margin-bottom:8px">
+      <h2 class="decision-title">如何用通則推出指法 <em>How to Derive</em></h2>
+      <p class="decision-subtitle">只要記住下面的通則，任何調都能自己推出完整指法——下方各調列表只是對答案用</p>
+
+      <div style="display:grid;gap:10px;margin-top:20px">
+        <div style="display:grid;grid-template-columns:28px 1fr;gap:12px;align-items:start">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:700">1</div>
+          <div style="font-size:13px;color:var(--ink);line-height:1.7;padding-top:3px">
+            <strong>起始音 = 主音</strong>（調性名那個音）。音階從主音開始，彈到高八度再回來。
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:28px 1fr;gap:12px;align-items:start">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:700">2</div>
+          <div style="font-size:13px;color:var(--ink);line-height:1.7;padding-top:3px">
+            <strong>定位錨點</strong>（用下方四方向通則）。錨點是「哪根手指固定落在哪個音」——右手上行與左手看拇指，右手下行看 3、4 指。
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:28px 1fr;gap:12px;align-items:start">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:700">3</div>
+          <div style="font-size:13px;color:var(--ink);line-height:1.7;padding-top:3px">
+            <strong>算起始指</strong>：看起始音與第一個錨點的關係。<br>
+            • 起始音<u>正好是錨點</u> → 用錨點的手指（拇指上行用 1；下行最高音用 5）<br>
+            • 起始音<u>還沒到錨點</u> → 右手上行一律從 <strong>2 指</strong>起（拇指留給後面的白鍵錨點）；左手下行同理從 2 或 3 起
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:28px 1fr;gap:12px;align-items:start">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:700">4</div>
+          <div style="font-size:13px;color:var(--ink);line-height:1.7;padding-top:3px">
+            <strong>填指與轉指</strong>：錨點之間順著音階級進填手指。<br>
+            • <strong>上行</strong>：手指遞增（…2 3 4），到下一個拇指錨點時<u>拇指從下方穿越</u><br>
+            • <strong>下行</strong>：手指遞減（5 4 3 2…），到拇指後<u>用 3 或 4 指跨過去</u>繼續往下<br>
+            <span style="color:var(--ink-muted);font-size:11.5px">轉指點（指法表的 | 記號）就落在錨點上。</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:16px;padding:12px 16px;background:var(--paper-warm);border-radius:var(--r-md);font-size:12.5px;color:var(--ink-soft);line-height:1.7;font-family:var(--serif)">
+        <strong>實例（B♭ 大調右手上行）：</strong>起始音 B♭ → 錨點 C、F（降號調）→ B♭ 還沒到 C，從 2 指起 → B♭(2) C(1) D(2) E♭(3) F(1)…拇指落在 C、F，其餘級進填入。
+      </div>
+    </div>
+  `;
+}
+
 function renderFourRules() {
   const wrap = document.getElementById('four-rules-wrap');
   if (!wrap) return;
 
   wrap.innerHTML = `
-    <div style="margin-top:40px;border-top:1px solid var(--line);padding-top:28px">
+    <div style="padding-top:8px">
       <h2 class="decision-title">四方向指法規律總覽 <em>Four Rules</em></h2>
       <p class="decision-subtitle">涵蓋整個五度圈——升號調與降號調的完整指法規律</p>
 
@@ -3283,8 +3336,8 @@ function renderFourRules() {
         <div style="background:#eef2ff;border:1px solid #b0c0e8;border-radius:var(--r-lg);padding:16px 18px">
           <div style="font-family:var(--mono);font-size:10px;color:var(--accent);margin-bottom:8px;letter-spacing:.08em">右手下行 RH ↓</div>
           <div style="font-size:13px;color:var(--ink);line-height:1.7">
-            <span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#eaf0ea;color:#2a4a2a;border:1px solid #aac0aa;font-family:var(--mono);font-size:10px;font-weight:700;vertical-align:middle">3</span> 在第3音，<span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#f5ece0;color:#6a3a0a;border:1px solid #d0a870;font-family:var(--mono);font-size:10px;font-weight:700;vertical-align:middle">4</span> 在第7音<br>
-            <span style="font-size:11px;color:var(--ink-muted)">降號調即 E、B 字母音</span>
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#eaf0ea;color:#2a4a2a;border:1px solid #aac0aa;font-family:var(--mono);font-size:10px;font-weight:700;vertical-align:middle">3</span>＝E 字母，<span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#f5ece0;color:#6a3a0a;border:1px solid #d0a870;font-family:var(--mono);font-size:10px;font-weight:700;vertical-align:middle">4</span>＝B 字母<br>
+            <span style="font-size:11px;color:var(--ink-muted)">降號調看 E、B 字母音；升號調看第3、7音（C 大調兩者重合）</span>
           </div>
         </div>
 
@@ -3300,7 +3353,7 @@ function renderFourRules() {
       </div>
 
       <div style="margin-top:16px;padding:12px 16px;background:var(--paper-warm);border-radius:var(--r-md);font-size:12px;color:var(--ink-soft);line-height:1.7;font-style:italic;font-family:var(--serif)">
-        核心：右手上行降號調錨點固定 C、F，升號調為主音與第4音；右手下行統一是第3、7音。左手錨點則看主音踩白鍵或黑鍵，上下行共用同一套，最為對稱。
+        核心：右手上行降號調錨點固定 C、F，升號調為主音與第4音；右手下行降號調看 E、B 字母音、升號調看第3、7音。左手錨點則看主音踩白鍵或黑鍵，上下行共用同一套，最為對稱。
       </div>
 
       <div style="margin-top:12px;padding:10px 14px;background:#f5f0ff;border:1px solid #d0b8f0;border-radius:var(--r-md);font-size:12px;color:var(--ink-soft);line-height:1.6">
@@ -3436,7 +3489,7 @@ function renderAnchorMethod() {
     { key:'E♭', anchor:'F', dist:1, fingers:['2','1'],         desc:'2指起，下一個轉1' },
     { key:'A♭', anchor:'C', dist:2, fingers:['2','3','1'],     desc:'2-3後轉1' },
     { key:'D♭', anchor:'F', dist:2, fingers:['2','3','1'],     desc:'2-3後轉1' },
-    { key:'G♭', anchor:'C', dist:3, fingers:['2','3','4','1'], desc:'2-3-4後轉1' },
+    { key:'G♭', anchor:'C♭', dist:3, fingers:['2','3','4','1'], desc:'2-3-4後轉1（拇指落C♭=B、F）' },
   ];
 
   const rows = FLAT_KEYS.map(k => {
@@ -3481,6 +3534,55 @@ function renderAnchorMethod() {
       </div>
     </div>
   `;
+}
+
+
+function getAnchorAnnotation(keyId, dirKey) {
+  // Returns {anchor: "拇指 C、F", rule: "降號調通則"} for major scales
+  // Scale degrees per key (7-note ascending)
+  const SCALE7 = {
+    'C':['C','D','E','F','G','A','B'], 'F':['F','G','A','B♭','C','D','E'],
+    'Bb':['B♭','C','D','E♭','F','G','A'], 'Eb':['E♭','F','G','A♭','B♭','C','D'],
+    'Ab':['A♭','B♭','C','D♭','E♭','F','G'], 'Db':['D♭','E♭','F','G♭','A♭','B♭','C'],
+    'Gb':['G♭','A♭','B♭','C♭','D♭','E♭','F'], 'Cb':['C♭','D♭','E♭','F♭','G♭','A♭','B♭'],
+    'G':['G','A','B','C','D','E','F♯'], 'D':['D','E','F♯','G','A','B','C♯'],
+    'A':['A','B','C♯','D','E','F♯','G♯'], 'E':['E','F♯','G♯','A','B','C♯','D♯'],
+    'B':['B','C♯','D♯','E','F♯','G♯','A♯'],
+    'Fs':['F♯','G♯','A♯','B','C♯','D♯','E♯'], 'Cs':['C♯','D♯','E♯','F♯','G♯','A♯','B♯'],
+  };
+  const FLAT = ['F','Bb','Eb','Ab','Db','Gb','Cb'];
+  const SHARP = ['G','D','A','E','B','Fs','Cs'];
+  const s = SCALE7[keyId];
+  if (!s) return null;
+  const isFlat = FLAT.includes(keyId);
+  const isSharp = SHARP.includes(keyId);
+
+  if (dirKey === 'rh_asc') {
+    if (keyId === 'C') return {anchor:'拇指 C、F', rule:'第1、4音'};
+    if (isFlat) return {anchor:'拇指 '+ (keyId==='Gb'||keyId==='Cb' ? 'C♭、F' : 'C、F'), rule:'降號調：固定 C、F'};
+    return {anchor:'拇指 '+s[0]+'、'+s[3], rule:'升號調：主音與第4音'};
+  }
+  if (dirKey === 'rh_desc') {
+    if (keyId === 'Gb' || keyId === 'Cb') return {anchor:'起始 3 指，拇指 F、C♭', rule:'特例：白鍵最少，不套用一般通則'};
+    if (keyId === 'C') return {anchor:'3 指→E，4 指→B', rule:'第3音、第7音'};
+    if (isFlat) {
+      // find E-letter and B-letter notes in scale
+      const eNote = s.find(n => n[0]==='E') || 'E';
+      const bNote = s.find(n => n[0]==='B') || 'B';
+      return {anchor:'3 指→'+eNote+'，4 指→'+bNote, rule:'降號調：E、B 字母音'};
+    }
+    return {anchor:'3 指→'+s[2]+'，4 指→'+s[6], rule:'升號調：第3、第7音'};
+  }
+  // LH asc & desc share thumb anchors
+  if (dirKey === 'lh_asc' || dirKey === 'lh_desc') {
+    if (keyId === 'Gb' || keyId === 'Cb') return {anchor:'拇指 C♭(=B)、F', rule:'例外：第3音黑鍵→第4、7音'};
+    if (keyId === 'B') return {anchor:'拇指 B、E', rule:'例外：第5音黑鍵→第1、4音'};
+    // determine tonic black/white
+    const tonicBlack = s[0].includes('♭') || s[0].includes('♯');
+    if (tonicBlack) return {anchor:'拇指 '+s[2]+'、'+s[6], rule:'主音黑鍵→第3、7音'};
+    return {anchor:'拇指 '+s[0]+'、'+s[4], rule:'主音白鍵→第1、5音'};
+  }
+  return null;
 }
 
 function render() {
@@ -3536,6 +3638,11 @@ function render() {
     const entry = d[r.key];
     const scaleNotes = getScaleNotes(curKey, curMode, dirMap[r.key]);
     const mirrorSet = mirrorMap[r.key];
+    const anno = curMode === 'major' ? getAnchorAnnotation(curKey, r.key) : null;
+    const annoHtml = anno ? `<div style="margin-top:6px;font-family:var(--mono);font-size:10.5px;color:var(--accent);display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+        <span style="background:#eef2ff;border:1px solid #c0cdec;border-radius:10px;padding:1px 8px">${anno.anchor}</span>
+        <span style="color:var(--ink-muted)">${anno.rule}</span>
+      </div>` : '';
     html += `<div class="row-card" role="row">
       <div class="row-label">
         <span class="hand">${r.label}</span>
@@ -3544,6 +3651,7 @@ function render() {
       <div class="row-content">
         <div class="fingers">${buildFingers(entry.fingers, scaleNotes, mirrorSet)}</div>
         <div class="row-rule">${entry.rule}</div>
+        ${annoHtml}
       </div>
     </div>`;
   });
@@ -3576,6 +3684,7 @@ renderAnchorMethod();
 renderLHDescMethod();
 renderRHDescMethod();
 renderFourRules();
+renderHowTo();
 </script>
 </body>
 </html>
