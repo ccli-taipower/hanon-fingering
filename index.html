@@ -1300,11 +1300,11 @@ select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
           <option value="Ab">A♭ 大調 / f 小調　(4♭)</option>
           <option value="Db">D♭ 大調 / b♭ 小調　(5♭)</option>
           <option value="Gb">G♭ 大調 / e♭ 小調　(6♭)</option>
-          <option value="Cb">C♭ 大調 / a♭ 小調　(7♭)</option>
+          <option value="Cb">C♭ 大調 / a♭ 小調　(7♭＝B 5♯ 等音)</option>
         </optgroup>
         <optgroup label="升號調 ♯">
-          <option value="Cs">C# 大調 / a# 小調　(7♯)</option>
-          <option value="Fs">F# 大調 / d# 小調　(6♯)</option>
+          <option value="Cs">C# 大調 / a# 小調　(7♯＝D♭ 5♭ 等音)</option>
+          <option value="Fs">F# 大調 / d# 小調　(6♯＝G♭ 6♭ 等音)</option>
           <option value="B">B 大調 / g# 小調　(5♯)</option>
           <option value="E">E 大調 / c# 小調　(4♯)</option>
           <option value="A">A 大調 / f# 小調　(3♯)</option>
@@ -3590,7 +3590,19 @@ function render() {
     ? keyName.split('/')[0].trim()
     : (keyName.split('/')[1]?.trim() || keyName);
 
+  const ENHARMONIC_NOTE = {
+    'Cb': { same: 'B 大調（5♯）', id: 'B' },
+    'Cs': { same: 'D♭ 大調（5♭）', id: 'Db' },
+    'Fs': { same: 'G♭ 大調（6♭）', id: 'Gb' },
+  };
   let html = `<div style="font-family:var(--serif);font-style:italic;color:var(--ink-muted);font-size:13px;margin-bottom:14px;">${scaleName} ${modeName}</div>`;
+  if (ENHARMONIC_NOTE[curKey]) {
+    const e = ENHARMONIC_NOTE[curKey];
+    html += `<div style="margin-bottom:16px;padding:10px 14px;background:#f5f0ff;border:1px solid #d0b8f0;border-radius:var(--r-md);font-size:12px;color:var(--ink-soft);line-height:1.6">
+      🎹 這是<strong>等音調</strong>——與 ${e.same} 在鋼琴上是同樣的鍵、同樣的指法，只是記譜不同。
+      <span onclick="gotoFingering('${e.id}')" style="color:var(--accent);cursor:pointer;text-decoration:underline;margin-left:4px">改用 ${e.same.split('（')[0]} →</span>
+    </div>`;
+  }
 
   const dirMap = {rh_asc:'asc', rh_desc:'desc', lh_asc:'asc', lh_desc:'desc'};
 
