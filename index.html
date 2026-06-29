@@ -1736,7 +1736,7 @@ const DATA = {
     name:"Gb大調 / eb小調",
     major:{
       rh_asc:  {fingers:"2 3 4 | 1 2 3 | 1 2 3 4 | 1 2 3 | 1 2", rule:"同 F#；幾乎全黑鍵，1 指只踩白鍵"},
-      rh_desc: {fingers:"2 1 | 3 2 1 | 4 3 2 1 | 3 2 1 | 4 3 2", rule:"同 F# 下行"},
+      rh_desc: {fingers:"3 1 | 3 2 1 | 4 3 2 1 | 3 2 1 | 4 3 2", rule:"同 F# 下行"},
       lh_asc:  {fingers:"4 3 2 | 1 3 2 | 1 4 3 2 | 1 3 2 | 1 3", rule:"4 指起"},
       lh_desc: {fingers:"2 | 1 2 3 | 1 2 3 4 | 1 2 3 | 1 2 3 4", rule:"拇指踩白鍵"},
     },
@@ -3044,7 +3044,7 @@ function buildRulesPanel(mode) {
               ['E♭（3♭）', '2', '3', '3', '2'],
               ['A♭（4♭）', '2', '3', '3', '2'],
               ['D♭（5♭）', '2', '2', '3', '2'],
-              ['G♭（6♭）', '2', '2', '4', '2'],
+              ['G♭（6♭）', '2', '3', '4', '2'],
             ].map(([type, rha, rhd, lha, lhd], i) => `
               <tr style="background:${i%2===0?'var(--paper)':'var(--paper-warm)'}">
                 <td style="padding:7px 10px;color:var(--ink-soft);border-bottom:1px solid var(--line)">${type}</td>
