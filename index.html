@@ -1462,7 +1462,7 @@ const DATA = {
   C: {
     name:"C大調 / a小調",
     major:{
-      rh_asc:  {fingers:"1 2 3 | 1 2 3 4 | 1 2 3 4 5", rule:"拇指落在 C、F；分組 3+4"},
+      rh_asc:  {fingers:"1 2 3 | 1 2 3 4 | 1 2 3 | 1 2 3 4 | 1", rule:"拇指落在 C、F；分組 3+4"},
       rh_desc: {fingers:"5 4 3 2 1 | 3 2 1 | 4 3 2 1 | 3 2 1", rule:"下行在 E、B 轉指"},
       lh_asc:  {fingers:"5 4 3 2 1 | 3 2 1 | 4 3 2 1 | 3 2 1", rule:"左手上行在 E、B 穿越"},
       lh_desc: {fingers:"1 2 3 | 1 2 3 4 | 1 2 3 | 1 2 3 4 | 1", rule:"拇指在 C、G；分組 4+3"},
@@ -1630,7 +1630,7 @@ const DATA = {
   F: {
     name:"F大調 / d小調",
     major:{
-      rh_asc:  {fingers:"1 2 3 4 | 1 2 3 | 1 2 3 4 5", rule:"拇指在 F、C；分組 4+3"},
+      rh_asc:  {fingers:"1 2 3 4 | 1 2 3 | 1 2 3 4 | 1 2 3 | 1", rule:"拇指在 F、C；分組 4+3"},
       rh_desc: {fingers:"4 3 2 1 | 4 3 2 1 | 3 2 1 | 4 3 2 1", rule:"4指起；1指在 C、F；4指踩 Bb"},
       lh_asc:  {fingers:"5 4 3 2 1 | 3 2 1 | 4 3 2 1 | 3 2 1", rule:"在 E、Bb 穿越"},
       lh_desc: {fingers:"1 2 3 | 1 2 3 4 | 1 2 3 | 1 2 3 4 | 1", rule:"拇指在 F、C；4指踩 Bb"},
@@ -1651,7 +1651,7 @@ const DATA = {
   Bb: {
     name:"Bb大調 / g小調",
     major:{
-      rh_asc:  {fingers:"4 | 1 2 3 | 1 2 3 4 | 1 2 3", rule:"4 指起（Bb 為黑鍵）——黑鍵策略"},
+      rh_asc:  {fingers:"2 | 1 2 3 | 1 2 3 4 | 1 2 3 | 1 2 3 4", rule:"4 指起（Bb 為黑鍵）——黑鍵策略"},
       rh_desc: {fingers:"4 3 2 1 | 3 2 1 | 4 3 2 1 | 3 2 1 | 4", rule:"在 A、Eb 轉"},
       lh_asc:  {fingers:"3 2 | 1 4 3 2 | 1 3 2 | 1 4 3 2 | 1 4", rule:"左手 3 指起"},
       lh_desc: {fingers:"2 | 1 2 3 4 | 1 2 3 | 1 2 3 4 | 1 2 3", rule:"拇指在 Bb、F"},
@@ -1672,7 +1672,7 @@ const DATA = {
   Eb: {
     name:"Eb大調 / c小調",
     major:{
-      rh_asc:  {fingers:"3 | 1 2 3 4 | 1 2 3 | 1 2 3 4", rule:"3 指起（Eb）"},
+      rh_asc:  {fingers:"2 | 1 2 3 4 | 1 2 3 | 1 2 3 4 | 1 2 3", rule:"3 指起（Eb）"},
       rh_desc: {fingers:"3 2 1 | 4 3 2 1 | 3 2 1 | 4 3 2 1 | 3", rule:"在 D、Ab 轉指"},
       lh_asc:  {fingers:"3 2 | 1 4 3 2 | 1 3 2 | 1 4 3 2 | 1 4", rule:"左手同 Bb"},
       lh_desc: {fingers:"2 | 1 2 3 4 | 1 2 3 | 1 2 3 4 | 1 2 3", rule:"拇指在 Eb、Bb"},
@@ -1693,7 +1693,7 @@ const DATA = {
   Ab: {
     name:"Ab大調 / f小調",
     major:{
-      rh_asc:  {fingers:"3 4 | 1 2 3 | 1 2 3 4 | 1 2", rule:"3 指起（Ab）；黑鍵用 3、4 指"},
+      rh_asc:  {fingers:"2 3 | 1 2 3 | 1 2 3 4 | 1 2 3 | 1 2 3", rule:"3 指起（Ab）；黑鍵用 3、4 指"},
       rh_desc: {fingers:"3 2 1 | 3 2 1 | 4 3 2 1 | 3 2 1 | 4 3", rule:"在 G、Db 轉"},
       lh_asc:  {fingers:"3 2 | 1 4 3 2 | 1 3 2 | 1 4 3 2 | 1 4", rule:"左手 3 指起"},
       lh_desc: {fingers:"2 | 1 2 3 4 | 1 2 3 | 1 2 3 4 | 1 2 3", rule:"拇指在 Ab、Eb"},
@@ -1714,7 +1714,7 @@ const DATA = {
   Db: {
     name:"Db大調 / bb小調",
     major:{
-      rh_asc:  {fingers:"2 3 | 1 2 3 4 | 1 2 3 | 1 2", rule:"2 指起（Db）；黑鍵全用 2–3–4"},
+      rh_asc:  {fingers:"2 3 | 1 2 3 4 | 1 2 3 | 1 2 3 4 | 1 2", rule:"2 指起（Db）；黑鍵全用 2–3–4"},
       rh_desc: {fingers:"2 1 | 4 3 2 1 | 3 2 1 | 4 3 2 1 | 3 2", rule:"在 C、Gb 轉"},
       lh_asc:  {fingers:"3 2 | 1 4 3 2 | 1 3 2 | 1 4 3 2 | 1 4", rule:"左手 3 指"},
       lh_desc: {fingers:"2 | 1 2 3 4 | 1 2 3 | 1 2 3 4 | 1 2 3", rule:"拇指在 Db、Ab"},
@@ -1735,7 +1735,7 @@ const DATA = {
   Gb: {
     name:"Gb大調 / eb小調",
     major:{
-      rh_asc:  {fingers:"2 3 4 | 1 2 3 | 1 2 3 4 | 1 2", rule:"同 F#；幾乎全黑鍵，1 指只踩白鍵"},
+      rh_asc:  {fingers:"2 3 4 | 1 2 3 | 1 2 3 4 | 1 2 3 | 1 2", rule:"同 F#；幾乎全黑鍵，1 指只踩白鍵"},
       rh_desc: {fingers:"2 1 | 3 2 1 | 4 3 2 1 | 3 2 1 | 4 3 2", rule:"同 F# 下行"},
       lh_asc:  {fingers:"4 3 2 | 1 3 2 | 1 4 3 2 | 1 3 2 | 1 3", rule:"4 指起"},
       lh_desc: {fingers:"2 | 1 2 3 | 1 2 3 4 | 1 2 3 | 1 2 3 4", rule:"拇指踩白鍵"},
