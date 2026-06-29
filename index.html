@@ -1283,6 +1283,11 @@ select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   <div class="tab-panel" id="tab-circle">
     <div id="circle-content"></div>
+    <div id="four-rules-wrap"></div>
+    <div id="decision-wrap"></div>
+    <div id="anchor-wrap"></div>
+    <div id="lh-anchor-wrap"></div>
+    <div id="rh-desc-wrap"></div>
   </div>
 
   <div class="tab-panel active" id="tab-fingering">
@@ -1779,10 +1784,11 @@ const DATA = {
 const RULES = {
   major: [
     "拇指（1指）永遠只踩白鍵——這是所有指法的根本原則。",
-    "右手上行：通常以 3+4 或 4+3 分組，拇指落在調性的主音或第四音上。",
-    "左手是右手的鏡像：左手上行指法 ≈ 右手下行；左手下行指法 ≈ 右手上行。",
-    "多黑鍵調（Bb、Eb、Ab、Db、F#/Gb、C#/Cb）：起始指改為 2 或 3，讓拇指等到白鍵才出現。",
-    "轉指點（| 記號處）：右手上行是拇指穿越；左手上行是 1 指穿越，實際是大拇指從下方插入。",
+    "右手上行：拇指錨點——降號調固定落在 C、F；升號調落在主音與第4音。",
+    "右手下行：3 指落在第3音、4 指落在第7音（降號調即 E、B 字母音）。",
+    "左手（上行＆下行共用同一套拇指錨點）：主音踩白鍵→第1、5音；踩黑鍵→第3、7音。左手上行與下行只是方向相反，錨點相同。",
+    "多黑鍵調（Bb、Eb、Ab、Db、Gb）：右手上行起始指改為 2 或 3，讓拇指等到白鍵才出現。",
+    "左手例外（拇指錨點遇黑鍵時往白鍵調整）：Gb 大調第3音 Bb 是黑鍵，拇指改落第4、7音 Cb(=B)、F；B 大調第5音 F♯ 是黑鍵，拇指改落第1、4音 B、E。完整規律見「五度圈」分頁。",
   ],
   harm: [
     "和聲小調指法與同主音大調完全相同——升高的第7音不位於轉指點，故不需要另背一套。",
@@ -2999,22 +3005,14 @@ function buildRulesPanel(mode) {
   const symmetryDiagram = `
     <div style="background:var(--paper-warm);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px 20px;margin-bottom:20px">
       <div style="font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:12px">對稱關係</div>
-      <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;font-size:13px">
-        <div style="text-align:center;padding:10px;background:#e8ecf5;border-radius:var(--r-md);color:var(--accent);font-weight:500">右手 上行 ↑</div>
-        <div style="color:var(--ink-muted);font-size:18px;text-align:center">⇄</div>
-        <div style="text-align:center;padding:10px;background:#eaf5ee;border-radius:var(--r-md);color:var(--pivot-ring);font-weight:500">左手 下行 ↓</div>
-        <div style="text-align:center;font-size:11px;color:var(--ink-muted)">指法相同</div>
-        <div></div>
-        <div style="text-align:center;font-size:11px;color:var(--ink-muted)">指法相同</div>
-        <div style="text-align:center;padding:10px;background:#eaf5ee;border-radius:var(--r-md);color:var(--pivot-ring);font-weight:500">左手 上行 ↑</div>
-        <div style="color:var(--ink-muted);font-size:18px;text-align:center">⇄</div>
-        <div style="text-align:center;padding:10px;background:#e8ecf5;border-radius:var(--r-md);color:var(--accent);font-weight:500">右手 下行 ↓</div>
-        <div style="text-align:center;font-size:11px;color:var(--ink-muted)">指法相同</div>
-        <div></div>
-        <div style="text-align:center;font-size:11px;color:var(--ink-muted)">指法相同</div>
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;font-size:13px;margin-bottom:10px">
+        <div style="text-align:center;padding:10px;background:#eaf4ee;border-radius:var(--r-md);color:var(--pivot-ring);font-weight:500">左手 上行 ↑</div>
+        <div style="color:var(--ink-muted);font-size:11px;text-align:center">拇指錨點<br>相同</div>
+        <div style="text-align:center;padding:10px;background:#eaf4ee;border-radius:var(--r-md);color:var(--pivot-ring);font-weight:500">左手 下行 ↓</div>
       </div>
-      <div style="margin-top:12px;font-size:12px;color:var(--ink-muted);font-style:italic;font-family:var(--serif)">
-        只要記住右手兩種，左手兩種幾乎免費附贈。
+      <div style="font-size:12px;color:var(--ink-soft);line-height:1.7">
+        左手上行與下行<strong>共用同一套拇指錨點</strong>（看主音踩白鍵或黑鍵），只是彈奏方向相反——這是最對稱、最好記的部分。<br>
+        右手則是上行、下行各有獨立錨點（上行看 C、F 或主音與第4音；下行看第3、7音），需分別記憶。
       </div>
     </div>
   `;
@@ -3276,8 +3274,9 @@ function renderFourRules() {
         <div style="background:#eef2ff;border:1px solid #b0c0e8;border-radius:var(--r-lg);padding:16px 18px">
           <div style="font-family:var(--mono);font-size:10px;color:var(--accent);margin-bottom:8px;letter-spacing:.08em">右手上行 RH ↑</div>
           <div style="font-size:13px;color:var(--ink);line-height:1.7">
-            拇指（<span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#d4e0f5;color:#1a3066;border:1.5px solid #1a3066;font-family:var(--mono);font-size:10px;font-weight:700;vertical-align:middle">1</span>）落在第 <strong>1、4 音</strong><br>
-            <span style="font-size:11px;color:var(--ink-muted)">降號調剛好是 C、F；升號調是主音與第4音</span>
+            拇指（<span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#d4e0f5;color:#1a3066;border:1.5px solid #1a3066;font-family:var(--mono);font-size:10px;font-weight:700;vertical-align:middle">1</span>）錨點：<br>
+            • 降號調 → 固定落在 <strong>C、F</strong><br>
+            • 升號調 → <strong>主音與第4音</strong>
           </div>
         </div>
 
@@ -3301,11 +3300,11 @@ function renderFourRules() {
       </div>
 
       <div style="margin-top:16px;padding:12px 16px;background:var(--paper-warm);border-radius:var(--r-md);font-size:12px;color:var(--ink-soft);line-height:1.7;font-style:italic;font-family:var(--serif)">
-        核心：右手錨點看「第幾音」（上行第1、4音；下行第3、7音）；左手錨點看主音踩白鍵或黑鍵。左手上下行共用同一套錨點，最為對稱。
+        核心：右手上行降號調錨點固定 C、F，升號調為主音與第4音；右手下行統一是第3、7音。左手錨點則看主音踩白鍵或黑鍵，上下行共用同一套，最為對稱。
       </div>
 
       <div style="margin-top:12px;padding:10px 14px;background:#f5f0ff;border:1px solid #d0b8f0;border-radius:var(--r-md);font-size:12px;color:var(--ink-soft);line-height:1.6">
-        <strong>例外整理：</strong>G♭ 大調左手拇指落 C♭(=B)、F；B 大調因第5音 F♯ 是黑鍵，左手改用第1、4音（B、E）。
+        <strong>左手例外</strong>（拇指錨點遇黑鍵時往白鍵調整）：<br>• G♭：主音黑鍵本應落第3、7音，但第3音 B♭ 是黑鍵 → 改落<strong>第4、7音</strong>（C♭=B、F）<br>• B：主音白鍵本應落第1、5音，但第5音 F♯ 是黑鍵 → 改落<strong>第1、4音</strong>（B、E）
       </div>
     </div>
   `;
