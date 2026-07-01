@@ -3137,32 +3137,33 @@ function renderRHCheatsheet() {
         <div style="background:var(--paper-warm);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px 20px">
           <div style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--accent);margin-bottom:12px">▲ 上行（從主音往上）</div>
           <div style="font-size:12.5px;color:var(--ink);line-height:1.85">
-            <strong>起始指</strong><br>
-            • 升號調 → 主音是錨點，<strong>一律 1 指</strong>起<br>
-            • 降號調 → 主音是 C/F 就 1 指，否則 <strong>2 指</strong>起<br>
-            <strong style="display:inline-block;margin-top:8px">拇指錨點</strong><br>
+            <strong>拇指錨點</strong>（1 指固定落這裡）<br>
             • 升號調 → 主音、第4音<br>
-            • 降號調 → C、F
+            • 降號調 → C、F<br>
+            <strong style="display:inline-block;margin-top:8px">起始指</strong>（從主音數到錨點）<br>
+            • 升號調 → 主音就是錨點，<strong>一律 1 指</strong>起<br>
+            • 降號調 → 主音是 C/F 就 1 指，否則 <strong>2 指</strong>起
           </div>
         </div>
         <!-- 下行 -->
         <div style="background:var(--paper-warm);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px 20px">
           <div style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--accent-2);margin-bottom:12px">▼ 下行（從最高音往下）</div>
           <div style="font-size:12.5px;color:var(--ink);line-height:1.85">
-            <strong>起始指</strong>（最高音是起點，不多換指）<br>
+            <strong>拇指錨點</strong>（與上行相同）<br>
+            <span style="color:var(--ink-muted);font-size:11.5px">升號→主音、第4音；降號→C、F</span><br>
+            <strong style="display:inline-block;margin-top:8px">起始指</strong>（最高音是起點，不多換指）<br>
             • 升號調 → <strong>一律 5 指</strong>起<br>
-            • 降號調 → 看到 C/F 距離：<br>
+            • 降號調 → 看最高音到 C/F 距離：<br>
             <span style="font-family:var(--mono);font-size:11.5px;margin-left:10px">C=5 F=4 B♭=4 E♭A♭=3 D♭G♭=2</span><br>
-            <strong style="display:inline-block;margin-top:8px">轉指</strong>：第一段先到拇指 1，之後交替
+            <strong style="display:inline-block;margin-top:8px">轉指</strong>：第一段先到拇指 1，之後看跨指音交替：<br>
+            • 降號調 → 先遇 <strong>B 字母</strong>(4)：<span style="font-family:var(--mono)">4 3 2 1</span>；先遇 <strong>E 字母</strong>(3)：<span style="font-family:var(--mono)">3 2 1</span><br>
+            • 升號調 → 先遇 <strong>第7音</strong>(4)：<span style="font-family:var(--mono)">4 3 2 1</span>；先遇 <strong>第3音</strong>(3)：<span style="font-family:var(--mono)">3 2 1</span>
           </div>
         </div>
       </div>
 
-      <div style="margin-top:14px;padding:14px 18px;background:#eef2ff;border:1px solid #c0cdec;border-radius:var(--r-lg);font-size:13px;color:var(--ink);line-height:1.8">
-        <strong style="color:var(--accent)">3、4 指錨點（決定下行怎麼交替）：</strong><br>
-        • <strong>降號調</strong>：<span style="font-family:var(--mono)">3</span>＝E 字母音、<span style="font-family:var(--mono)">4</span>＝B 字母音<br>
-        • <strong>升號調</strong>：<span style="font-family:var(--mono)">3</span>＝第3音、<span style="font-family:var(--mono)">4</span>＝第7音<br>
-        <span style="color:var(--ink-muted);font-size:11.5px">下行到拇指後，往下先遇 4 指的音就接 4 3 2 1，先遇 3 指的音就接 3 2 1。拇指永遠不踩黑鍵；C 大調是升降交會點。</span>
+      <div style="margin-top:14px;padding:12px 16px;background:var(--paper-warm);border-radius:var(--r-md);font-size:11.5px;color:var(--ink-muted);line-height:1.6">
+        3、4 指錨點 = 降號調看 E、B 字母音；升號調看第3、7音。拇指永遠不踩黑鍵；C 大調是升降交會點。
       </div>
     </div>
   `;
@@ -3213,22 +3214,18 @@ function renderRHDiagrams() {
   }
 
   const flatRule = `
-    <div style="font-size:12.5px;color:var(--ink);line-height:1.8">
-      <strong>拇指(1)</strong> 固定落 <strong>C、F</strong>（藍圈）。<br>
-      上行：主音到 C/F 幾個音，就從第幾指起（C/F=1，否則2）。<br>
-      下行：<strong>3</strong>＝E 字母、<strong>4</strong>＝B 字母，到拇指後看先遇哪個。
+    <div style="font-size:12px;color:var(--ink-muted);line-height:1.6">
+      拇指（藍圈）落 <strong style="color:var(--ink)">C、F</strong>；3、4 指落 <strong style="color:var(--ink)">E、B 字母音</strong>。
     </div>`;
   const sharpRule = `
-    <div style="font-size:12.5px;color:var(--ink);line-height:1.8">
-      <strong>拇指(1)</strong> 落 <strong>主音、第4音</strong>（藍圈）。<br>
-      上行：主音是錨點，一律 1 指起。<br>
-      下行：<strong>3</strong>＝第3音、<strong>4</strong>＝第7音，一律 5 指起（5 4 3 2 1）。
+    <div style="font-size:12px;color:var(--ink-muted);line-height:1.6">
+      拇指（藍圈）落 <strong style="color:var(--ink)">主音、第4音</strong>；3、4 指落 <strong style="color:var(--ink)">第3、7音</strong>。
     </div>`;
 
   wrap.innerHTML = `
     <div style="margin-top:36px;border-top:1px solid var(--line);padding-top:28px">
       <h2 class="decision-title">升降記號圖解 <em>Visual Guide</em></h2>
-      <p class="decision-subtitle">藍圈＝拇指落點（錨點）。降號看字母音、升號看音級</p>
+      <p class="decision-subtitle">把速記卡的規則畫出來——藍圈是拇指，看範例對照</p>
       <div style="display:grid;grid-template-columns:1fr;gap:16px;margin-top:20px">
         ${block('降記號調（1~6♭）', 'var(--accent-2)', flatExample, flatRule)}
         ${block('升記號調（1~5♯）', 'var(--pivot-ring)', sharpExample, sharpRule)}
