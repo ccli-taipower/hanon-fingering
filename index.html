@@ -1289,6 +1289,8 @@ select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
   <div class="tab-panel active" id="tab-fingering">
   <div id="howto-wrap"></div>
   <div id="four-rules-wrap"></div>
+  <div id="rh-asc-cheat-wrap"></div>
+  <div id="rh-desc-cheat-wrap"></div>
   <div id="anchor-wrap"></div>
   <div id="lh-anchor-wrap"></div>
   <div id="rh-desc-wrap"></div>
@@ -1746,7 +1748,7 @@ const DATA = {
     name:"Gb大調 / eb小調",
     major:{
       rh_asc:  {fingers:"2 3 4 | 1 2 3 | 1 2 3 4 | 1 2 3 | 1 2", rule:"同 F#；幾乎全黑鍵，1 指只踩白鍵"},
-      rh_desc: {fingers:"3 1 | 3 2 1 | 4 3 2 1 | 3 2 1 | 4 3 2", rule:"同 F# 下行"},
+      rh_desc: {fingers:"2 1 | 3 2 1 | 4 3 2 1 | 3 2 1 | 4 3 2", rule:"同 F# 下行"},
       lh_asc:  {fingers:"4 3 2 | 1 3 2 | 1 4 3 2 | 1 3 2 | 1 3", rule:"4 指起"},
       lh_desc: {fingers:"2 | 1 2 3 | 1 2 3 4 | 1 2 3 | 1 2 3 4", rule:"拇指踩白鍵"},
     },
@@ -3047,7 +3049,7 @@ function buildRulesPanel(mode) {
               ['E♭（3♭）', '2', '3', '3', '2'],
               ['A♭（4♭）', '2', '3', '3', '2'],
               ['D♭（5♭）', '2', '2', '3', '2'],
-              ['G♭（6♭）', '2', '3', '4', '2'],
+              ['G♭（6♭）', '2', '2', '4', '2'],
             ].map(([type, rha, rhd, lha, lhd], i) => `
               <tr style="background:${i%2===0?'var(--paper)':'var(--paper-warm)'}">
                 <td style="padding:7px 10px;color:var(--ink-soft);border-bottom:1px solid var(--line)">${type}</td>
@@ -3291,9 +3293,10 @@ function renderHowTo() {
         <div style="display:grid;grid-template-columns:28px 1fr;gap:12px;align-items:start">
           <div style="width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:700">3</div>
           <div style="font-size:13px;color:var(--ink);line-height:1.7;padding-top:3px">
-            <strong>算起始指</strong>：看起始音與第一個錨點的關係。<br>
-            • 起始音<u>正好是錨點</u> → 用錨點的手指（拇指上行用 1；下行最高音用 5）<br>
-            • 起始音<u>還沒到錨點</u> → 右手上行一律從 <strong>2 指</strong>起（拇指留給後面的白鍵錨點）；左手下行同理從 2 或 3 起
+            <strong>算起始指</strong>：起始指 = 從起始音「順著彈奏方向數到第一個拇指錨點」需要幾根手指。<br>
+            • <strong>右手上行</strong>：起始音正好是錨點 → 拇指 1 起；還沒到錨點 → 一律從 <strong>2 指</strong>起（拇指留給後面的白鍵錨點）。<br>
+            • <strong>右手下行</strong>（從最高音開始）：最高音是<u>起點，不必為了接續而換指</u>——直接用「數到第一個拇指錨點的那根手指」起。距拇指 4 音用 5、3 音用 4、2 音用 3、1 音用 2。<br>
+            <span style="color:var(--ink-muted);font-size:11.5px">例：C 大調下行最高音 C 雖是拇指錨點，但它是起點，直接用 5 彈（5 4 3 2 1…），不用先 1 再換。</span>
           </div>
         </div>
         <div style="display:grid;grid-template-columns:28px 1fr;gap:12px;align-items:start">
@@ -3329,7 +3332,8 @@ function renderFourRules() {
           <div style="font-size:13px;color:var(--ink);line-height:1.7">
             拇指（<span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#d4e0f5;color:#1a3066;border:1.5px solid #1a3066;font-family:var(--mono);font-size:10px;font-weight:700;vertical-align:middle">1</span>）錨點：<br>
             • 降號調 → 固定落在 <strong>C、F</strong><br>
-            • 升號調 → <strong>主音與第4音</strong>
+            • 升號調 → <strong>主音與第4音</strong><br>
+            <span style="font-size:11px;color:var(--ink-muted)">＊G♭（6♭）起 C 已降為 C♭，所以「C 錨點」實彈 B 鍵</span>
           </div>
         </div>
 
@@ -3369,6 +3373,7 @@ function renderRHDescMethod() {
 
   const RH_KEYS = [
     { key:'C',  start:'5' },
+    { key:'G D A E B (1~5♯)', start:'5' },
     { key:'F',  start:'4' },
     { key:'B♭', start:'4' },
     { key:'E♭', start:'3' },
@@ -3398,6 +3403,29 @@ function renderRHDescMethod() {
           • <span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:#eaf0ea;color:#2a4a2a;border:1px solid #aac0aa;font-family:var(--mono);font-size:11px;font-weight:600;vertical-align:middle">3</span> 指永遠落在 <strong>E 字母音</strong>（E 或 E♭）<br>
           • <span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:#f5ece0;color:#6a3a0a;border:1px solid #d0a870;font-family:var(--mono);font-size:11px;font-weight:600;vertical-align:middle">4</span> 指永遠落在 <strong>B 字母音</strong>（B 或 B♭）<br>
           其餘音順著遞減填滿（…3 2 1，到拇指後跨指）。
+        </div>
+      </div>
+
+      <div style="background:#eef2ff;border:1px solid #c0cdec;border-radius:var(--r-lg);padding:16px 20px;margin-bottom:20px">
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:10px">實際彈奏的操作版（1~6♭）</div>
+        <div style="font-size:13px;color:var(--ink);line-height:1.9">
+          從最高音開始，第一組遞減到拇指 <strong>1</strong>（起始指看距離）。<br>
+          <strong>到拇指 1 之後，看往下第一個跨指音：</strong><br>
+          • 先遇到 <strong>B 字母</strong>（B / B♭）→ 用 <span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#f5ece0;color:#6a3a0a;border:1px solid #d0a870;font-family:var(--mono);font-size:10px;font-weight:700;vertical-align:middle">4</span>，接 <span style="font-family:var(--mono)">4 3 2 1</span><br>
+          • 先遇到 <strong>E 字母</strong>（E / E♭）→ 用 <span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#eaf0ea;color:#2a4a2a;border:1px solid #aac0aa;font-family:var(--mono);font-size:10px;font-weight:700;vertical-align:middle">3</span>，接 <span style="font-family:var(--mono)">3 2 1</span><br>
+          <span style="color:var(--ink-muted);font-size:11.5px">如此交替到底。例 B♭：4 3 2 1（到拇指F）→ 先遇 E♭ 用 3 → 3 2 1（到拇指C）→ 先遇 B♭ 用 4 → 4 3 2 1…</span>
+        </div>
+      </div>
+
+      <div style="background:#eef7f0;border:1px solid #a8d0ba;border-radius:var(--r-lg);padding:16px 20px;margin-bottom:20px">
+        <div style="font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--pivot-ring);margin-bottom:10px">實際彈奏的操作版（1~5♯）</div>
+        <div style="font-size:13px;color:var(--ink);line-height:1.9">
+          升號調主音都是白鍵，第一組固定 <span style="font-family:var(--mono)">5 4 3 2 1</span>（最高音=主音，用 5 指起）。<br>
+          <span style="color:var(--ink-muted);font-size:11.5px">推導：上行錨點是主音與第4音，最高音（主音）本該用 1，但它是起點不必多換一次指 → 直接用 5；從 5 遞減，拇指剛好落在第4音，與上行錨點呼應。</span><br>
+          <strong>到拇指 1 之後，看往下第一個跨指音：</strong><br>
+          • 先遇到 <strong>第 7 音</strong> → 用 <span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#f5ece0;color:#6a3a0a;border:1px solid #d0a870;font-family:var(--mono);font-size:10px;font-weight:700;vertical-align:middle">4</span>，接 <span style="font-family:var(--mono)">4 3 2 1</span><br>
+          • 先遇到 <strong>第 3 音</strong> → 用 <span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#eaf0ea;color:#2a4a2a;border:1px solid #aac0aa;font-family:var(--mono);font-size:10px;font-weight:700;vertical-align:middle">3</span>，接 <span style="font-family:var(--mono)">3 2 1</span><br>
+          <span style="color:var(--ink-muted);font-size:11.5px">降號調看 E、B 字母；升號調看第3、7音（C 大調兩者重合）。第3、7音常是黑鍵，但 3、4 指可踩黑鍵。</span>
         </div>
       </div>
 
@@ -3473,6 +3501,91 @@ function renderLHDescMethod() {
 
       <div style="margin-top:12px;padding:10px 14px;background:#eaf5ee;border-left:3px solid var(--pivot-ring);border-radius:0 var(--r-md) var(--r-md) 0;font-size:12px;color:var(--ink-soft);line-height:1.6">
         <strong>左手上下行共用：</strong>左手上行與下行的拇指錨點完全相同，差別只在彈奏方向。右手上行錨點固定在 C、F；左手則依主音黑白變化。配合指法表的紫色「錨點」標示，可確認雙手是否同步。
+      </div>
+    </div>
+  `;
+}
+
+
+
+function renderRHDescCheat() {
+  const wrap = document.getElementById('rh-desc-cheat-wrap');
+  if (!wrap) return;
+  wrap.innerHTML = `
+    <div style="margin-top:32px;border-top:1px solid var(--line);padding-top:28px">
+      <h2 class="decision-title">右手下行速記卡 <em>RH Descending Cheatsheet</em></h2>
+      <p class="decision-subtitle">起始音＝調號名（最高音）；最高音是起點，不必多換一次指</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px">
+        <div style="background:#fdf2ee;border:1px solid #e0b8a8;border-radius:var(--r-lg);padding:18px 20px">
+          <div style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--accent-2);margin-bottom:10px">1~6 降記號</div>
+          <div style="font-size:13px;color:var(--ink);line-height:1.8">
+            1 指在 <strong>C、F</strong>。從最高音往下數到第一個 C/F，反推起始指：<br>
+            • <strong>C</strong>（到 C 距 0）→ 本該換指，但起點 → <strong>5</strong> 指<br>
+            • <strong>F</strong>（到 F 距 0）→ 同理 → <strong>4</strong> 指<br>
+            • <strong>B♭</strong>（到 F 距 3）→ <strong>4</strong> 指<br>
+            • <strong>E♭ A♭</strong>（到 C/F 距 2）→ <strong>3</strong> 指<br>
+            • <strong>D♭ G♭</strong>（距 1）→ <strong>2</strong> 指
+          </div>
+        </div>
+
+        <div style="background:#eef7f0;border:1px solid #a8d0ba;border-radius:var(--r-lg);padding:18px 20px">
+          <div style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--pivot-ring);margin-bottom:10px">1~5 升記號</div>
+          <div style="font-size:13px;color:var(--ink);line-height:1.8">
+            主音上行一定 1 指起，所以下行最高音（主音）<u>理論上是 1</u>。<br>
+            但最高音是起點，<strong>不必多換一次</strong> → 直接用 <strong>5</strong> 指。<br>
+            <span style="color:var(--ink-muted);font-size:12px">G D A E B 全部 5 指起，第一組 5 4 3 2 1。</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:16px;padding:12px 16px;background:var(--paper-warm);border-radius:var(--r-md);font-size:12.5px;color:var(--ink-soft);line-height:1.7;font-family:var(--serif)">
+        一句話：<strong>升號調一律 5 指起</strong>；<strong>降號調看最高音到 C/F 的距離</strong>（C=5、F=4、B♭=4、E♭A♭=3、D♭G♭=2）。最高音永遠不為了接續而多換指。
+      </div>
+
+      <div style="margin-top:14px;padding:14px 18px;background:#f0f4fb;border:1px solid #c5d2ea;border-radius:var(--r-lg);font-size:13px;color:var(--ink);line-height:1.9">
+        <strong style="color:var(--accent)">完整流程（兩階段）：</strong><br>
+        <strong>① 第一段</strong>：從最高音（起始指）遞減，<u>一定先到拇指 1</u>。<br>
+        <span style="color:var(--ink-muted);font-size:12px;margin-left:14px">例 B♭：4 3 2 1（先到 1）</span><br>
+        <strong>② 之後每段</strong>：到 1 後看往下第一個跨指音，接 4 3 2 1 或 3 2 1，交替到底。<br>
+        <span style="margin-left:14px">• 降號調：先遇 <strong>B 字母</strong>→<span style="font-family:var(--mono)">4 3 2 1</span>；先遇 <strong>E 字母</strong>→<span style="font-family:var(--mono)">3 2 1</span></span><br>
+        <span style="margin-left:14px">• 升號調：先遇 <strong>第7音</strong>→<span style="font-family:var(--mono)">4 3 2 1</span>；先遇 <strong>第3音</strong>→<span style="font-family:var(--mono)">3 2 1</span></span>
+      </div>
+    </div>
+  `;
+}
+
+function renderRHAscCheat() {
+  const wrap = document.getElementById('rh-asc-cheat-wrap');
+  if (!wrap) return;
+  wrap.innerHTML = `
+    <div style="margin-top:32px;border-top:1px solid var(--line);padding-top:28px">
+      <h2 class="decision-title">右手上行速記卡 <em>RH Ascending Cheatsheet</em></h2>
+      <p class="decision-subtitle">起始音＝調號名；起始指看升降號類型</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px">
+        <div style="background:#fdf2ee;border:1px solid #e0b8a8;border-radius:var(--r-lg);padding:18px 20px">
+          <div style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--accent-2);margin-bottom:10px">1~6 降記號</div>
+          <div style="font-size:13px;color:var(--ink);line-height:1.8">
+            1 指固定在 <strong>C、F</strong>。<br>
+            起始音（主音）不一定是 C/F，所以要<strong>推</strong>：<br>
+            • 主音正好是 C 或 F → <strong>1 指</strong>起<br>
+            • 主音還沒到 → 從 <strong>2 指</strong>起（F=1；B♭ E♭ A♭ D♭ G♭=2）
+          </div>
+        </div>
+
+        <div style="background:#eef7f0;border:1px solid #a8d0ba;border-radius:var(--r-lg);padding:18px 20px">
+          <div style="font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--pivot-ring);margin-bottom:10px">1~5 升記號</div>
+          <div style="font-size:13px;color:var(--ink);line-height:1.8">
+            1 指在 <strong>主音與第4音</strong>。<br>
+            主音<u>本身就是錨點</u>，所以<strong>一定從 1 指開始</strong>。<br>
+            <span style="color:var(--ink-muted);font-size:12px">G D A E B 全部 1 指起，不必推。</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:16px;padding:12px 16px;background:var(--paper-warm);border-radius:var(--r-md);font-size:12.5px;color:var(--ink-soft);line-height:1.7;font-family:var(--serif)">
+        一句話：<strong>升號調主音=錨點，一律 1 指起</strong>；<strong>降號調看主音到 C/F 的距離</strong>，到了就 1 指，沒到就 2 指起。
       </div>
     </div>
   `;
@@ -3559,11 +3672,11 @@ function getAnchorAnnotation(keyId, dirKey) {
 
   if (dirKey === 'rh_asc') {
     if (keyId === 'C') return {anchor:'拇指 C、F', rule:'第1、4音'};
-    if (isFlat) return {anchor:'拇指 '+ (keyId==='Gb'||keyId==='Cb' ? 'C♭、F' : 'C、F'), rule:'降號調：固定 C、F'};
+    if (keyId === 'Gb' || keyId === 'Cb') return {anchor:'拇指 C♭、F', rule:'降號調 C、F；6♭起 C 降為 C♭（實彈 B 鍵）'};
+    if (isFlat) return {anchor:'拇指 C、F', rule:'降號調：固定 C、F'};
     return {anchor:'拇指 '+s[0]+'、'+s[3], rule:'升號調：主音與第4音'};
   }
   if (dirKey === 'rh_desc') {
-    if (keyId === 'Gb' || keyId === 'Cb') return {anchor:'起始 3 指，拇指 F、C♭', rule:'特例：白鍵最少，不套用一般通則'};
     if (keyId === 'C') return {anchor:'3 指→E，4 指→B', rule:'第3音、第7音'};
     if (isFlat) {
       // find E-letter and B-letter notes in scale
@@ -3681,6 +3794,8 @@ renderGantt();
 renderCircle();
 renderDecisionTree();
 renderAnchorMethod();
+renderRHAscCheat();
+renderRHDescCheat();
 renderLHDescMethod();
 renderRHDescMethod();
 renderFourRules();
