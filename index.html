@@ -1826,6 +1826,18 @@ let curKey = 'C', curMode = 'major';
 let lhVersion = 'uni'; // 'uni' 統一版(預設) 或 'hanon' 哈農版，只對降記號調有效
 const FLAT_KEYS = ['C','F','Bb','Eb','Ab','Db','Gb'];
 
+// 生物力學評比（score-claude V6 DP 定量分析 2026-07-04）：逐調建議左手版本
+// 依據：兩版左手上下行各 15 音 DP cost + 逐音歸因（穿越落點鍵色/爬指/跨距）
+const LH_VERSION_RECOMMEND = {
+  Db: {v:'uni',   why:'兩版錨點本來就同為 F、C；統一版只把上行頂音 4 指改 2 指——修掉哈農上行表尾與自己下行起始的矛盾，嚴格改進'},
+  Gb: {v:'uni',   why:'兩版錨點同為 C♭(=B)、F；統一版只把上行頂音 3 指改 2 指，同 D♭ 的修正'},
+  Bb: {v:'hanon', why:'傳統錨點 D、A 對齊黑鍵地形：下行每次穿越從黑鍵出發（手墊高、拇指淨空大）、上行跨越半音落黑；C/F 錨點使跨越退化為全音全白'},
+  Eb: {v:'hanon', why:'傳統錨點 G、D 對齊黑鍵地形，理由同 B♭（程度較輕）'},
+  Ab: {v:'hanon', why:'微幅優勢——傳統錨點 C、G 與 C、F 只差一個錨點，接近兩可'},
+  C:  {v:null,    why:'上行哈農略優、下行統一略優，差距在誤差內'},
+  F:  {v:null,    why:'兩版逐音完全相同（哈農拇指本來就落 C、F）'},
+};
+
 
 const SCALES = {
   major: {
@@ -3203,6 +3215,17 @@ function renderFlatSystem() {
           <span style="color:var(--ink-muted);font-size:11.5px">下方各調指法表可切換兩種左手版本對照。</span>
         </div>
       </div>
+
+      <div style="margin-top:16px;padding:16px 20px;background:#eef4fb;border:1px solid #a8c4e0;border-radius:var(--r-lg)">
+        <div style="font-family:var(--mono);font-size:11px;color:#3a6a9b;margin-bottom:10px">生物力學評比：哪個調用哪一版（DP 定量分析 2026-07-04）</div>
+        <div style="font-size:12.5px;color:var(--ink);line-height:1.85">
+          以生物力學 cost model 對兩版左手逐調逐音計分後的結論——<strong>不必二選一，逐調取優</strong>：<br>
+          • <strong>D♭、G♭ → 統一版</strong>：兩版錨點本來就相同（哈農的黑鍵主音例外規則也落在 C/F），統一版只差「上行頂音 4/3 指 → 2 指」一個音——修掉哈農上行表尾與自己下行起始（皆為 2 指）的矛盾，是嚴格改進。<br>
+          • <strong>B♭、E♭（A♭ 微幅）→ 哈農版</strong>：傳統錨點（D、A／G、D）配合黑鍵地形——<strong>下行每次穿越都從黑鍵出發</strong>（手被黑鍵墊高、拇指下方淨空最大）、<strong>上行每次跨越都是半音落黑鍵</strong>（升起的鍵面迎向跨越指）；統一版強推 C/F 後全部退化為全音、全白鍵的跨越，快速彈奏時這些正是最先崩、也最耗手的動作。<br>
+          • <strong>C、F → 兩可</strong>：F 兩版逐音相同；C 差距在誤差內。<br><br>
+          <span style="color:var(--ink-muted);font-size:11.5px">建議使用順序：入門期用統一版的一條規則跑通 12 個調（平行音階雙手拇指同步穿越是它的真實優勢），熟練後在 B♭／E♭ 換回哈農版作在地優化。另注意：統一版左手<strong>上行</strong>表尾（如 B♭ 的 …1 2 3 4）是查表顯示用的收法；實際連續彈奏迴轉時請沿用下行起始的指法（如 …1 4 3 2），避免非拇指跨指（爬指在連奏下解剖學上不可行）。</span>
+        </div>
+      </div>
     </div>
   `;
 }
@@ -3477,12 +3500,18 @@ function render() {
           <div style="font-size:10.5px;opacity:.85;margin-top:2px">${sub}</div>
         </button>`;
       };
+      const rec = LH_VERSION_RECOMMEND[curKey];
+      const recLabel = rec ? (rec.v === 'uni' ? '統一版' : rec.v === 'hanon' ? '哈農版' : '兩可') : '';
+      const recHtml = rec ? `
+        <div style="margin-top:8px;padding:8px 12px;background:#eef4fb;border:1px solid #c0d4e8;border-radius:var(--r-md);font-size:11px;color:var(--ink-soft);line-height:1.65">
+          ⚖️ <strong>生物力學建議：${recLabel}</strong> — ${rec.why}
+        </div>` : '';
       toggleWrap.innerHTML = `
         <div style="font-family:var(--mono);font-size:10.5px;color:var(--ink-muted);margin-bottom:8px">左手指法版本（降記號調）</div>
         <div style="display:flex;gap:10px">
           ${btn('uni','統一版','拇指踩 C、F')}
           ${btn('hanon','哈農版','主音黑白分類')}
-        </div>`;
+        </div>${recHtml}`;
     } else {
       toggleWrap.innerHTML = '';
     }
