@@ -460,6 +460,105 @@ select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
 .tab-panel { display: none; }
 .tab-panel.active { display: block; }
 
+/* ── Biomechanics tab (bm-) ── */
+.bm-sec { margin-top: 44px; }
+.bm-kicker { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent-2); margin: 0 0 10px; }
+.bm-sec.cog .bm-kicker { color: var(--accent); }
+.bm-lead { color: var(--ink-soft); max-width: 60ch; line-height: 1.8; }
+.bm-lead b, .bm-callout b.h { color: var(--ink); }
+
+.bm-verdict { display: flex; flex-wrap: wrap; gap: 12px; margin: 22px 0 6px; }
+.bm-vcard { flex: 1 1 220px; border: 1px solid var(--line); border-radius: var(--r-md); padding: 15px 18px; background: var(--paper); border-top: 3px solid var(--vc); }
+.bm-vcard.bio { --vc: var(--accent-2); }
+.bm-vcard.cognition { --vc: var(--accent); }
+.bm-vcard .who { font-family: var(--mono); font-size: 11px; letter-spacing: .13em; text-transform: uppercase; color: var(--vc); margin: 0 0 4px; }
+.bm-vcard .win { font-size: 20px; font-weight: 600; margin: 0; color: var(--ink); }
+.bm-vcard .sub { font-size: 13px; color: var(--ink-soft); margin: 3px 0 0; }
+
+.bm-kb { position: relative; display: flex; width: 100%; height: 52px; border: 1px solid var(--ink); border-radius: 0 0 var(--r-md) var(--r-md); overflow: hidden; background: var(--ink); margin: 6px 0 2px; }
+.bm-kb .wk { flex: 1; background: var(--paper); border-right: 1px solid rgba(26,22,18,.14); }
+.bm-kb .wk:last-child { border-right: 0; }
+.bm-kb .bk { position: absolute; top: 0; width: 8.4%; height: 58%; background: var(--ink); border-radius: 0 0 3px 3px; z-index: 2; }
+.bm-kb .b1 { left: 10%; } .bm-kb .b2 { left: 24.3%; } .bm-kb .b3 { left: 52.8%; } .bm-kb .b4 { left: 67.1%; } .bm-kb .b5 { left: 81.4%; }
+
+.bm-tbl-scroll { overflow-x: auto; margin: 6px 0; }
+.bm-tbl { border-collapse: collapse; width: 100%; font-size: 14px; }
+.bm-tbl th, .bm-tbl td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.bm-tbl thead th { font-family: var(--mono); font-size: 11px; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-muted); border-bottom: 1.5px solid var(--ink-muted); white-space: nowrap; }
+.bm-tbl .yes { color: var(--pivot-ring); font-weight: 600; }
+.bm-tbl .diff { color: var(--accent-2); font-weight: 600; }
+.bm-tag { display: inline-block; font-family: var(--mono); font-size: 11px; padding: 1px 7px; border-radius: var(--r-sm); }
+.bm-tag.hanon { background: color-mix(in srgb, var(--accent-2) 15%, var(--paper)); color: var(--accent-2); }
+.bm-tag.neu { background: var(--paper-deep); color: var(--ink-soft); }
+.bm-mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+.bm-cost { background: var(--paper-warm); border: 1px solid var(--line); border-radius: var(--r-md); padding: 22px 22px 16px; margin: 4px 0; }
+.bm-cost .axnote { font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-muted); text-align: right; margin: 0 0 14px; }
+.bm-bar { display: grid; grid-template-columns: 52px 1fr auto; align-items: center; gap: 13px; margin-bottom: 12px; }
+.bm-bar .lbl { font-size: 16px; font-weight: 600; color: var(--ink); }
+.bm-track { position: relative; height: 24px; background: var(--paper-deep); border-radius: var(--r-sm); overflow: hidden; }
+.bm-fill { position: absolute; inset: 0 auto 0 0; border-radius: var(--r-sm); }
+.bm-bar.h .bm-fill { background: var(--accent-2); width: 89.1%; }
+.bm-bar.u .bm-fill { background: var(--accent); width: 100%; }
+.bm-bar.u .bm-excess { position: absolute; top: 0; bottom: 0; left: 89.1%; right: 0; background: repeating-linear-gradient(45deg, var(--accent-2), var(--accent-2) 2px, transparent 2px, transparent 6px); opacity: .9; }
+.bm-bar .num { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 14px; font-weight: 600; }
+.bm-cost .delta { font-size: 12.5px; color: var(--ink-soft); text-align: right; margin: 4px 0 0; }
+.bm-cost .delta b { color: var(--accent-2); font-family: var(--mono); }
+
+.bm-mechs { display: grid; grid-template-columns: 1fr; gap: 14px; margin-top: 6px; }
+@media (min-width: 620px) { .bm-mechs { grid-template-columns: 1fr 1fr; } }
+.bm-mech { border: 1px solid var(--line); border-radius: var(--r-md); padding: 18px; background: var(--paper); }
+.bm-mech h4 { font-size: 16px; margin: 0 0 2px; color: var(--ink); }
+.bm-mech .n { font-family: var(--mono); font-size: 11px; color: var(--accent-2); }
+.bm-mech p { font-size: 13.5px; color: var(--ink-soft); margin: 9px 0 0; line-height: 1.75; }
+.bm-mech .demo { display: flex; gap: 10px; margin-top: 12px; }
+.bm-kc { flex: 1; text-align: center; }
+.bm-kc .mini { position: relative; height: 42px; border-radius: 0 0 4px 4px; border: 1px solid var(--ink); overflow: hidden; background: var(--paper); }
+.bm-kc .mini .blk { position: absolute; left: 34%; top: 0; width: 32%; height: 60%; background: var(--ink); border-radius: 0 0 3px 3px; }
+.bm-kc.good .mini { box-shadow: 0 4px 10px -4px var(--accent-2); }
+.bm-kc .dot { position: absolute; width: 11px; height: 11px; border-radius: 50%; background: var(--accent-2); }
+.bm-kc .cap { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: .03em; margin-top: 6px; text-transform: uppercase; color: var(--ink-muted); }
+.bm-kc.good .cap { color: var(--accent-2); }
+.bm-kc.bad .cap { color: var(--ink-soft); }
+
+.bm-bd { border: 1px solid var(--line); border-radius: var(--r-md); background: var(--paper-warm); padding: 20px 20px 16px; }
+.bm-bd-scroll { overflow-x: auto; padding-bottom: 4px; }
+.bm-ngrid { display: grid; grid-template-columns: 48px repeat(8, minmax(42px, 1fr)); align-items: center; min-width: 500px; row-gap: 4px; }
+.bm-ngrid > div { text-align: center; padding: 5px 2px; }
+.bm-ngrid .rl { text-align: left; font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-muted); }
+.bm-ngrid .rl.h { color: var(--accent-2); } .bm-ngrid .rl.u { color: var(--accent); }
+.bm-nchip { display: inline-block; min-width: 30px; padding: 3px 5px; border-radius: var(--r-sm); font-family: var(--mono); font-size: 12px; font-weight: 600; }
+.bm-nchip.blk { background: var(--ink); color: var(--paper); }
+.bm-nchip.wht { background: transparent; color: var(--ink-soft); border: 1px solid var(--line); }
+.bm-pip { display: inline-flex; align-items: center; justify-content: center; width: 27px; height: 27px; border-radius: 50%; font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 14px; font-weight: 600; color: var(--ink-soft); }
+.bm-pip.tbh { background: var(--accent-2); color: var(--paper); }
+.bm-pip.tbu { background: var(--accent); color: var(--paper); }
+.bm-pip.xh { box-shadow: inset 0 0 0 2px var(--accent-2); color: var(--accent-2); }
+.bm-pip.xu { box-shadow: inset 0 0 0 2px var(--accent); color: var(--accent); }
+.bm-bdsep { grid-column: 1 / -1; border-top: 1px solid var(--line); height: 0; }
+.bm-bdnote { display: flex; gap: 9px; align-items: baseline; font-size: 13.5px; margin-top: 12px; }
+.bm-bdnote .who { flex: none; font-family: var(--mono); font-size: 11px; font-weight: 600; width: 40px; }
+.bm-bdnote.h .who { color: var(--accent-2); } .bm-bdnote.u .who { color: var(--accent); }
+.bm-bdnote p { margin: 0; color: var(--ink-soft); }
+.bm-bdnote.h b { color: var(--accent-2); } .bm-bdnote.u b { color: var(--accent); }
+.bm-bdroot { font-size: 13px; color: var(--ink-soft); margin: 12px 0 0; padding-top: 10px; border-top: 1px dashed var(--line); }
+
+.bm-callout { border-left: 3px solid var(--accent-2); background: color-mix(in srgb, var(--accent-2) 6%, var(--paper)); padding: 16px 20px; border-radius: 0 var(--r-md) var(--r-md) 0; }
+.bm-callout p { margin: 0; font-size: 14.5px; color: var(--ink-soft); line-height: 1.8; }
+.bm-callout b { color: var(--accent-2); }
+
+.bm-reco { display: grid; grid-template-columns: 1fr; gap: 13px; margin-top: 6px; }
+@media (min-width: 620px) { .bm-reco { grid-template-columns: 1fr 1fr; } }
+.bm-rcard { border: 1px solid var(--line); border-radius: var(--r-md); padding: 18px; background: var(--paper); }
+.bm-rcard .phase { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; margin: 0 0 6px; }
+.bm-rcard.beg { border-top: 3px solid var(--accent); } .bm-rcard.beg .phase { color: var(--accent); }
+.bm-rcard.adv { border-top: 3px solid var(--accent-2); } .bm-rcard.adv .phase { color: var(--accent-2); }
+.bm-rcard h4 { font-size: 17px; margin: 0 0 7px; color: var(--ink); }
+.bm-rcard p { font-size: 13.5px; color: var(--ink-soft); margin: 0; line-height: 1.7; }
+.bm-rcard .use { font-family: var(--mono); font-weight: 600; color: var(--ink); }
+.bm-warn { font-size: 13px; color: var(--ink-soft); border: 1px dashed var(--line); border-radius: var(--r-md); padding: 13px 16px; margin-top: 14px; line-height: 1.7; }
+.bm-warn b { color: var(--accent-2); }
+
 .supp-card-header {
   display: flex;
   align-items: flex-start;
@@ -1276,6 +1375,7 @@ select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   <nav class="tab-nav" role="tablist">
     <button class="tab-btn active" data-tab="fingering" role="tab">指法查詢</button>
+    <button class="tab-btn" data-tab="biomech" role="tab">生物力學</button>
     <button class="tab-btn" data-tab="circle" role="tab">五度圈</button>
     <button class="tab-btn" data-tab="practice" role="tab">練習指南 &amp; 計劃</button>
     <button class="tab-btn" data-tab="gantt" role="tab">進度總覽</button>
@@ -1287,9 +1387,7 @@ select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
   </div>
 
   <div class="tab-panel active" id="tab-fingering">
-  <div id="flat-system-wrap"></div>
-  <div id="sharp-system-wrap"></div>
-  <div style="margin-top:40px;border-top:2px solid var(--line);padding-top:24px;margin-bottom:8px">
+  <div style="margin-bottom:8px">
     <h2 class="decision-title">各調指法查詢 <em>Lookup by Key</em></h2>
     <p class="decision-subtitle">選擇調性與調式，對照上方速記卡逐一確認</p>
   </div>
@@ -1354,6 +1452,12 @@ select:focus { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 
   </div><!-- /tab-fingering -->
+
+  <div class="tab-panel" id="tab-biomech">
+    <div id="biomech-extra-wrap"></div>
+    <div id="flat-system-wrap"></div>
+    <div id="sharp-system-wrap"></div>
+  </div><!-- /tab-biomech -->
 
   <div class="tab-panel" id="tab-practice">
   <!-- Supplement sections -->
@@ -3159,6 +3263,149 @@ const KEY_NAME_TO_ID = {
 let accType = 'sharp';
 let accCount = 0;
 
+function renderBiomechExtra() {
+  const wrap = document.getElementById('biomech-extra-wrap');
+  if (!wrap) return;
+  wrap.innerHTML = `
+    <div style="padding-top:8px">
+      <p class="bm-kicker">鋼琴音階指法 · 生物力學 vs 認知</p>
+      <h2 class="decision-title">哈農法 vs 統一法 <em>Two Systems</em></h2>
+      <p class="decision-subtitle">降記號調音階的兩套左手指法，用生物力學 cost model 量化</p>
+      <p class="bm-lead" style="margin-top:14px">結論很乾脆：<b>兩條評分軸，勝負相反。</b></p>
+
+      <div class="bm-kb" aria-hidden="true">
+        <span class="wk"></span><span class="wk"></span><span class="wk"></span><span class="wk"></span><span class="wk"></span><span class="wk"></span><span class="wk"></span>
+        <span class="bk b1"></span><span class="bk b2"></span><span class="bk b3"></span><span class="bk b4"></span><span class="bk b5"></span>
+      </div>
+
+      <div class="bm-verdict">
+        <div class="bm-vcard bio">
+          <p class="who">生物力學 · 好不好彈</p>
+          <p class="win">哈農贏</p>
+          <p class="sub">總 cost 677.2，統一版無一調勝出</p>
+        </div>
+        <div class="bm-vcard cognition">
+          <p class="who">系統自洽 · 好不好記</p>
+          <p class="win">統一贏</p>
+          <p class="sub">一條規則跑雙手、可現場推導</p>
+        </div>
+      </div>
+
+      <div class="bm-sec">
+        <p class="bm-kicker">先釐清範圍</p>
+        <h3 class="decision-title" style="font-size:20px">兩法只差在「降記號調的左手」</h3>
+        <p class="bm-lead">右手、升記號調、雙手迴轉頂音全都一樣。真正不同的只有一格：</p>
+        <div class="bm-tbl-scroll"><table class="bm-tbl">
+          <thead><tr><th>區塊</th><th>哈農法</th><th>統一法</th><th>相同？</th></tr></thead>
+          <tbody>
+            <tr><td>所有調的<b>右手</b></td><td>C／F 錨點</td><td>同左</td><td class="yes">✓ 相同</td></tr>
+            <tr><td><b>升記號調</b>左手</td><td>主音＋第4音</td><td>照抄哈農</td><td class="yes">✓ 相同</td></tr>
+            <tr><td><b>降記號調</b>左手</td><td>主音黑鍵→3、7音</td><td>改用 C／F</td><td class="diff">✗ 唯一差異</td></tr>
+          </tbody>
+        </table></div>
+        <p class="bm-lead" style="margin-top:10px">整場比較只在 <span class="bm-mono">B♭ / E♭ / A♭ / D♭ / G♭</span> 的左手。</p>
+      </div>
+
+      <div class="bm-sec">
+        <p class="bm-kicker">生物力學代價 · DP 定量評比</p>
+        <h3 class="decision-title" style="font-size:20px">逐調、上下行各 15 音計分</h3>
+        <p class="bm-lead">cost 越低＝越省力。統一版沒有任何一個調勝出。</p>
+        <div class="bm-cost">
+          <p class="axnote">← 越短越省力　　更耗手 →</p>
+          <div class="bm-bar h"><span class="lbl">哈農</span><span class="bm-track"><span class="bm-fill"></span></span><span class="num" style="color:var(--accent-2)">677.2</span></div>
+          <div class="bm-bar u"><span class="lbl">統一</span><span class="bm-track"><span class="bm-fill"></span><span class="bm-excess"></span></span><span class="num" style="color:var(--accent)">760.0</span></div>
+          <p class="delta">統一法多付 <b>+82.8</b>　·　斜紋段＝全部集中在 B♭／E♭／A♭</p>
+        </div>
+        <div class="bm-tbl-scroll"><table class="bm-tbl">
+          <thead><tr><th>調</th><th>判定</th><th>原因</th></tr></thead>
+          <tbody>
+            <tr><td class="bm-mono">D♭ · G♭</td><td><span class="bm-tag neu">逐音相同</span></td><td>哈農黑鍵例外錨點剛好＝C／F</td></tr>
+            <tr><td class="bm-mono">B♭ · E♭ · A♭</td><td><span class="bm-tag hanon">哈農較優</span></td><td>差距全集中在此三調的中段錨點</td></tr>
+            <tr><td class="bm-mono">C · F</td><td><span class="bm-tag neu">誤差內</span></td><td>F 逐音相同；C 錨點差可忽略</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+
+      <div class="bm-sec">
+        <p class="bm-kicker">差異的來源 · 兩個生物力學量</p>
+        <h3 class="decision-title" style="font-size:20px">為什麼「長指配黑鍵」較省力</h3>
+        <p class="bm-lead">統一版強推 C／F 後，兩者全退化成全音、全白鍵動作——快速彈奏時最先崩、也最耗手。</p>
+        <div class="bm-mechs">
+          <div class="bm-mech">
+            <span class="n">01</span><h4>穿越淨空</h4>
+            <p>拇指從長指下方穿越時，長指按<b>黑鍵</b>→手被墊高、通道最寬；全白鍵穿越則手貼鍵面、通道最窄。哈農下行每次穿越都從黑鍵出發。</p>
+            <div class="demo" aria-hidden="true">
+              <div class="bm-kc good"><div class="mini"><span class="blk"></span><span class="dot" style="left:44%;top:7px"></span></div><span class="cap">黑鍵 · 通道寬</span></div>
+              <div class="bm-kc bad"><div class="mini"><span class="dot" style="left:20%;bottom:6px"></span></div><span class="cap">白鍵 · 通道窄</span></div>
+            </div>
+          </div>
+          <div class="bm-mech">
+            <span class="n">02</span><h4>跨越落點</h4>
+            <p>長指跨過拇指：落<b>黑鍵</b>＝順勢落升起鍵面（半音側移）；落白鍵＝跨過後還要下潛到鍵盤平面（全音側移）。哈農上行每次跨越都是半音落黑。</p>
+            <div class="demo" aria-hidden="true">
+              <div class="bm-kc good"><div class="mini"><span class="blk"></span><span class="dot" style="left:40%;top:6px"></span></div><span class="cap">落黑 · 半音</span></div>
+              <div class="bm-kc bad"><div class="mini"><span class="dot" style="left:66%;bottom:6px"></span></div><span class="cap">落白 · 全音</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bm-sec">
+        <p class="bm-kicker">拆給你看 · 具體一調</p>
+        <h3 class="decision-title" style="font-size:20px">E♭ 左手上行，逐音對照</h3>
+        <p class="bm-lead">兩版幾乎<b>逐音全不同</b>，根源只有一個：<b>拇指（1）錨在哪個音</b>。哈農踩 <span class="bm-mono">G · D</span>，統一踩 <span class="bm-mono">C · F</span>。</p>
+        <div class="bm-bd">
+          <div class="bm-bd-scroll"><div class="bm-ngrid">
+            <div class="rl">音</div>
+            <div><span class="bm-nchip blk">E♭</span></div><div><span class="bm-nchip wht">F</span></div><div><span class="bm-nchip wht">G</span></div><div><span class="bm-nchip blk">A♭</span></div><div><span class="bm-nchip blk">B♭</span></div><div><span class="bm-nchip wht">C</span></div><div><span class="bm-nchip wht">D</span></div><div><span class="bm-nchip blk">E♭</span></div>
+            <div class="bm-bdsep"></div>
+            <div class="rl h">哈農</div>
+            <div><span class="bm-pip">3</span></div><div><span class="bm-pip">2</span></div><div><span class="bm-pip tbh">1</span></div><div><span class="bm-pip xh">4</span></div><div><span class="bm-pip">3</span></div><div><span class="bm-pip">2</span></div><div><span class="bm-pip tbh">1</span></div><div><span class="bm-pip">3</span></div>
+            <div class="bm-bdsep"></div>
+            <div class="rl u">統一</div>
+            <div><span class="bm-pip">2</span></div><div><span class="bm-pip tbu">1</span></div><div><span class="bm-pip xu">4</span></div><div><span class="bm-pip">3</span></div><div><span class="bm-pip">2</span></div><div><span class="bm-pip tbu">1</span></div><div><span class="bm-pip">3</span></div><div><span class="bm-pip">2</span></div>
+          </div></div>
+          <div class="bm-bdnote h"><span class="who">哈農</span><p>拇指踩 <b>G · D</b>（緊鄰黑鍵）→ 4 指跨到 <b>A♭（黑鍵）＝半音側移</b>，順勢落升起鍵面。</p></div>
+          <div class="bm-bdnote u"><span class="who">統一</span><p>拇指踩 <b>C · F</b>（白鍵）→ 4 指跨到 <b>G（白鍵）＝全音側移</b>，跨過拇指後還要下潛。</p></div>
+          <p class="bm-bdroot"><b>實心圓＝拇指錨點，圈框＝跨越的 4 指。</b>整條差異就是這顆拇指落點的擴散。</p>
+        </div>
+      </div>
+
+      <div class="bm-sec">
+        <p class="bm-kicker">一個關鍵澄清</p>
+        <h3 class="decision-title" style="font-size:20px">統一法的招牌動作，哈農早就在做</h3>
+        <div class="bm-callout">
+          <p>哈農在五個黑鍵主音調的左手頂音<b>本來就都用 2</b>：它在邊界放棄自己的循環理論（應為 3/3/3/3/4），採用「2 指輕收」。所以兩法真正的差異只剩 <b>B♭／E♭／A♭ 的中段錨點</b>——那正是哈農贏的地方。</p>
+        </div>
+      </div>
+
+      <div class="bm-sec cog">
+        <p class="bm-kicker">那統一法贏在哪</p>
+        <h3 class="decision-title" style="font-size:20px">認知層，不是手指</h3>
+        <div class="bm-tbl-scroll"><table class="bm-tbl"><tbody>
+          <tr><td style="width:34%"><b>一條規則跑雙手</b></td><td>C／F 錨點左右手通用，只記一套。</td></tr>
+          <tr><td><b>平行音階同步穿越</b></td><td>兩手同錨點 → 拇指同步，動作程式化。</td></tr>
+          <tr><td><b>可重建性</b></td><td>忘了指法能從規則現場推回來，不用背例外。</td></tr>
+        </tbody></table></div>
+      </div>
+
+      <div class="bm-sec">
+        <p class="bm-kicker">實用建議</p>
+        <h3 class="decision-title" style="font-size:20px">逐調取優，不必二選一</h3>
+        <div class="bm-reco">
+          <div class="bm-rcard beg"><p class="phase">入門 · 建構期</p><h4>用統一法</h4><p>一條規則跑通全部降記號調，記憶與動作程式化優勢真實。<span class="use">全降記號調通用。</span></p></div>
+          <div class="bm-rcard adv"><p class="phase">熟練 · 在地優化</p><h4>換回哈農</h4><p>只在 <span class="use">B♭ / E♭ / A♭</span> 換回哈農作生物力學優化；其餘調兩版相同。</p></div>
+        </div>
+        <p class="bm-warn"><b>⚠ 迴轉注意</b>　統一版左手<b>上行</b>表尾（如 B♭ 的 …1 2 3 4）只是查表顯示；實際連奏迴轉要沿用下行起始指法（…1 4 3 2）。非拇指跨指（爬指）在連奏下解剖學上不可行——只有拇指的 CMC 鞍狀關節具備跨越所需的對掌性。</p>
+      </div>
+
+      <div class="bm-sec" style="border-top:2px solid var(--line);padding-top:24px">
+        <p class="bm-lead" style="font-size:13px;color:var(--ink-muted)">以下為兩套系統的機制詳解與逐調速記（指法查詢表的規則來源）。</p>
+      </div>
+    </div>
+  `;
+}
+
 function renderFlatSystem() {
   const wrap = document.getElementById('flat-system-wrap');
   if (!wrap) return;
@@ -3620,6 +3867,7 @@ restoreChecks();
 renderGantt();
 renderCircle();
 renderDecisionTree();
+renderBiomechExtra();
 renderFlatSystem();
 renderSharpSystem();
 </script>
